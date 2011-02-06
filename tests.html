@@ -1,0 +1,284 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+        <title>Tent Test Page</title>
+        <style type='text/css'>
+            
+            body {
+                font-family: fixedsys, consolas, monospace;
+            }
+            
+            h1 {
+                text-align: center;
+                width: 500px;
+                margin-bottom: 5px;
+            }
+            
+            #controlPanel {
+                width: 500px;
+                text-align: center;
+                vertical-align: middle;
+                padding: 10px;
+                margin-top: 0px;
+                height: 50px;
+            }
+            
+            #footer {
+                text-align: center;
+                vertical-align: middle;
+                padding: 60px;
+                color: #888888;
+            }
+            
+            #browser {
+                padding: 0px;
+                color: #888888;
+                font-size: smaller;
+            }
+            
+            #btnStart {
+                font-size: x-large;
+            }
+            
+            #btnLoad {
+                font-size: x-large;
+            }
+            
+            #status {
+                font-weight: bold;
+                padding: 10px;
+            }
+            
+            #status.success {
+                background: #66FF66;
+            }
+            
+            #status.failed {
+                background: red;
+                color: white;
+            }
+            
+            .log table {
+                border: none;
+            }
+            
+            .log td.eventMessage {
+                max-width: 980px;
+                word-break: break-all;
+            }
+            
+            .log tr.evenrow .eventMessage {
+                background-color: #e5e5e5;
+                padding-right: 50px;
+            }
+            
+            .log .eventType {
+                font-weight: bold;
+            }
+            
+            .log .eventType {
+                padding-right: 10px;
+                text-align: right;
+            }
+            
+            .log .eventlevelinfo .eventType {
+                color: blue;
+            }
+            
+            .log .eventleveltrace {
+                color: gray;
+            }
+            
+            .log .eventleveldebug {
+                color: gray;
+            }
+            
+            .log .eventlevelwarn {
+                color: #EE9900;
+            }
+            
+            .log .eventlevelerror {
+                color: red;
+            }
+            
+            .log .eventlevelfatal {
+                color: red;
+            }
+        </style>
+    </head>
+    <body>
+        <script type="text/javascript" src="lib/json2.js">
+        </script>
+        <script type="text/javascript" src="lib/jquery.min.js">
+        </script>
+        <script type="text/javascript" src="lib/tests.js">
+        </script>
+        <script type="text/javascript" src="lib/Asserts.js">
+        </script>
+        <h1>Tent Test Page</h1>
+        <div id="controlPanel">
+            <span id="status">choose source</span>
+            <div id="codesourcepanel" style="display:inline;">
+                <input id="loadminified" name="codesource" type="radio" value="dist" checked="checked"/>minified &nbsp;<input name="codesource" type="radio" value="src"/>source folder 
+            </div><input id="btnLoad" type="button" value="Load" onclick="loadTest();"/><input id="btnStart" type="button" disabled="true" value="Run" style="display:none;" onclick="startTest();"/>
+        </div>
+        <div id="browser" title="Current UserAgent">
+        </div>
+        <h2>Log</h2>
+        <div id="logOutput" class="log">
+            <table id="logItems">
+                <thead>
+                    <th>
+                        Event Type
+                    </th>
+                    <th>
+                        Message
+                    </th>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+        <div id="footer">
+            Tent Test Page - 2011
+        </div>
+        <script type="text/javascript">
+            
+            var logCount = 0;
+            var scriptsLoaded = false;
+            
+            var addToLog = function(message, level){
+            
+                var levelName;
+                if (typeof tent == 'undefined') {
+                    levelName = (level || 'ERROR').toUpperCase();
+                }
+                else {
+                    levelName = tent.logging.Levels.getName(level).toUpperCase();
+                }
+                
+                
+                var tr = document.createElement('tr');
+                var cssclass = 'eventRow eventlevel' +
+                levelName.toLowerCase() +
+                (logCount % 2 == 0 ? ' evenrow' : '');
+                
+                tr.setAttribute('class', cssclass);
+                
+                var td1 = document.createElement('td');
+                td1.setAttribute('class', 'eventType');
+                $(td1).text(levelName);
+                tr.appendChild(td1);
+                var td2 = document.createElement('td');
+                td2.setAttribute('class', 'eventMessage');
+                $(td2).html($('<div/>').text(message).html().replace(/(\s)/g, '&nbsp;'));
+                tr.appendChild(td2);
+                
+                var tbody = document.getElementById('logItems').tBodies[0];
+                
+                tbody.appendChild(tr);
+                logCount++;
+            }
+            
+            var loadTest = function(){
+                if (scriptsLoaded) {
+                    alert('scripts already loaded');
+                    return;
+                }
+                var btnLoad, btnStart, txtStatus;
+                try {
+                    btnLoad = document.getElementById('btnLoad');
+                    btnLoad.disabled = 'true';
+                    btnLoad.parentNode.removeChild(btnLoad);
+                    txtStatus = document.getElementById('status');
+                    txtStatus.innerText = 'Loading...';
+                    document.getElementById('codesourcepanel').style.display = 'none';
+                    
+                    var onSourceLoaded = function(files){
+                        if (typeof tent == 'undefined') {
+                            addToLog('Error loading library, check browser console', 'FATAL');
+                            document.getElementById('status').innerText = 'Error';
+                            document.getElementById('status').setAttribute('class', 'failed');
+                        }
+                        tent.log.bind(addToLog);
+                        tent.log.info('Source loaded (' + files.length + ' files)');
+                        
+                        tests.scripts.loadList('src-test/testfilelist.js', 'src-test', function(files){
+                            tent.log.info('Tests loaded (' + files.length + ' files, ' + tests.cases.length + ' test cases)');
+                            scriptsLoaded = true;
+                            document.getElementById('btnStart').disabled = '';
+                            document.getElementById('btnStart').style.display = '';
+                            document.getElementById('status').innerText = 'Ready';
+                        });
+                    }
+                    
+                    try {
+                    
+                        if (document.getElementById('loadminified').checked) {
+                            // load minified version
+                            tests.scripts.load('dist/tent.min.js' + '?' + Math.random(), function(data, textStatus){
+                                onSourceLoaded(['dist/tent.min.js']);
+                            });
+                        }
+                        else {
+                            // load from src folder
+                            tests.scripts.loadList('src/srcfilelist.js', 'src', onSourceLoaded);
+                        }
+                    } 
+                    catch (error) {
+                        document.getElementById('status').innerText = 'Error';
+                        document.getElementById('status').setAttribute('class', 'failed');
+                        if (typeof tent == 'undefined') {
+                            addToLog('Error loading scripts: ' + error, 'FATAL');
+                        }
+                        else {
+                            tent.log.fatal('Error loading scripts: ' + error);
+                        }
+                    }
+                    
+                } 
+                catch (error) {
+                    addToLog(error + '')
+                }
+            }
+            
+            var startTest = function(){
+            
+                if (!scriptsLoaded) {
+                    alert('scripts not loaded');
+                    return;
+                }
+                var btnStart, txtStatus;
+                try {
+                    txtStatus = document.getElementById('status');
+                    txtStatus.innerText = 'Running...';
+                    btnStart = document.getElementById('btnStart');
+                    btnStart.disabled = 'true';
+                    btnStart.parentNode.removeChild(btnStart);
+                    
+                    tests.runAsync(function(){
+                        if (tests.succeeded) {
+                            tent.log.info('All tests completed successfully! (' + tests.elapsed + 'ms)');
+                            txtStatus.innerText = 'Success!';
+                            txtStatus.setAttribute('class', 'success');
+                        }
+                        else {
+                            tent.log.error('Tests failed, errors: ' + tests.errors + ' (' + tests.elapsed + 'ms)');
+                            txtStatus.innerText = 'Failed';
+                            txtStatus.setAttribute('class', 'failed');
+                        }
+                    });
+                    
+                } 
+                catch (error) {
+                    tent.log.fatal(error + '');
+                }
+            }
+            
+            document.getElementById('browser').innerText = navigator.userAgent;
+            
+            addToLog('test engine ready', 'INFO');
+        </script>
+    </body>
+</html>
