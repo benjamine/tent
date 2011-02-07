@@ -9,11 +9,11 @@ Tent is a JavaScript framework that aims to ease working with tool-agnostic enti
 - In top of this there's **reverse-property synchronization** for 1:1, 1:N and N:M relationships.
 - In top of both Tent provides Entity Contexts that support the **Unit Of Work** pattern for data manipulation, common in modern ORMs.
 
- 1. Create a Context and (optionally) define Entity Types 
- - Use your preferred mechanism to load objects and attach them to the Context (eg: ajax GET request)
- - Manipulate objects (change property values, add/remove from arrays), note that this step is completely framework ignorant*.
- - Commit all changes registered by the Context using your preferred persistance mechanism** (eg: ajax POST request)
- - (optionally) Mark changes as accepted and go back to step 3. 
+	1. Create a Context and (optionally) define Entity Types 
+	- Use your preferred mechanism to load objects and attach them to the Context (eg: ajax GET request)
+	- Manipulate objects (change property values, add/remove from arrays), note that this step is completely framework ignorant*.
+	- Commit all changes registered by the Context using your preferred persistance mechanism** (eg: ajax POST request)
+	- (optionally) Mark changes as accepted and go back to step 3. 
 
  \* *Actually, the only limitation for object manipulation is the Array length property, because there's no cross-browser consistent support for detecting when the length property is set.*
 
@@ -105,7 +105,8 @@ A typical Tent workflow may include some or all of these steps:
 
 
 
-### Building Tent from source ###
+Building Tent from source
+----------------
 
 `tent.js` is a composite file generated from many source files in the `src/` directory. To build Tent, you'll need:
 
@@ -119,7 +120,8 @@ Google Closure Compiler is used to build tent.js, and tent.min.js (minified vers
 
 Note: currently I'm developing this project under Windows (using Aptana IDE), so I use some .bat files to run builds and unit tests, cross-platform commands may be added later.
 
-### Running Unit Tests ###
+Running Unit Tests
+----------------
 
 Unit tests are written for [js-test-driver](http://code.google.com/p/js-test-driver/). 
 Configuration files provided:
