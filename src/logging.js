@@ -1,53 +1,101 @@
+/**
+ * @requires tent
+ * @requires tent.arrays
+ * @requires tent.coreTypes
+ * @name tent.logging
+ * @namespace Logging
+ */
+tent.declare('tent.logging', function(){
 
-tent.declare('tent.logging', function(exports){
-
-    exports.Levels = new tent.coreTypes.Enum('TRACE,DEBUG,INFO,WARN,ERROR,FATAL');
+    /**
+     * Event severity levels
+     * @type tent.coreTypes.Enum
+     * @enum
+     */
+    tent.logging.Levels = new tent.coreTypes.Enum('TRACE,DEBUG,INFO,WARN,ERROR,FATAL');
     
-    exports.Log = function Log(){
-        if (arguments.length > 0) {
-            this.add.apply(this, arguments);
-        }
-        
-        // by default log to console
-        if (typeof console != 'undefined') {
-            this.out = {
-                TRACE: function(msg){
-                    if (console.trace) {
-                        console.trace(msg);
-                    }
-                    else {
-                        console.info(msg);
-                    }
-                },
-                DEBUG: function(msg){
-                    if (console.debug) {
-                        console.debug(msg);
-                    }
-                    else {
-                        console.info(msg);
-                    }
-                },
-                INFO: function(msg){
-                    console.info(msg);
-                },
-                WARN: function(msg){
-                    console.warn(msg);
-                },
-                ERROR: function(msg){
-                    console.error(msg);
-                },
-                FATAL: function(msg){
-                    console.error(msg);
-                }
-            };
-        }
-        
+    /**
+     * Creates a new log sink
+     * @class a log sink
+     * @constructor
+     */
+    tent.logging.Log = function Log(){
         this.listeners = [];
     }
+
+	/**
+	 * Binds this Log to the browser's console
+	 * @param {Number} [level] minimum level for events sent
+	 * @return {tent.logging.Log} this
+	 */
+    tent.logging.Log.prototype.bindToConsole = function(level){
+        if (typeof console != 'undefined') {
+            this.bind(tent.logging.consoleLogger, level);
+        }
+        return this;
+    }
     
-    tent.log = new exports.Log();
+	/**
+	 * Binds this Log to the alert function (ie: shows an alert dialog for every event)
+	 * @param {Number} [level] minimum level for events sent
+	 * @return {tent.logging.Log} this
+	 */
+    tent.logging.Log.prototype.bindToAlert = function(level){
+        this.bind(tent.logging.alertLogger, level);
+        return this;
+    }
     
-    exports.Log.prototype.bind = function(callback, level){
+	/**
+	 * Binds this Log to an Html element (ie: adds some html for every event)
+	 * @param {Object} outputElement html element for appends, INPUT (add line to value), UL (add LI), TABLE (add TR) or DIV (add line to innerHTML)
+	 * @param {Number} [level] minimum level for events sent
+	 * @return {tent.logging.Log} this
+	 */
+    tent.logging.Log.prototype.bindToHtml = function(outputElement, level){
+        this.bind(tent.logging.createHtmlAppendLogger(outputElement), level);
+        return this;
+    }
+    
+	/**
+	 * Unbinds this Log from browser's console
+	 * @return {tent.logging.Log} this
+	 */
+    tent.logging.Log.prototype.unbindConsole = function(){
+        if (typeof console != 'undefined') {
+            this.unbind(tent.logging.consoleLogger);
+        }
+        return this;
+    }
+    
+	/**
+	 * Unbinds this Log from alert function
+	 * @return {tent.logging.Log} this
+	 */
+    tent.logging.Log.prototype.unbindAlert = function(){
+        this.unbind(tent.logging.alertLogger, level);
+        return this;
+    }
+    
+	/**
+	 * Unbinds this Log from an Html element
+	 * @return {tent.logging.Log} this
+	 */
+    tent.logging.Log.prototype.unbindHtml = function(outputElement){
+        for (var i = this.listeners.length; i >= 0; i--) {
+            if (this.listeners[i].callback.outputElement === outputElement) {
+                this.listeners.splice(i, 1);
+            }
+        }
+        return this;
+    }
+    
+	/**
+	 * Binds a callback function to events of this Log
+	 * @param {function()} callback 
+	 * @param {Number} [level]
+	 * @return {tent.logging.Log} this
+	 */
+    tent.logging.Log.prototype.bind = function(callback, level){
         if (!callback instanceof Function) {
             throw 'a callback Function must be provided';
         }
@@ -55,20 +103,38 @@ tent.declare('tent.logging', function(exports){
         var lvl = level;
         if (typeof lvl != 'number') {
             if (typeof lvl == 'undefined') {
-                lvl = exports.Levels.TRACE;
+                lvl = tent.logging.Levels.TRACE;
             }
             else {
-                lvl = exports.Levels[lvl] || exports.Levels.TRACE;
+                lvl = tent.logging.Levels[lvl] || tent.logging.Levels.TRACE;
             }
         }
         
-        this.listeners.push({
-            callback: callback,
-            level: lvl
-        })
+        var found = false;
+        for (var i = this.listeners.length - 1; i >= 0; i--) {
+            var list = this.listeners[i];
+            if (list.callback === callback) {
+                // already bound, just update level
+                list.level = lvl;
+                found = true;
+            }
+        };
+        if (!found) {
+            this.listeners.push({
+                callback: callback,
+                level: lvl
+            })
+        }
+        
+        return this;
     }
     
-    exports.Log.prototype.unbind = function(callback){
+	/**
+	 * Unbinds a callback function from events of this Log
+	 * @param {function()} callback 
+	 * @return {tent.logging.Log} this
+	 */
+    tent.logging.Log.prototype.unbind = function(callback){
         if (!callback instanceof Function) {
             throw 'a callback Function must be provided';
         }
@@ -77,17 +143,24 @@ tent.declare('tent.logging', function(exports){
                 this.listeners.splice(i, 1);
             }
         }
+        return this;
     }
     
-    exports.Log.prototype.notify = function(message, level){
+	/**
+	 * Notifies an event to Log listeners
+	 * @private
+	 * @param {String} message
+	 * @param {Number} level
+	 */	
+    tent.logging.Log.prototype.notify = function(message, level){
     
         var lvl = level;
         if (typeof lvl != 'number') {
             if (!lvl) {
-                lvl = exports.Levels.INFO;
+                lvl = tent.logging.Levels.INFO;
             }
             else {
-                lvl = exports.Levels[lvl] || exports.Levels.INFO;
+                lvl = tent.logging.Levels[lvl] || tent.logging.Levels.INFO;
             }
         }
         
@@ -100,47 +173,61 @@ tent.declare('tent.logging', function(exports){
             }
         }
     }
-    
-    exports.Log.prototype.__log__ = function(message, level){
-        level = level || exports.Levels.INFO;
-        var levelName = exports.Levels.getName(level);
-        if (this.out && this.out[levelName]) {
-            this.out[levelName](exports.Levels.getName(level) + ' ' + message);
-        }
-        this.notify(message, level);
-    }
-    
-    exports.Log.prototype.trace = function(){
+        
+	/**
+	 * Logs an event with severity TRACE, all arguments are stringified in a message
+	 */
+    tent.logging.Log.prototype.trace = function(){
         var message = this.stringOrStringify.apply(this, arguments);
-        this.__log__(message, exports.Levels.TRACE);
+        this.notify(message, tent.logging.Levels.TRACE);
     }
     
-    exports.Log.prototype.debug = function(){
+	/**
+	 * Logs an event with severity DEBUG, all arguments are stringified in a message
+	 */
+    tent.logging.Log.prototype.debug = function(){
         var message = this.stringOrStringify.apply(this, arguments);
-        this.__log__(message, exports.Levels.DEBUG);
+        this.notify(message, tent.logging.Levels.DEBUG);
     }
     
-    exports.Log.prototype.info = function(){
+	/**
+	 * Logs an event with severity INFO, all arguments are stringified in a message
+	 */
+    tent.logging.Log.prototype.info = function(){
         var message = this.stringOrStringify.apply(this, arguments);
-        this.__log__(message, exports.Levels.INFO);
+        this.notify(message, tent.logging.Levels.INFO);
     }
     
-    exports.Log.prototype.warn = function(){
+	/**
+	 * Logs an event with severity WARN, all arguments are stringified in a message
+	 */
+    tent.logging.Log.prototype.warn = function(){
         var message = this.stringOrStringify.apply(this, arguments);
-        this.__log__(message, exports.Levels.WARN);
+        this.notify(message, tent.logging.Levels.WARN);
     }
     
-    exports.Log.prototype.error = function(){
+	/**
+	 * Logs an event with severity ERROR, all arguments are stringified in a message
+	 */
+    tent.logging.Log.prototype.error = function(){
         var message = this.stringOrStringify.apply(this, arguments);
-        this.__log__(message, exports.Levels.ERROR);
+        this.notify(message, tent.logging.Levels.ERROR);
     }
     
-    exports.Log.prototype.fatal = function(){
+	/**
+	 * Logs an event with severity FATAL, all arguments are stringified in a message
+	 */
+    tent.logging.Log.prototype.fatal = function(){
         var message = this.stringOrStringify.apply(this, arguments);
-        this.__log__(message, exports.Levels.FATAL);
+        this.notify(message, tent.logging.Levels.FATAL);
     }
     
-    exports.Log.prototype.stringify = function(){
+	/**
+	 * Stringifies all arguments
+	 * @private
+	 * @return {String} a String represeting all arguments
+	 */
+    tent.logging.Log.prototype.stringify = function(){
     
         var s = '';
         
@@ -153,7 +240,7 @@ tent.declare('tent.logging', function(exports){
             
             if (!options.deepStack) {
                 options.deepStack = [];
-                tent.arrays.addFunctions(options.deepStack);
+                tent.arrays.extend(options.deepStack);
             }
             
             for (var i = 0, l = arguments.length; i < l; i++) {
@@ -239,16 +326,136 @@ tent.declare('tent.logging', function(exports){
         return s;
     }
     
-    exports.Log.prototype.stringOrStringify = function(){
+	/**
+	 * If a String argument is used returns the same string, otherwise the stringified arguments (as {@link #stringify})
+	 * @private
+	 * @return {String} a String represeting all arguments 
+	 */
+    tent.logging.Log.prototype.stringOrStringify = function(){
         if (arguments.length == 1 && typeof arguments[0] == 'string') {
             return arguments[0];
         }
         else {
             return this.stringify.apply(this, arguments);
-        }
-        
+        }        
     }
     
-    return exports;
+	/**
+	 * @private
+	 * @param {Object} message
+	 * @param {Object} level
+	 */
+    tent.logging.consoleLogger = function(message, level){
+    
+        if (level == tent.logging.Levels.TRACE) {
+            if (console.trace) {
+                console.trace(message);
+            }
+            else {
+                console.info(message);
+            }
+        }
+        if (level == tent.logging.Levels.DEBUG) {
+            if (console.debug) {
+                console.debug(message);
+            }
+            else {
+                console.info(message);
+            }
+        }
+        if (level == tent.logging.Levels.INFO) {
+            console.info(message);
+        }
+        if (level == tent.logging.Levels.WARN) {
+            if (console.warn) {
+                console.warn(message);
+            }
+            else {
+                console.info(message);
+            }
+        }
+        if (level == tent.logging.Levels.ERROR) {
+            console.error(message);
+        };
+        if (level == tent.logging.Levels.FATAL) {
+            console.error(message);
+        }
+    }
+    
+	/**
+	 * @private
+	 * @param {Object} message
+	 * @param {Object} level
+	 */
+    tent.logging.alertLogger = function(message, level){
+        alert(message);
+    }
+    
+	/**
+	 * @private
+	 * @param {Object} outputElement
+	 */
+    tent.logging.createHtmlAppendLogger = function(outputElement){
+        var f=null;
+        if (outputElement.tagName == 'INPUT') {
+			/**
+			 * @inner
+			 */
+            f = function(message, level){
+                outputElement.value += '\n[' + tent.logging.Levels.getName(level) + '] ' + message;
+            }
+        }
+        else 
+            if (outputElement.tagName == 'UL') {
+				/**
+				 * @inner
+				 */
+                f = function(message, level){
+                    var li = document.createElement('li');
+                    li.innerHTML = '[' + tent.logging.Levels.getName(level) + '] ' + message;
+                    outputElement.appendChild(li);
+                }
+            }
+            else 
+                if (outputElement.tagName == 'TABLE') {
+					/**
+					 * @inner
+					 */
+                    f = function(message, level){
+                        var tr = document.createElement('tr');
+                        var td1 = document.createElement('td');
+                        td1.setAttribute('class', 'eventType');
+                        td1.innerHTML = tent.logging.Levels.getName(level);
+                        tr.appendChild(td1);
+                        var td2 = document.createElement('td');
+                        td2.setAttribute('class', 'eventMessage');
+                        
+                        td2.innerHTML = message.replace(/(\<)/g, '&lt;').replace(/(\>)/g, '&gt;').replace(/(\&)/g, '&amp;').replace(/(\s)/g, '&nbsp;');
+                        
+                        tr.appendChild(td2);
+                        
+                        var tbody = outputElement.tBodies[0];
+                        tbody.appendChild(tr);
+                    }
+                }
+                else {
+					/**
+					 * @inner
+					 */
+                    f = function(message, level){
+                        outputElement.innerHTML += '<br/>[' + tent.logging.Levels.getName(level) + '] ' + message;
+                    }
+                }
+        f.outputElement = outputElement;
+        return f;
+    }
+	    
+    /**
+     * Default global log sink
+     * @constant
+     * @type tent.logging.Log
+     */
+    tent.log = new tent.logging.Log().bindToConsole();
+    	    
 });
 

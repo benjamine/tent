@@ -1,7 +1,20 @@
+/**
+ * @requires tent.changes
+ * @name tent.changes.reverseProperties
+ * @namespace Reverse Properties Synchronization
+ */
+tent.declare('tent.changes.reverseProperties', function(){
 
-tent.declare('tent.changes.reverseProperties', function(exports){
-
-    exports.setReverseProperty = function(obj, name, prop){
+	/**
+	 * Adds a reverse property definition to a Javascript Object
+	 * @private
+	 * @param {Object} obj
+	 * @param {String} name property name in obj
+	 * @param {Object} [prop] reverse property definition
+	 * @param {String} [prop.cardinality] cardinality, one of: '11','1n','n1','nm', default is '11'
+	 * @param {Object} [prop.reverse] reverse property name on the referenced object(s)
+	 */
+    tent.changes.reverseProperties.setReverseProperty = function(obj, name, prop){
 
         if (!prop) {
             prop = {};
@@ -49,32 +62,73 @@ tent.declare('tent.changes.reverseProperties', function(exports){
         }
     }
     
-    exports.setReverseProperties = function(obj, properties){
+	/**
+	 * Adds reverse property definitions to a Javascript Object
+	 * @private
+	 * @param {Object} obj
+	 * @param {Object} properties an object which properties are property definitions, properties with reverse=true will be synced
+	 */
+    tent.changes.reverseProperties.setReverseProperties = function(obj, properties){
         if (properties) {
             for (var name in properties) {
                 if (properties[name].reverse) {
 
-                    exports.setReverseProperty(obj, name, properties[name]);
+                    tent.changes.reverseProperties.setReverseProperty(obj, name, properties[name]);
 
                 }
             }
         }
     }
     
-    exports.Set = function Set(properties){
+	/**
+	 * Creates a new set of reverse property definitions
+	 * @class a set of reverse property definitions
+	 * @constructor
+	 * @param {Object} properties an object which properties are property definitions, properties with reverse=true will be synced
+	 */
+    tent.changes.reverseProperties.Set = function Set(properties){
         this.properties = properties;
     }
     
-    exports.Set.prototype.create = function(){
+	/**
+	 * Creates a new Javascript Object and applies this Set to it, see {@link #applyTo}
+	 * @return {Object} a new Javascript Object with this set applied
+	 */
+    tent.changes.reverseProperties.Set.prototype.create = function(){
         var obj = {};
-        exports.setReverseProperties(obj, this.properties);
+		this.applyTo(obj);
         return obj;
     }
     
-    exports.Set.prototype.applyTo = function(){
+	/**
+	 * Applies this Set to all arguments
+	 * @example
+	 *   // set reverse properties, start synchronization and logging
+	 *   var Person = new tent.changes.reverseProperties.Set({
+	 *   	father: { reverse: 'children', cardinality: 'n1' },
+	 *   	children: { reverse: 'father', cardinality: '1n' },
+	 *   	friends: { reverse: 'friends', cardinality: 'nm' },
+	 *   });
+	 *   Person.applyTo(p1,p2,p3).bind({ log: true });
+	 *   p1.father = p2;
+	 *   p2.friends.push(p3);
+	 *   p3.children.push(p2);
+	 *   
+	 *   // assert reverse properties are in sync
+	 *   strictEqual(p1, p2.children[0]);
+	 *   strictEqual(p2, p3.friends[0]);
+	 *   strictEqual(p3, p2.father);
+	 *   
+	 * @return {Array} an Array with all arguments and a 'bind' method, similar to {@link tent.changes.bind} that automatically includes reverse property sinchronization.
+	 */
+    tent.changes.reverseProperties.Set.prototype.applyTo = function(){
         var result = [];
         
         // fluent bind method (eg: MySet.applyTo(elem1,elem2).bind({log:true});)
+		/**
+		 * @inner
+		 * @param {Object} options
+		 */
         result.bind = function(options){
         
             if (!options) {
@@ -114,7 +168,7 @@ tent.declare('tent.changes.reverseProperties', function(exports){
         if (this.properties) {
 
             for (var i = 0; i < arguments.length; i++) {
-                exports.setReverseProperties(arguments[i], this.properties);
+                tent.changes.reverseProperties.setReverseProperties(arguments[i], this.properties);
             }
             result.push.apply(result, arguments);
 
@@ -123,22 +177,21 @@ tent.declare('tent.changes.reverseProperties', function(exports){
         return result;
     }
     
-    exports.Set.prototype.applyToAndBind = function(){
-        if (this.properties && this.properties.length > 0) {
-            for (var i = 0; i < arguments.length; i++) {
-                exports.setReverseProperties(arguments[i], this.properties);
-                tent.changes.bind(arguments[i], {
-                    deep: true,
-                    reverseProperties: true
-                });
-            }
-        }
-    }
-    
+	/**
+	 * @private
+	 */
     var reversePropertyHandler;
     
-    exports.getHandler = function(){
+	/**
+	 * Gets the reverse property change handler.
+	 * It keeps reverse properties synchronized.
+	 * @return {function()} reverse property change handler
+	 */
+    tent.changes.reverseProperties.getHandler = function(){
         if (!reversePropertyHandler) {
+			/**
+			 * @inner
+			 */
             reversePropertyHandler = function(change){
             
                 // TODO: handle MANYCHANGES eventType
@@ -254,6 +307,5 @@ tent.declare('tent.changes.reverseProperties', function(exports){
         return reversePropertyHandler;
     }
     
-    return exports;
 });
 

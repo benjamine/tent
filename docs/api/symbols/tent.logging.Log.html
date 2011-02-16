@@ -1,0 +1,978 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<meta name="generator" content="JsDoc Toolkit" />
+		
+		<title>JsDoc Reference - tent.logging.Log</title>
+
+		<style type="text/css">
+			/* default.css */
+body
+{
+	font: 12px "Lucida Grande", Tahoma, Arial, Helvetica, sans-serif;
+	width: 800px;
+}
+
+.header
+{
+	clear: both;
+	background-color: #ccc;
+	padding: 8px;
+}
+
+h1
+{
+	font-size: 150%;
+	font-weight: bold;
+	padding: 0;
+	margin: 1em 0 0 .3em;
+}
+
+hr
+{
+	border: none 0;
+	border-top: 1px solid #7F8FB1;
+	height: 1px;
+}
+
+pre.code
+{
+	display: block;
+	padding: 8px;
+	border: 1px dashed #ccc;
+}
+
+#index
+{
+	margin-top: 24px;
+	float: left;
+	width: 160px;
+	position: absolute;
+	left: 8px;
+	background-color: #F3F3F3;
+	padding: 8px;
+}
+
+#content
+{
+	margin-left: 190px;
+	width: 600px;
+}
+
+.classList
+{
+	list-style-type: none;
+	padding: 0;
+	margin: 0 0 0 8px;
+	font-family: arial, sans-serif;
+	font-size: 1em;
+	overflow: auto;
+}
+
+.classList li
+{
+	padding: 0;
+	margin: 0 0 8px 0;
+}
+
+.summaryTable { width: 100%; }
+
+h1.classTitle
+{
+	font-size:170%;
+	line-height:130%;
+}
+
+h2 { font-size: 110%; }
+caption, div.sectionTitle
+{
+	background-color: #7F8FB1;
+	color: #fff;
+	font-size:130%;
+	text-align: left;
+	padding: 2px 6px 2px 6px;
+	border: 1px #7F8FB1 solid;
+}
+
+div.sectionTitle { margin-bottom: 8px; }
+.summaryTable thead { display: none; }
+
+.summaryTable td
+{
+	vertical-align: top;
+	padding: 4px;
+	border-bottom: 1px #7F8FB1 solid;
+	border-right: 1px #7F8FB1 solid;
+}
+
+/*col#summaryAttributes {}*/
+.summaryTable td.attributes
+{
+	border-left: 1px #7F8FB1 solid;
+	width: 140px;
+	text-align: right;
+}
+
+td.attributes, .fixedFont
+{
+	line-height: 15px;
+	color: #002EBE;
+	font-family: "Courier New",Courier,monospace;
+	font-size: 13px;
+}
+
+.summaryTable td.nameDescription
+{
+	text-align: left;
+	font-size: 13px;
+	line-height: 15px;
+}
+
+.summaryTable td.nameDescription, .description
+{
+	line-height: 15px;
+	padding: 4px;
+	padding-left: 4px;
+}
+
+.summaryTable { margin-bottom: 8px; }
+
+ul.inheritsList
+{
+	list-style: square;
+	margin-left: 20px;
+	padding-left: 0;
+}
+
+.detailList {
+	margin-left: 20px; 
+	line-height: 15px;
+}
+.detailList dt { margin-left: 20px; }
+
+.detailList .heading
+{
+	font-weight: bold;
+	padding-bottom: 6px;
+	margin-left: 0;
+}
+
+.light, td.attributes, .light a:link, .light a:visited
+{
+	color: #777;
+	font-style: italic;
+}
+
+.fineprint
+{
+	text-align: right;
+	font-size: 10px;
+}
+		</style>
+	</head>
+
+	<body>
+<!-- ============================== header ================================= -->	
+		<!-- begin static/header.html -->
+		<div id="header">
+</div>
+		<!-- end static/header.html -->
+
+<!-- ============================== classes index ============================ -->
+		<div id="index">
+			<!-- begin publish.classesIndex -->
+			<div align="center"><a href="../index.html">Class Index</a>
+| <a href="../files.html">File Index</a></div>
+<hr />
+<h2>Classes</h2>
+<ul class="classList">
+	
+	<li><i><a href="../symbols/_global_.html">_global_</a></i></li>
+	
+	<li><a href="../symbols/tent.html">tent</a></li>
+	
+	<li><a href="../symbols/tent.arrays.html">tent.arrays</a></li>
+	
+	<li><a href="../symbols/tent.arrays.functions.html">tent.arrays.functions</a></li>
+	
+	<li><a href="../symbols/tent.changes.html">tent.changes</a></li>
+	
+	<li><a href="../symbols/tent.changes.Change.html">tent.changes.Change</a></li>
+	
+	<li><a href="../symbols/tent.changes.LogHandler.html">tent.changes.LogHandler</a></li>
+	
+	<li><a href="../symbols/tent.changes.Observable.html">tent.changes.Observable</a></li>
+	
+	<li><a href="../symbols/tent.changes.reverseProperties.html">tent.changes.reverseProperties</a></li>
+	
+	<li><a href="../symbols/tent.changes.reverseProperties.Set.html">tent.changes.reverseProperties.Set</a></li>
+	
+	<li><a href="../symbols/tent.coreTypes.html">tent.coreTypes</a></li>
+	
+	<li><a href="../symbols/tent.coreTypes.Enum.html">tent.coreTypes.Enum</a></li>
+	
+	<li><a href="../symbols/tent.coreTypes.NameCounter.html">tent.coreTypes.NameCounter</a></li>
+	
+	<li><a href="../symbols/tent.databinding.html">tent.databinding</a></li>
+	
+	<li><a href="../symbols/tent.entities.html">tent.entities</a></li>
+	
+	<li><a href="../symbols/tent.entities.Collection.html">tent.entities.Collection</a></li>
+	
+	<li><a href="../symbols/tent.entities.Context.html">tent.entities.Context</a></li>
+	
+	<li><a href="../symbols/tent.entities.ContextChangeHandler.html">tent.entities.ContextChangeHandler</a></li>
+	
+	<li><a href="../symbols/tent.entities.ContextChanges.html">tent.entities.ContextChanges</a></li>
+	
+	<li><a href="../symbols/tent.entities.EntityLink.html">tent.entities.EntityLink</a></li>
+	
+	<li><a href="../symbols/tent.entities.Type.html">tent.entities.Type</a></li>
+	
+	<li><a href="../symbols/tent.logging.html">tent.logging</a></li>
+	
+	<li><a href="../symbols/tent.logging.Log.html">tent.logging.Log</a></li>
+	
+	<li><a href="../symbols/tent.Namespace.html">tent.Namespace</a></li>
+	
+</ul>
+<hr />
+			<!-- end publish.classesIndex -->
+		</div>
+		
+		<div id="content">
+<!-- ============================== class title ============================ -->
+			<h1 class="classTitle">
+				
+				Class tent.logging.Log
+			</h1>
+
+<!-- ============================== class summary ========================== -->			
+			<p class="description">
+				
+				
+			
+				a log sink
+				
+				
+					<br /><i>Defined in: </i> <a href="../symbols/src/src__logging.js.html">logging.js</a>.
+				
+			</p>
+
+<!-- ============================== constructor summary ==================== -->			
+			
+			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class tent.logging.Log.">
+				<caption>Class Summary</caption>
+				<thead>
+					<tr>
+						<th scope="col">Constructor Attributes</th>
+						<th scope="col">Constructor Name and Description</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="attributes">&nbsp;</td>
+						<td class="nameDescription" >
+							<div class="fixedFont">
+								<b><a href="../symbols/tent.logging.Log.html#constructor">tent.logging.Log</a></b>()
+							</div>
+							<div class="description">Creates a new log sink</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			
+
+<!-- ============================== properties summary ===================== -->
+			
+
+<!-- ============================== methods summary ======================== -->
+			
+				
+				
+				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class tent.logging.Log.">
+					<caption>Method Summary</caption>
+					<thead>
+						<tr>
+							<th scope="col">Method Attributes</th>
+							<th scope="col">Method Name and Description</th>
+						</tr>
+					</thead>
+					<tbody>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/tent.logging.Log.html#bind">bind</a></b>(callback, level)
+								</div>
+								<div class="description">Binds a callback function to events of this Log</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/tent.logging.Log.html#bindToAlert">bindToAlert</a></b>(level)
+								</div>
+								<div class="description">Binds this Log to the alert function (ie: shows an alert dialog for every event)</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/tent.logging.Log.html#bindToConsole">bindToConsole</a></b>(level)
+								</div>
+								<div class="description">Binds this Log to the browser's console</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/tent.logging.Log.html#bindToHtml">bindToHtml</a></b>(outputElement, level)
+								</div>
+								<div class="description">Binds this Log to an Html element (ie: adds some html for every event)</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/tent.logging.Log.html#debug">debug</a></b>()
+								</div>
+								<div class="description">Logs an event with severity DEBUG, all arguments are stringified in a message</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/tent.logging.Log.html#error">error</a></b>()
+								</div>
+								<div class="description">Logs an event with severity ERROR, all arguments are stringified in a message</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/tent.logging.Log.html#fatal">fatal</a></b>()
+								</div>
+								<div class="description">Logs an event with severity FATAL, all arguments are stringified in a message</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/tent.logging.Log.html#info">info</a></b>()
+								</div>
+								<div class="description">Logs an event with severity INFO, all arguments are stringified in a message</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/tent.logging.Log.html#trace">trace</a></b>()
+								</div>
+								<div class="description">Logs an event with severity TRACE, all arguments are stringified in a message</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/tent.logging.Log.html#unbind">unbind</a></b>(callback)
+								</div>
+								<div class="description">Unbinds a callback function from events of this Log</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/tent.logging.Log.html#unbindAlert">unbindAlert</a></b>()
+								</div>
+								<div class="description">Unbinds this Log from alert function</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/tent.logging.Log.html#unbindConsole">unbindConsole</a></b>()
+								</div>
+								<div class="description">Unbinds this Log from browser's console</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/tent.logging.Log.html#unbindHtml">unbindHtml</a></b>(outputElement)
+								</div>
+								<div class="description">Unbinds this Log from an Html element</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/tent.logging.Log.html#warn">warn</a></b>()
+								</div>
+								<div class="description">Logs an event with severity WARN, all arguments are stringified in a message</div>
+							</td>
+						</tr>
+					
+					</tbody>
+				</table>
+				
+				
+				
+			
+<!-- ============================== events summary ======================== -->
+			
+
+<!-- ============================== constructor details ==================== -->		
+			
+			<div class="details"><a name="constructor"> </a>
+				<div class="sectionTitle">
+					Class Detail
+				</div>
+				
+				<div class="fixedFont">
+						<b>tent.logging.Log</b>()
+				</div>
+				
+				<div class="description">
+					Creates a new log sink
+					
+				</div>
+				
+				
+				
+				
+					
+					
+					
+					
+					
+					
+					
+
+			</div>
+			
+
+<!-- ============================== field details ========================== -->		
+			
+
+<!-- ============================== method details ========================= -->		
+			
+				<div class="sectionTitle">
+					Method Detail
+				</div>
+				
+					<a name="bind"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{<a href="../symbols/tent.logging.Log.html">tent.logging.Log</a>}</span>
+					<b>bind</b>(callback, level)
+					
+					</div>
+					<div class="description">
+						Binds a callback function to events of this Log
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{function()}</span> <b>callback</b>
+									
+								</dt>
+								<dd></dd>
+							
+								<dt>
+									<span class="light fixedFont">{Number}</span> <b>level</b>
+									<i>Optional</i>
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{<a href="../symbols/tent.logging.Log.html">tent.logging.Log</a>}</span> this</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="bindToAlert"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{<a href="../symbols/tent.logging.Log.html">tent.logging.Log</a>}</span>
+					<b>bindToAlert</b>(level)
+					
+					</div>
+					<div class="description">
+						Binds this Log to the alert function (ie: shows an alert dialog for every event)
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Number}</span> <b>level</b>
+									<i>Optional</i>
+								</dt>
+								<dd>minimum level for events sent</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{<a href="../symbols/tent.logging.Log.html">tent.logging.Log</a>}</span> this</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="bindToConsole"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{<a href="../symbols/tent.logging.Log.html">tent.logging.Log</a>}</span>
+					<b>bindToConsole</b>(level)
+					
+					</div>
+					<div class="description">
+						Binds this Log to the browser's console
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Number}</span> <b>level</b>
+									<i>Optional</i>
+								</dt>
+								<dd>minimum level for events sent</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{<a href="../symbols/tent.logging.Log.html">tent.logging.Log</a>}</span> this</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="bindToHtml"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{<a href="../symbols/tent.logging.Log.html">tent.logging.Log</a>}</span>
+					<b>bindToHtml</b>(outputElement, level)
+					
+					</div>
+					<div class="description">
+						Binds this Log to an Html element (ie: adds some html for every event)
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Object}</span> <b>outputElement</b>
+									
+								</dt>
+								<dd>html element for appends, INPUT (add line to value), UL (add LI), TABLE (add TR) or DIV (add line to innerHTML)</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Number}</span> <b>level</b>
+									<i>Optional</i>
+								</dt>
+								<dd>minimum level for events sent</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{<a href="../symbols/tent.logging.Log.html">tent.logging.Log</a>}</span> this</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="debug"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>debug</b>()
+					
+					</div>
+					<div class="description">
+						Logs an event with severity DEBUG, all arguments are stringified in a message
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="error"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>error</b>()
+					
+					</div>
+					<div class="description">
+						Logs an event with severity ERROR, all arguments are stringified in a message
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="fatal"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>fatal</b>()
+					
+					</div>
+					<div class="description">
+						Logs an event with severity FATAL, all arguments are stringified in a message
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="info"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>info</b>()
+					
+					</div>
+					<div class="description">
+						Logs an event with severity INFO, all arguments are stringified in a message
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="trace"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>trace</b>()
+					
+					</div>
+					<div class="description">
+						Logs an event with severity TRACE, all arguments are stringified in a message
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="unbind"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{<a href="../symbols/tent.logging.Log.html">tent.logging.Log</a>}</span>
+					<b>unbind</b>(callback)
+					
+					</div>
+					<div class="description">
+						Unbinds a callback function from events of this Log
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{function()}</span> <b>callback</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{<a href="../symbols/tent.logging.Log.html">tent.logging.Log</a>}</span> this</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="unbindAlert"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{<a href="../symbols/tent.logging.Log.html">tent.logging.Log</a>}</span>
+					<b>unbindAlert</b>()
+					
+					</div>
+					<div class="description">
+						Unbinds this Log from alert function
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{<a href="../symbols/tent.logging.Log.html">tent.logging.Log</a>}</span> this</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="unbindConsole"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{<a href="../symbols/tent.logging.Log.html">tent.logging.Log</a>}</span>
+					<b>unbindConsole</b>()
+					
+					</div>
+					<div class="description">
+						Unbinds this Log from browser's console
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{<a href="../symbols/tent.logging.Log.html">tent.logging.Log</a>}</span> this</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="unbindHtml"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{<a href="../symbols/tent.logging.Log.html">tent.logging.Log</a>}</span>
+					<b>unbindHtml</b>(outputElement)
+					
+					</div>
+					<div class="description">
+						Unbinds this Log from an Html element
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<b>outputElement</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{<a href="../symbols/tent.logging.Log.html">tent.logging.Log</a>}</span> this</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="warn"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>warn</b>()
+					
+					</div>
+					<div class="description">
+						Logs an event with severity WARN, all arguments are stringified in a message
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+					
+				
+			
+			
+<!-- ============================== event details ========================= -->		
+			
+			
+			<hr />
+		</div>
+
+		
+<!-- ============================== footer ================================= -->
+		<div class="fineprint" style="clear:both">
+			&copy;2011<br />
+			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Wed Feb 16 2011 01:18:59 GMT-0300 (ART)
+		</div>
+	</body>
+</html>

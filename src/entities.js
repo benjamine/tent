@@ -1,12 +1,79 @@
+/**
+ * @requires tent.changes
+ * @requires tent.changes.reverseProperties
+ * @requires tent.arrays
+ * @requires tent.coreTypes
+ * @name tent.entities
+ * @namespace Entity Data Modeling
+ */
+tent.declare('tent.entities', function(){
 
-tent.declare('tent.entities', function(exports){
-
-    exports.ChangeStates = new tent.coreTypes.Enum('DETACHED,UNCHANGED,ADDED,MODIFIED,DELETED');
+	/**
+	 * Entity change states
+	 */
+    tent.entities.ChangeStates = new tent.coreTypes.Enum('DETACHED,UNCHANGED,ADDED,MODIFIED,DELETED');
     
-    exports.Type = function Type(name, properties){
+	/**
+	 * Create an entity Type
+	 * 
+	 * @example
+	 * 
+	 *  var Person = new tent.entities.Type('Person',{
+	 *  	name: {}, // scalar property
+	 *  	age: {}, // scalar property	
+	 *  	pet: {
+	 *  		reverse: 'owner', // each Person is his pet's owner
+	 *  		cardinality: '11', // one Person has one pet (optional, as '11' is the default)
+	 *  		collection: 'Animal', // pets belong to the 'Animal' collection (see {@link tent.entities.Collection}
+	 *  	} 
+	 *  	descendants: { 
+	 *  		 reverse: 'ancestor', // name of the property in 'descendants' objects
+	 *  		 cardinality: '1n', // each Person has many descendants 
+	 *  		 collection: 'Person', // descendants belong to the 'Person' collection (see {@link tent.entities.Collection}
+	 *           cascadePush: true, // when adding a Person, add its descendants too
+     *           cascadeRemove: true, // when deleting a Person, delete its descendants too
+     *           onLinkPush: true, // when a Person is added as descendant, add it to the {@link tent.entities.Context} too
+     *           onUnlinkRemove: true // when a Person is removed descendant, delete if from the {@link tent.entities.Context} too  
+     *        }, 
+	 *  	ancestor: { 
+	 *  		reverse: 'descendants',
+	 *  		cardinality: 'n1', // many Persons have one ancestor
+	 *  		collection: 'Person' // ancestor belongs to the 'Person' collection (see {@link tent.entities.Collection}
+	 *  		}, 
+	 *  	friends: { 
+	 *  		reverse: 'friends',
+	 *  		cardinality: 'nm' // many Persons have many Person friends
+	 *  		collection: 'Person' // friends belongs to the 'Person' collection (see {@link tent.entities.Collection}
+	 *      } 
+	 *  });
+	 *  
+	 * @class an entity type. Describes a set data structure type (eg: 'Person', 'Article', 'BlogEntry' or 'Country')
+	 * @constructor
+	 * @param {String} name Type name
+	 * @param {Object|tent.changes.reverseProperties.Set} properties An object which properties are the Type's property definitions, or a {@link tent.changes.reverseProperties.Set} to include in this Type
+	 */
+    tent.entities.Type = function Type(name, properties){
+		
+		/**
+		 * Type name
+		 * @type String
+		 * @field
+		 */
         this.name = name;
+		
+		/**
+		 * Type properties descriptor
+		 * @type Object
+		 * @field
+		 */
         this.properties = properties;
+
         if (properties instanceof tent.changes.reverseProperties.Set) {
+			/**
+			 * Reverse properties for this Type
+			 * @type tent.changes.reverseProperties.Set
+			 * @field
+			 */
             this.reversePropertySet = properties;
         }
         else 
@@ -18,11 +85,17 @@ tent.declare('tent.entities', function(exports){
             }
     }
     
-    exports.Type.prototype.toString = function(){
+	/**
+	 * Type identifying String
+	 */
+    tent.entities.Type.prototype.toString = function(){
         return 'EntityType(' + this.name + ')';
     }
     
-    exports.Type.prototype.applyTo = function(){
+	/**
+	 * Applies this Type to all the object arguments 
+	 */
+    tent.entities.Type.prototype.applyTo = function(){
         this.reversePropertySet.applyTo.apply(this.reversePropertySet, arguments);
         for (var i = 0; i < arguments.length; i++) {
             if (arguments[i].__entityType__ != this) {
@@ -42,18 +115,56 @@ tent.declare('tent.entities', function(exports){
         }
     }
     
-    exports.Collection = function Collection(context, type, name){
+	/**
+	 * Creates a new entity Collection.
+	 * This is intended for internal use, to add collections to a context use {@link tent.entities.Context#createCollection}
+	 * 
+	 * @class a collection of entities of a {@link tent.entities.Type} attached to a {@link tent.entities.Context}
+	 * @constructor
+	 * @param {tent.entities.Context} context
+	 * @param {tent.entities.Type} type
+	 * @param {String} name name for this collection, if not specified the type name is used
+	 */
+    tent.entities.Collection = function Collection(context, type, name){
     
+		/**
+		 * the {@link tent.entities.Context} that owns this collection
+		 * @type tent.entities.Context
+		 * @field
+		 */
         this.context = context;
+		
+		/**
+		 * the {@link tent.entities.Type} of objects on this collection
+		 * @type tent.entities.Type
+		 * @field
+		 */
         this.type = type;
+		
+		/**
+		 * Collection name
+		 * @type String
+		 * @field
+		 */
         this.name = name || type.name;
         
+		/**
+		 * Objects in this collection
+		 * @type Array
+		 * @field
+		 */
         this.items = [];
         
-        tent.arrays.addFunctions(this.items);
+        tent.arrays.extend(this.items);
     }
     
-    exports.Collection.prototype.push = function(){
+	/**
+	 * Adds all arguments to this collection
+	 * @throws if an argument already belongs to another collection
+	 * @throws if an argument has a {@link tent.entities.Type} different from this collection {@link #type}
+	 * @return {Number} the number of entities in this collection
+	 */
+    tent.entities.Collection.prototype.push = function(){
         for (var i = 0; i < arguments.length; i++) {
             if (arguments[i] instanceof Array) {
                 // array, push each element in the array
@@ -96,7 +207,13 @@ tent.declare('tent.entities', function(exports){
         return this.items.length;
     }
     
-    exports.Collection.prototype.attach = function(){
+	/**
+	 * Attachs all arguments to this collection. Each object change state is preserved. If no change state is found, object are added as unchanged.
+	 * @throws if an argument already belongs to another collection
+	 * @throws if an argument has a {@link tent.entities.Type} different from this collection {@link #type}
+	 * @return {Number} the number of entities in this collection
+	 */
+    tent.entities.Collection.prototype.attach = function(){
         for (var i = 0; i < arguments.length; i++) {
             if (arguments[i] instanceof Array) {
                 throw 'cannot attach arrays to a Collection';
@@ -123,7 +240,7 @@ tent.declare('tent.entities', function(exports){
                     if (this.items.lastIndexOf(arguments[i]) < 0) {
                         // add item to this collection
                         arguments[i].__collection__ = this;
-                        if (arguments[i].__changeState__ != exports.ChangeStates.DELETED) {
+                        if (arguments[i].__changeState__ != tent.entities.ChangeStates.DELETED) {
                             this.items.push(arguments[i]);
                         }
                         if (this.context.changeHandler) {
@@ -140,7 +257,11 @@ tent.declare('tent.entities', function(exports){
         return this.items.length;
     }
     
-    exports.Collection.prototype.remove = function(){
+	/**
+	 * Removes all arguments from this collection.
+	 * @return {Boolean} true if any element has been removed (ie: a change has been made)
+	 */
+    tent.entities.Collection.prototype.remove = function(){
         var removed = false;
         for (var i = 0, l = arguments.length; i < l; i++) {
             var item = arguments[i];
@@ -160,11 +281,15 @@ tent.declare('tent.entities', function(exports){
         return removed;
     }
     
-    exports.Collection.prototype.detach = function(){
+	/**
+	 * Detaches all arguments from this collection (and its {@link #context})
+	 * @return {Boolean} true if any element has been detached (ie: a change has been made)
+	 */
+    tent.entities.Collection.prototype.detach = function(){
         var removed = false;
         for (var i = 0, l = arguments.length; i < l; i++) {
             var item = arguments[i];
-            if (this.items.remove(item) || item.__changeState__ == exports.ChangeStates.DELETED) {
+            if (this.items.remove(item) || item.__changeState__ == tent.entities.ChangeStates.DELETED) {
                 removed = true;
                 // item removed from the Context
                 if (this.context.changeHandler) {
@@ -181,7 +306,11 @@ tent.declare('tent.entities', function(exports){
         return removed;
     }
     
-    exports.Collection.prototype.detachAll = function(){
+	/**
+	 * Detaches ({@link #detach}) all entities in this collection ({@link #items})
+	 * @return {Boolean} true if any element has been detached (ie: a change has been made)
+	 */
+    tent.entities.Collection.prototype.detachAll = function(){
         if (this.items.length < 1) {
             return false;
         }
@@ -205,17 +334,37 @@ tent.declare('tent.entities', function(exports){
         return true;
     }
     
-    exports.Context = function Context(trackChanges){
+	/**
+	 * Creates a new entity Context
+	 * @class a Context that contains collections ({@link tent.entities.Collection}) of entities. Tracks changes on its entities.
+	 * @constructor 
+	 * @param {Object} trackChanges if true change tracking is activated
+	 */
+    tent.entities.Context = function Context(trackChanges){
         this.__collections__ = {};
         this.__types__ = {};
         if (trackChanges === true) {
             this.trackChanges();
         }
+		
+		/**
+		 * Changes detected on this context. Activate change tracking calling {@link #trackChanges}
+		 * @type tent.entities.ContextChanges
+		 * @field
+		 */		
+		 this.changes = null;
     }
     
-    exports.MyContext = new exports.Context();
+	/**
+	 * A global {@link tent.entities.Context} instance.
+	 */
+    tent.entities.MyContext = new tent.entities.Context();
     
-    exports.Context.prototype.all = function(){
+	/**
+	 * Returns all entities in this Context
+	 * @return {Array} all entities in this Context
+	 */
+    tent.entities.Context.prototype.all = function(){
         var items = [];
         for (var collname in this.__collections__) {
             items.push.apply(items, this.__collections__[collname].items);
@@ -223,7 +372,12 @@ tent.declare('tent.entities', function(exports){
         return items;
     }
     
-    exports.Context.prototype.filter = function(condition){
+	/**
+	 * Filters entities in this Context
+	 * @param {function()} condition a function that returns true for items that pass the filter
+	 * @return {Array} all entities in this Context that passed the filter
+	 */
+    tent.entities.Context.prototype.filter = function(condition){
         var items = [];
         for (var collname in this.__collections__) {
             items.push.apply(items, this.__collections__[collname].items.filter(condition));
@@ -231,7 +385,11 @@ tent.declare('tent.entities', function(exports){
         return items;
     }
     
-    exports.Context.prototype.contains = function(){
+	/**
+	 * Searchs for all arguments in this Context. Arguments can be an entity object, a {@link tent.entities.Type} or a {@link tent.entities.Collection} 
+	 * @return {Boolean} true if all arguments were found on this Context 
+	 */
+    tent.entities.Context.prototype.contains = function(){
     
         for (var ai = 0; ai < arguments.length; ai++) {
             var item = arguments[ai];
@@ -245,13 +403,13 @@ tent.declare('tent.entities', function(exports){
                     }
                 }
                 else 
-                    if (item instanceof exports.Type) {
+                    if (item instanceof tent.entities.Type) {
                         if (this.__types__[item.name] != item) {
                             return false;
                         }
                     }
                     else 
-                        if (item instanceof exports.Collection) {
+                        if (item instanceof tent.entities.Collection) {
                             if (this != item.context) {
                                 return false;
                             }
@@ -263,14 +421,21 @@ tent.declare('tent.entities', function(exports){
         return true;
     }
     
-    exports.Context.prototype.createCollection = function(type, name){
+	/**
+	 * Creates a new {@link tent.entities.Collection} on this Context. If the collection already exists no action is performed.
+	 * @param {tent.entities.Type} [type] the type for items in this collection, if not provided an untyped collection is created
+	 * @param {String} [name] a name for the collection, if not provided the type name is used (for the untyped collection name is '_Object')
+	 * @return {tent.entities.Collection} the new (or previously existing) collection
+	 * @throws if no name and no type were provided
+	 */
+    tent.entities.Context.prototype.createCollection = function(type, name){
     
         if (!name) {
             if (!type) {
                 name = '_Object';
             }
             else {
-                if (type instanceof exports.Type) {
+                if (type instanceof tent.entities.Type) {
                     name = type.name;
                 }
                 else 
@@ -284,13 +449,13 @@ tent.declare('tent.entities', function(exports){
             }
         }
         else 
-            if (type && (!type instanceof exports.Type)) {
+            if (type && (!type instanceof tent.entities.Type)) {
                 throw 'provided type is not a Type instance';
             }
         
         if (!this.__collections__[name]) {
             // create a new collection
-            this.__collections__[name] = new exports.Collection(this, type, name);
+            this.__collections__[name] = new tent.entities.Collection(this, type, name);
             
             // add shortcut
             var shortcutName = name;
@@ -303,17 +468,55 @@ tent.declare('tent.entities', function(exports){
         return this.__collections__[name];
     }
     
-    exports.Context.prototype.pushModel = function(model){
+	/**
+	 * Adds an entity model to this context. 
+	 * Allows to load entity models using JSON.
+	 * 
+	 * @example
+	 * 
+	 * 	var ctx = new tent.entities.Context();
+	 * 
+	 *  ctx.pushModel({ 
+	 *    Person: {
+	 *  	name: {}, // scalar property
+	 *  	age: {}, // scalar property	
+	 *  	pet: {
+	 *  		reverse: 'owner', // each Person is his pet's owner
+	 *  		cardinality: '11', // one Person has one pet (optional, as '11' is the default)
+	 *  		collection: 'Animal', // pets belong to the 'Animal' collection (see {@link tent.entities.Collection}
+	 *  	} 
+	 *    },
+	 *    Animal: {
+	 *  	name: {}, // scalar property
+	 *  	age: {}, // scalar property	
+	 *  	color: {}, // scalar property	
+	 *  	owner: {
+	 *  		reverse: 'pet', // each Animal is his owner's pet
+	 *  		cardinality: '11', // one Animal has one owner (optional, as '11' is the default)
+	 *  		collection: 'Person', // owner belong to the 'Person' collection (see {@link tent.entities.Collection}
+	 *  	} 
+	 *    }
+	 *  );
+	 *  
+	 * @param {Object} model an entity model
+	 * @param {Object} model.types a javascript Object with properties represent entity types ({@link tent.entities.Type})
+	 */
+    tent.entities.Context.prototype.pushModel = function(model){
         if (model) {
             if (model.types) {
                 for (var typeName in model.types) {
-                    this.push(new exports.Type(typeName, model.types[typeName]));
+                    this.push(new tent.entities.Type(typeName, model.types[typeName]));
                 }
             }
         }
     }
     
-    exports.Context.prototype.push = function(){
+	/**
+	 * Adds all arguments to this Context. Arguments can be an entity object (with or without type) or a {@link tent.entities.Type}.
+	 * When a type is added, a {@link tent.entities.Collection} with that type and the same name is created.
+	 * @throws if an argument belongs to another context
+	 */
+    tent.entities.Context.prototype.push = function() {
         for (var i = 0; i < arguments.length; i++) {
             if (arguments[i] instanceof Array) {
                 throw 'cannot push arrays into a Context';
@@ -329,7 +532,7 @@ tent.declare('tent.entities', function(exports){
                     }
                 }
                 else 
-                    if (arguments[i] instanceof exports.Type) {
+                    if (arguments[i] instanceof tent.entities.Type) {
                         if (!arguments[i].name) {
                             throw 'cannot add an EntityType without name';
                         }
@@ -345,7 +548,7 @@ tent.declare('tent.entities', function(exports){
                         this.createCollection(arguments[i]);
                     }
                     else 
-                        if (arguments[i] instanceof exports.Context) {
+                        if (arguments[i] instanceof tent.entities.Context) {
                             throw 'cannot add an EntityContext to an EntityContext';
                         }
                         else 
@@ -369,22 +572,33 @@ tent.declare('tent.entities', function(exports){
         }
     }
     
-    exports.Context.prototype.attach = function(){
+	/**
+	 * Attachs all arguments to this Context. Arguments can be entity objects (with or without type).
+	 * Each entity change state is preserved, if no change state is found entity is added as unchanged.
+	 * @throws if an argument belongs to another context
+	 * @throws if an argument type name exists in this context and is different
+	 */
+    tent.entities.Context.prototype.attach = function(){
         for (var i = 0; i < arguments.length; i++) {
             if (arguments[i] instanceof Array) {
                 throw 'cannot attach arrays';
             }
             else 
-                if (arguments[i].__collection__ && arguments[i].__collection__.context == this) {
-                    // object already attached
-                    continue;
+                if (arguments[i].__collection__) {
+	                if (arguments[i].__collection__.context == this) {
+	                    // object already attached
+                        continue;
+                    }
+                    else {
+                        throw 'cannot attach this item, it belongs to another Context';
+                    }
                 }
                 else 
-                    if (arguments[i] instanceof exports.Type) {
+                    if (arguments[i] instanceof tent.entities.Type) {
                         throw 'cannot attach EntityTypes';
                     }
                     else 
-                        if (arguments[i] instanceof exports.Context) {
+                        if (arguments[i] instanceof tent.entities.Context) {
                             throw 'cannot attach an EntityContext to an EntityContext';
                         }
                         else 
@@ -408,13 +622,16 @@ tent.declare('tent.entities', function(exports){
         }
     }
     
-    exports.Context.prototype.remove = function(){
+	/**
+	 * Removes all arguments from this context. Arguments can be entity objects (with or without type).
+	 */
+    tent.entities.Context.prototype.remove = function(){
         for (var i = 0; i < arguments.length; i++) {
-            if (arguments[i] instanceof exports.Type) {
+            if (arguments[i] instanceof tent.entities.Type) {
                 throw 'cannot remove EntityTypes';
             }
             else 
-                if (arguments[i] instanceof exports.Context) {
+                if (arguments[i] instanceof tent.entities.Context) {
                     throw 'cannot remove an EntityContext from an EntityContext';
                 }
                 else 
@@ -426,16 +643,19 @@ tent.declare('tent.entities', function(exports){
         }
     }
     
-    exports.Context.prototype.detach = function(){
+	/**
+	 * Detaches all arguments from this context.
+	 */
+    tent.entities.Context.prototype.detach = function(){
         for (var i = 0; i < arguments.length; i++) {
             if (arguments[i] instanceof Array) {
                 throw 'cannot detach arrays';
             }
-            if (arguments[i] instanceof exports.Type) {
+            if (arguments[i] instanceof tent.entities.Type) {
                 throw 'cannot detach EntityTypes';
             }
             else 
-                if (arguments[i] instanceof exports.Context) {
+                if (arguments[i] instanceof tent.entities.Context) {
                     throw 'cannot detach an EntityContext from an EntityContext';
                 }
                 else 
@@ -447,7 +667,10 @@ tent.declare('tent.entities', function(exports){
         }
     }
     
-    exports.Context.prototype.detachAll = function(){
+	/**
+	 * Detaches all entities on this Context
+	 */
+    tent.entities.Context.prototype.detachAll = function(){
         var removed = false;
         for (var i = 0; i < this.__collections__.length; i++) {
             if (this.__collections__[i].detachAll()) {
@@ -457,13 +680,20 @@ tent.declare('tent.entities', function(exports){
         return removed;
     }
     
-    exports.Context.prototype.touch = function(){
+	/**
+	 * Marks all arguments as modified
+	 */
+    tent.entities.Context.prototype.touch = function(){
         if (this.changeHandler) {
             return this.changeHandler.touch.apply(this.changeHandler, arguments);
         }
     }
     
-    exports.Context.prototype.__cascadePush__ = function(){
+	/**
+	 * Cascades push on all arguments, pushing referenced objects too
+	 * @private
+	 */
+    tent.entities.Context.prototype.__cascadePush__ = function(){
         for (var i = 0; i < arguments.length; i++) {
             // cascade push arguments[i] properties values
             var item = arguments[i];
@@ -503,7 +733,11 @@ tent.declare('tent.entities', function(exports){
         }
     }
     
-    exports.Context.prototype.__cascadeAttach__ = function(){
+	/**
+	 * Cascades attach on all arguments, attaching referenced objects too
+	 * @private
+	 */
+    tent.entities.Context.prototype.__cascadeAttach__ = function(){
         for (var i = 0; i < arguments.length; i++) {
             // cascade attach arguments[i] properties values
             var item = arguments[i];
@@ -543,7 +777,12 @@ tent.declare('tent.entities', function(exports){
         }
     }
     
-    exports.Context.prototype.__cascadeRemove__ = function(){
+	    
+	/**
+	 * Cascades remove on all arguments, removing referenced objects too
+	 * @private
+	 */
+    tent.entities.Context.prototype.__cascadeRemove__ = function(){
         for (var i = 0; i < arguments.length; i++) {
         
             // cascade remove arguments[i] properties values
@@ -573,7 +812,11 @@ tent.declare('tent.entities', function(exports){
         }
     }
     
-    exports.Context.prototype.__cascadeDetach__ = function(){
+	/**
+	 * Cascades detaches on all arguments, detaching referenced objects too
+	 * @private
+	 */
+    tent.entities.Context.prototype.__cascadeDetach__ = function(){
         for (var i = 0; i < arguments.length; i++) {
             // cascade detach arguments[i] properties values
             var item = arguments[i];
@@ -599,58 +842,133 @@ tent.declare('tent.entities', function(exports){
         }
     }
     
-    exports.Context.prototype.trackChanges = function(){
+	/**
+	 * Activates change tracking for this context
+	 */
+    tent.entities.Context.prototype.trackChanges = function(){
         if (!this.changeHandler) {
-            this.changeHandler = new exports.ContextChangeHandler(this);
+			/**
+			 * Change handler for this context
+			 * @type tent.entities.ContextChangeHandler
+			 * @field
+			 */
+            this.changeHandler = new tent.entities.ContextChangeHandler(this);
             this.changeHandler.init();
         }
     }
     
-    exports.Context.prototype.hasChanges = function(){
+	/**
+	 * Indicates if changes on this Context's entities has been detected
+	 * @return {Boolean} true if any change has ocurred
+	 */
+    tent.entities.Context.prototype.hasChanges = function(){
         return !!(this.changes && this.changes.items.length > 0);
     }
     
-    exports.Context.prototype.acceptChanges = function(){
+	/**
+	 * Clears all detected changes, marking all entities as unchanged.
+	 */
+    tent.entities.Context.prototype.acceptChanges = function(){
         if (this.changeHandler) {
             this.changeHandler.acceptChanges();
         }
     }
     
-    exports.EntityLink = function EntityLink(from, to, propertyName, changeState){
+	/**
+	 * Creates a new entity link
+	 * @class a link between to entities, specially useful when tracking many-to-many relationships
+	 * @constructor
+	 * @param {Object} from source entity
+	 * @param {Object} to target entity
+	 * @param {Object} propertyName property in source entity that point to target entity
+	 * @param {Object} changeState change state of this relationship
+	 */
+    tent.entities.EntityLink = function EntityLink(from, to, propertyName, changeState){
+		/**
+		 * Source entity
+		 * @field
+		 */
         this.from = from;
+		/**
+		 * Target entity
+		 * @field
+		 */
         this.to = to;
+		/**
+		 * Property in source entity that point to target entity
+		 * @type String
+		 * @field
+		 */
         this.propertyName = propertyName;
-        this.__changeState__ = changeState || exports.ChangeStates.DETACHED;
+        this.__changeState__ = changeState || tent.entities.ChangeStates.DETACHED;
     }
     
-    exports.ContextChanges = function ContextChanges(context){
+	/**
+	 * Creates a new set of context changes. Used internally when activating change tracking, see {tent.entities.Context#trackChanges}
+	 * @class Changes ocurred in a {@link tent.entities.Context}
+	 * @constructor  
+	 * @param {tent.entities.Context} context
+	 */
+    tent.entities.ContextChanges = function ContextChanges(context){
+		/**
+		 * Context where this changes ocurred
+		 * @type tent.entities.Context
+		 * @field
+		 */		
         this.context = context;
+		/**
+		 * Changed items, in the order they changed
+		 * @type Array
+		 * @field
+		 */
         this.items = [];
-        tent.arrays.addFunctions(this.items);
+        tent.arrays.extend(this.items);
     }
     
-    exports.ContextChanges.prototype.toString = function(){
+	/**
+	 * @return a human-readable description of changes ocurred
+	 */
+    tent.entities.ContextChanges.prototype.toString = function(){
         var count = new tent.coreTypes.NameCounter();
         for (var i = 0, l = this.items.length; i < l; i++) {
-            count.add(exports.ChangeStates.getName(this.items[i].__changeState__) + "." + this.items[i].__collection__.name);
+            count.add(tent.entities.ChangeStates.getName(this.items[i].__changeState__) + "." + this.items[i].__collection__.name);
         }
         return count.toString();
     }
     
-    exports.ContextChangeHandler = function ContextChangeHandler(context){
+	/**
+	 * Creates a new change handler
+	 * @class Handle changes in a {@link tent.entities.Context}
+	 * @param {tent.entities.Context} context
+	 */
+    tent.entities.ContextChangeHandler = function ContextChangeHandler(context){
+		/**
+		 * Context to which this handler belongs
+		 * @type tent.entities.Context
+		 * @field
+		 */
         this.context = context;
     }
     
-    exports.ContextChangeHandler.prototype.isDetached = function(item){
-        return (!item.__changeState__) || (item.__changeState__ == exports.ChangeStates.DETACHED);
+	/**
+	 * @return {Boolean} if item is detached
+	 * @param {Object} item an entity object
+	 */
+    tent.entities.ContextChangeHandler.prototype.isDetached = function(item){
+        return (!item.__changeState__) || (item.__changeState__ == tent.entities.ChangeStates.DETACHED);
     }
     
-    exports.ContextChangeHandler.prototype.bindArrayProperties = function(item){
+	/**
+	 * Binds this handler to all array properties (ie: cardinality '1n' or 'nm')
+	 * @private
+	 * @param {Object} item
+	 */
+    tent.entities.ContextChangeHandler.prototype.bindArrayProperties = function(item){
         // listen for changes in item array properties, to detect childrens added/removed
         if (item.__entityType__) {
             for (var n in item.__entityType__.properties) {
                 var prop = item.__entityType__.properties[n];
-                if (prop.cardinality && prop.cardinality[1] != '1' && item[n] instanceof Array) {
+                if (prop.cardinality && prop.cardinality.substr(1,1) != '1' && item[n] instanceof Array) {
                     item[n].__parent__ = item;
                     item[n].__propertyName__ = n;
                     tent.changes.bind(item[n], this);
@@ -659,30 +977,39 @@ tent.declare('tent.entities', function(exports){
         }
     }
     
-    exports.ContextChangeHandler.prototype.unbindArrayProperties = function(item){
+	/**
+	 * Unbinds this handler from all array properties (ie: cardinality '1n' or 'nm')
+	 * @private
+	 * @param {Object} item
+	 */
+    tent.entities.ContextChangeHandler.prototype.unbindArrayProperties = function(item){
         // stop listening for changes in item array properties
         if (item.__entityType__) {
             for (var n in item.__entityType__.properties) {
                 var prop = item.__entityType__.properties[n];
-                if (prop.cardinality && prop.cardinality[1] != '1' && item[n] instanceof Array) {
+                if (prop.cardinality && prop.cardinality.substr(1,1) != '1' && item[n] instanceof Array) {
                     tent.changes.unbind(item[n], this);
                 }
             }
         }
     }
     
-    exports.ContextChangeHandler.prototype.setAdded = function(item){
-        if (item.__changeState__ == exports.ChangeStates.ADDED) {
+	/**
+	 * Marks an entity as added
+	 * @param {Object} item
+	 */
+    tent.entities.ContextChangeHandler.prototype.setAdded = function(item){
+        if (item.__changeState__ == tent.entities.ChangeStates.ADDED) {
             return;
         }
         if (!item.__collection__) {
-            item.__changeState__ = exports.ChangeStates.ADDED;
+            item.__changeState__ = tent.entities.ChangeStates.ADDED;
         }
         else {
             if (item.__collection__.context == this.context) {
-                item.__changeState__ = exports.ChangeStates.ADDED;
+                item.__changeState__ = tent.entities.ChangeStates.ADDED;
                 if (!this.context.changes) {
-                    this.context.changes = new exports.ContextChanges(this.context);
+                    this.context.changes = new tent.entities.ContextChanges(this.context);
                 }
                 this.context.changes.items.pushUnique(item);
             }
@@ -692,29 +1019,33 @@ tent.declare('tent.entities', function(exports){
         }
     }
     
-    exports.ContextChangeHandler.prototype.setRemoved = function(item){
-        if (this.isDetached(item) || item.__changeState__ == exports.ChangeStates.DELETED) {
+	/**
+	 * Marks an entity as deleted
+	 * @param {Object} item
+	 */
+    tent.entities.ContextChangeHandler.prototype.setRemoved = function(item){
+        if (this.isDetached(item) || item.__changeState__ == tent.entities.ChangeStates.DELETED) {
             return;
         }
         if (!item.__collection__) {
-            item.__changeState__ = exports.ChangeStates.DELETED;
+            item.__changeState__ = tent.entities.ChangeStates.DELETED;
         }
         else {
             if (item.__collection__.context == this.context) {
-                if ((item.__changeState__ == exports.ChangeStates.UNCHANGED) ||
-                (item.__changeState__ == exports.ChangeStates.MODIFIED)) {
-                    item.__changeState__ = exports.ChangeStates.DELETED;
+                if ((item.__changeState__ == tent.entities.ChangeStates.UNCHANGED) ||
+                (item.__changeState__ == tent.entities.ChangeStates.MODIFIED)) {
+                    item.__changeState__ = tent.entities.ChangeStates.DELETED;
                     if (!this.context.changes) {
-                        this.context.changes = new exports.ContextChanges(this.context);
+                        this.context.changes = new tent.entities.ContextChanges(this.context);
                     }
                     this.context.changes.items.pushUnique(item);
                 }
                 else 
-                    if (item.__changeState__ == exports.ChangeStates.ADDED) {
-                        item.__changeState__ = exports.ChangeStates.DETACHED;
+                    if (item.__changeState__ == tent.entities.ChangeStates.ADDED) {
+                        item.__changeState__ = tent.entities.ChangeStates.DETACHED;
                         delete item.__collection__;
                         if (!this.context.changes) {
-                            this.context.changes = new exports.ContextChanges(this.context);
+                            this.context.changes = new tent.entities.ContextChanges(this.context);
                         }
                         this.context.changes.items.remove(item);
                     }
@@ -725,35 +1056,43 @@ tent.declare('tent.entities', function(exports){
         }
     }
     
-    exports.ContextChangeHandler.prototype.touch = function(){
+	/**
+	 * Marks all arguments as modified
+	 */
+    tent.entities.ContextChangeHandler.prototype.touch = function(){
         for (var i = 0, l = arguments.length; i < l; i++) {
-            if (arguments[i] && arguments[i].__changeState__ == exports.ChangeStates.UNCHANGED &&
+            if (arguments[i] && arguments[i].__changeState__ == tent.entities.ChangeStates.UNCHANGED &&
             arguments[i].__collection__ &&
             arguments[i].__collection__.context == this.context) {
                 // mark item as MODIFIED
                 if (!this.context.changes) {
-                    this.context.changes = new exports.ContextChanges(this);
+                    this.context.changes = new tent.entities.ContextChanges(this);
                 }
-                arguments[i].__changeState__ = exports.ChangeStates.MODIFIED;
+                arguments[i].__changeState__ = tent.entities.ChangeStates.MODIFIED;
                 this.context.changes.items.pushUnique(arguments[i]);
             }
         }
     }
     
-    exports.ContextChangeHandler.prototype.itemAdded = function(item){
+	/**
+	 * Called when an item is added
+	 * @private
+	 * @param {Object} item
+	 */
+    tent.entities.ContextChangeHandler.prototype.itemAdded = function(item){
         if (this.isDetached(item)) {
             this.setAdded(item);
         }
         else {
             // allow attach item with pre-established state
-            if (item.__changeState__ != exports.ChangeStates.UNCHANGED) {
+            if (item.__changeState__ != tent.entities.ChangeStates.UNCHANGED) {
                 if (!this.context.changes) {
-                    this.context.changes = new exports.ContextChanges(this.context);
+                    this.context.changes = new tent.entities.ContextChanges(this.context);
                 }
                 this.context.changes.items.pushUnique(item);
             }
         }
-        if (item.__changeState__ != exports.ChangeStates.DELETED) {
+        if (item.__changeState__ != tent.entities.ChangeStates.DELETED) {
             // listen for changes in item
             tent.changes.bind(item, this);
             // listen for changes in item array properties, to detect childrens added/removed
@@ -761,25 +1100,40 @@ tent.declare('tent.entities', function(exports){
         }
     }
     
-    exports.ContextChangeHandler.prototype.itemAttached = function(item){
+	/**
+	 * Called when an item is attached
+	 * @private
+	 * @param {Object} item
+	 */
+    tent.entities.ContextChangeHandler.prototype.itemAttached = function(item){
         if (this.isDetached(item)) {
-            item.__changeState__ = exports.ChangeStates.UNCHANGED;
+            item.__changeState__ = tent.entities.ChangeStates.UNCHANGED;
         }
         this.itemAdded(item);
     }
     
-    exports.ContextChangeHandler.prototype.itemRemoved = function(item){
+	/**
+	 * Called when an item is removed
+	 * @private
+	 * @param {Object} item
+	 */
+    tent.entities.ContextChangeHandler.prototype.itemRemoved = function(item){
         this.setRemoved(item);
         // stop listening for changes in item
         tent.changes.unbind(item, this);
         // stop listening for changes in item array properties
         this.unbindArrayProperties(item);
     }
-    
-    exports.ContextChangeHandler.prototype.itemDetached = function(item){
+	
+	/**
+	 * Called when an item is detached
+	 * @private
+	 * @param {Object} item
+	 */    
+    tent.entities.ContextChangeHandler.prototype.itemDetached = function(item){
         // item detached from context
         var changes = this.context.changes;
-        if (item.__changeState__ != exports.ChangeStates.UNCHANGED) {
+        if (item.__changeState__ != tent.entities.ChangeStates.UNCHANGED) {
             if (changes) {
                 changes.items.remove(item);
             }
@@ -790,8 +1144,16 @@ tent.declare('tent.entities', function(exports){
         // stop listening for changes in item array properties
         this.unbindArrayProperties(item);
     }
-    
-    exports.ContextChangeHandler.prototype.objectLinked = function(subject, propertyName, property, obj){
+    	
+	/**
+	 * Called when an item is linked (referenced by a property value or added to an array property)
+	 * @private
+	 * @param {Object} subject
+	 * @param {String} propertyName
+	 * @param {Object} property
+	 * @param {Object} obj
+	 */
+    tent.entities.ContextChangeHandler.prototype.objectLinked = function(subject, propertyName, property, obj){
     
         // object linked to an item in the Context
         
@@ -821,7 +1183,7 @@ tent.declare('tent.entities', function(exports){
         else 
             if (obj !== null && typeof obj != 'undefined') {
             
-                if (obj.__changeState__ == exports.ChangeStates.DELETED) {
+                if (obj.__changeState__ == tent.entities.ChangeStates.DELETED) {
                     throw 'cannot link a DELETED object to property "' + property + '"';
                 }
                 if (obj.__collection__) {
@@ -858,7 +1220,7 @@ tent.declare('tent.entities', function(exports){
                     var elink = null, elinki = -1;
                     for (var i = this.context.changes.items.length - 1; i >= 0; i--) {
                         var chg = this.context.changes.items[i];
-                        if ((chg instanceof exports.EntityLink) &&
+                        if ((chg instanceof tent.entities.EntityLink) &&
                         (chg.from === subject) &&
                         (chg.to === obj) &&
                         (chg.propertyName == propertyName)) {
@@ -869,13 +1231,13 @@ tent.declare('tent.entities', function(exports){
                     }
                     if (!elink) {
                         // new link created
-                        elink = new exports.EntityLink(subject, obj, propertyName, exports.ChangeStates.ADDED);
+                        elink = new tent.entities.EntityLink(subject, obj, propertyName, tent.entities.ChangeStates.ADDED);
                         this.context.changes.items.push(elink);
                     }
                     else {
-                        if (elink.__changeState__ == exports.ChangeStates.DELETED) {
+                        if (elink.__changeState__ == tent.entities.ChangeStates.DELETED) {
                             // removed link is restored
-                            elink.__changeState__ = exports.ChangeStates.UNCHANGED;
+                            elink.__changeState__ = tent.entities.ChangeStates.UNCHANGED;
                         }
                     }
                 }
@@ -883,7 +1245,15 @@ tent.declare('tent.entities', function(exports){
             }
     }
     
-    exports.ContextChangeHandler.prototype.objectUnlinked = function(subject, propertyName, property, obj){
+	/**
+	 * Called when an item is unlinked (de-referenced by a property value or removed from an array property)
+	 * @private
+	 * @param {Object} subject
+	 * @param {String} propertyName
+	 * @param {Object} property
+	 * @param {Object} obj
+	 */
+    tent.entities.ContextChangeHandler.prototype.objectUnlinked = function(subject, propertyName, property, obj){
     
         // object unlinked from an item in the Context
         
@@ -916,7 +1286,7 @@ tent.declare('tent.entities', function(exports){
                     var elink = null, elinki = -1;
                     for (var i = this.context.changes.items.length - 1; i >= 0; i--) {
                         var chg = this.context.changes.items[i];
-                        if ((chg instanceof exports.EntityLink) &&
+                        if ((chg instanceof tent.entities.EntityLink) &&
                         (chg.from === subject) &&
                         (chg.to === obj) &&
                         (chg.propertyName == propertyName)) {
@@ -927,30 +1297,36 @@ tent.declare('tent.entities', function(exports){
                     }
                     if (!elink) {
                         // unchanged link deleted
-                        elink = new exports.EntityLink(subject, obj, propertyName, exports.ChangeStates.DELETED);
+                        elink = new tent.entities.EntityLink(subject, obj, propertyName, tent.entities.ChangeStates.DELETED);
                         this.context.changes.items.push(elink);
                     }
                     else {
-                        if (elink.__changeState__ == exports.ChangeStates.ADDED) {
+                        if (elink.__changeState__ == tent.entities.ChangeStates.ADDED) {
                             // new link deleted, remove tracked change
                             this.context.changes.items.splice(elinki, 1);
                         }
                         else 
-                            if (elink.__changeState__ != exports.ChangeStates.DELETED) {
+                            if (elink.__changeState__ != tent.entities.ChangeStates.DELETED) {
                                 // existing link deleted
-                                elink.__changeState__ = exports.ChangeStates.DELETED;
+                                elink.__changeState__ = tent.entities.ChangeStates.DELETED;
                             }
                     }
                 }
             }
     }
     
-    exports.ContextChangeHandler.prototype.getTrackedProperty = function(subject, propertyName){
+	/**
+	 * Returns a change tracked property descriptor. 
+	 * @param {Object} subject the change tracked object
+	 * @param {String} propertyName the property being tracked
+	 * @return a property descriptor if the property exists and is being tracked
+	 */
+    tent.entities.ContextChangeHandler.prototype.getTrackedProperty = function(subject, propertyName){
         var prop;
         if (subject.__entityType__ &&
         subject.__changeState__ &&
-        subject.__changeState__ != exports.ChangeStates.DELETED &&
-        subject.__changeState__ != exports.ChangeStates.DETACHED &&
+        subject.__changeState__ != tent.entities.ChangeStates.DELETED &&
+        subject.__changeState__ != tent.entities.ChangeStates.DETACHED &&
         subject.__collection__ &&
         subject.__collection__.context == this.context &&
         (prop = subject.__entityType__.properties[propertyName])) {
@@ -958,7 +1334,11 @@ tent.declare('tent.entities', function(exports){
         }
     }
     
-    exports.ContextChangeHandler.prototype.handle = function(change){
+	/**
+	 * Handles a {@link tent.changes.Change} for this context
+	 * @param {tent.changes.Change} change
+	 */
+    tent.entities.ContextChangeHandler.prototype.handle = function(change){
     
         if (!change.subject) {
             return;
@@ -1025,7 +1405,10 @@ tent.declare('tent.entities', function(exports){
         tent.changes.reverseProperties.getHandler()(change);
     }
     
-    exports.ContextChangeHandler.prototype.init = function(){
+	/**
+	 * Initializes this change handler, binding itself to all entities in the context
+	 */
+    tent.entities.ContextChangeHandler.prototype.init = function(){
         if (this.context.log) {
             var rec = new tent.coreTypes.NameCounter();
         }
@@ -1048,7 +1431,10 @@ tent.declare('tent.entities', function(exports){
         }
     }
     
-    exports.ContextChangeHandler.prototype.acceptChanges = function(){
+	/**
+	 * Clears all changes detected, and marks all entities as unchanged.
+	 */
+    tent.entities.ContextChangeHandler.prototype.acceptChanges = function(){
         if (this.context.hasChanges()) {
             if (this.context.log) {
                 tent.log.debug("Context: accepting changes, " + this.context.changes);
@@ -1056,7 +1442,7 @@ tent.declare('tent.entities', function(exports){
             
             var items = this.context.changes.items;
             for (var i = 0, l = items.length; i < l; i++) {
-                items[i].__changeState__ = exports.ChangeStates.UNCHANGED;
+                items[i].__changeState__ = tent.entities.ChangeStates.UNCHANGED;
             }
             items.length = 0;
             if (this.context.log) {
@@ -1065,5 +1451,4 @@ tent.declare('tent.entities', function(exports){
         }
     }
     
-    return exports;
 });

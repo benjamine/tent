@@ -1,15 +1,27 @@
-
 /**
- * Base namespace for Tent. Checks to see tent is
- * already defined in the current scope before assigning to prevent
- * clobbering if base.js is loaded more than once.
- *
- * @const
+ * Tent, a tiny entity framework for JavaScript
+ * @author Benjamín Eidelman twitter.com/beneidel
+ */
+/**
+ * Tent, a tiny entity framework for JavaScript
+ * 
+ * @namespace
  */
 var tent = tent || {};
 
-tent.global = window;
+/**
+ * The global object, parent of root Namespaces, by default is window
+ * @constant
+ */
+tent.global = typeof window == 'undefined' ? this : window;
 
+/**
+ * Creates a Namespace
+ * @class a Namespace that groups classes, functions, constants and children Namespaces
+ * @constructor
+ * @param {Namespace} [parent] parent Namespace
+ * @param {String} path a namespace path, eg 'web.ajax.json.parsing'
+ */
 tent.Namespace = function Namespace(parent, path){
 
     if (!path) {
@@ -75,11 +87,43 @@ catch (ex) {
     // delete from window not allowed, continue	
 }
 
+/**
+ * Expands this Namespace
+ * @param {function()|Object} expander a function that receives this Namespace as parameter and adds members (eg: classes, constants, functions) or an Object wich properties are copied into this Namespace
+ */
 tent.Namespace.prototype.expand = function(expander){
-    expander(this);
+    if (expander instanceof Function) {
+        expander(this);
+    }
+    else 
+        if (typeof expander == 'object') {
+            for (var propName in expander) {
+                if (expander.hasOwnProperty(propName)) {
+                    if (typeof this[propName] != 'undefined') {
+                        throw this.fullname + '.' + propName + ' already exists';
+                    }
+                    this[propName] = expander[propName];
+                }
+            }
+        }
     return this;
 };
 
+/**
+ * Declares Namespaces and add members to them  (Namespace paths are unique, ie: the same Namespace object is returned for the same path)
+ *
+ * <p>Parameters can be any sequence of:
+ * 	  <ul>
+ *    <li>{@link tent.Namespace}: changes the current Namespace</li>
+ *    <li>{string} path: changes current Namespace to a subnamespace of the current Namespace (creating Namespaces if needed)</li>
+ *    <li>{function()|Object} expander: a function that adds members to the current Namespace or an Object wich properties are copied to the current Namespace</li>
+ *    </ul>
+ *	</p>
+ * @param {tent.Namespace} [parent] parent Namespace
+ * @param {String}  [path] Namespace path, eg: 'web.ajax.json.parsing'
+ * @param {function()|Object}  [expander] a function that receives the created Namespace and adds members  (eg: classes, constants, functions) or an Object wich properties are copied to the current Namespace
+ * @return {tent.Namespace} the last current Namespace
+ */
 tent.declare = function(/*[parent], [path], [expander]*/){
 
     var ns;
@@ -99,7 +143,7 @@ tent.declare = function(/*[parent], [path], [expander]*/){
                 }
             }
             else 
-                if (a instanceof Function) {
+                if (a instanceof Function || typeof a == 'object') {
                     if (!ns) {
                         throw 'no namespace provided';
                     }
@@ -113,6 +157,10 @@ tent.declare = function(/*[parent], [path], [expander]*/){
     return ns;
 }
 
+/**
+ * @param {Object} obj an object to test
+ * @return {Boolean} is obj a DOM object?
+ */
 tent.isDOMObject = function(obj){
 
     if (((typeof Node != 'undefined') && obj instanceof Node) ||
@@ -126,12 +174,20 @@ tent.isDOMObject = function(obj){
     if (typeof o === "object" && typeof o.nodeType === "number" && typeof o.nodeName === "string") {
         return true;
     }
-    
     return false;
 }
 
+/**
+ * DOM property names, they'll be ignored by default when tracking DOM objects.
+ * To disable this behaviour use trackDomProperties=true
+ * @type String[]
+ */
 tent.DOMPropertyNames = ['nextSibling', 'onresizeend', 'onrowenter', 'aria-haspopup', 'childNodes', 'ondragleave', 'canHaveHTML', 'onbeforepaste', 'ondragover', 'onbeforecopy', 'aria-disabled', 'onpage', 'recordNumber', 'previousSibling', 'nodeName', 'onbeforeactivate', 'accessKey', 'currentStyle', 'scrollLeft', 'onbeforeeditfocus', 'oncontrolselect', 'aria-hidden', 'onblur', 'hideFocus', 'clientHeight', 'style', 'onbeforedeactivate', 'dir', 'aria-expanded', 'onkeydown', 'nodeType', 'ondragstart', 'onscroll', 'onpropertychange', 'ondragenter', 'id', 'aria-level', 'onrowsinserted', 'scopeName', 'lang', 'onmouseup', 'aria-busy', 'oncontextmenu', 'language', 'scrollTop', 'offsetWidth', 'onbeforeupdate', 'onreadystatechange', 'onmouseenter', 'filters', 'onresize', 'isContentEditable', 'aria-checked', 'aria-readonly', 'oncopy', 'onselectstart', 'scrollHeight', 'onmove', 'ondragend', 'onrowexit', 'lastChild', 'aria-secret', 'onactivate', 'canHaveChildren', 'onfocus', 'onfocusin', 'isMultiLine', 'onmouseover', 'offsetTop', 'oncut', 'parentNode', 'tagName', 'className', 'onmousemove', 'title', 'role', 'behaviorUrns', 'onfocusout', 'onfilterchange', 'disabled', 'parentTextEdit', 'ownerDocument', 'offsetParent', 'aria-posinset', 'ondrop', 'ondblclick', 'onrowsdelete', 'tabIndex', 'onkeypress', 'aria-relevant', 'onlosecapture', 'innerText', 'aria-live', 'parentElement', 'ondeactivate', 'aria-labelledby', 'aria-pressed', 'children', 'ondatasetchanged', 'ondataavailable', 'aria-invalid', 'onafterupdate', 'nodeValue', 'onmousewheel', 'onkeyup', 'readyState', 'onmovestart', 'aria-valuenow', 'aria-selected', 'onmouseout', 'aria-owns', 'aria-valuemax', 'onmoveend', 'contentEditable', 'document', 'firstChild', 'sourceIndex', 'outerText', 'isTextEdit', 'isDisabled', 'oncellchange', 'runtimeStyle', 'scrollWidth', 'aria-valuemin', 'onlayoutcomplete', 'onhelp', 'attributes', 'offsetHeight', 'onerrorupdate', 'onmousedown', 'clientTop', 'aria-setsize', 'clientWidth', 'onpaste', 'tagUrn', 'onmouseleave', 'onclick', 'outerHTML', 'ondrag', 'aria-controls', 'onresizestart', 'aria-flowto', 'ondatasetcomplete', 'aria-required', 'clientLeft', 'aria-describedby', 'all', 'onbeforecut', 'innerHTML', 'aria-activedescendant', 'aria-multiselectable', 'offsetLeft', 'dataSrc', 'dataFld', 'dataFormatAs', 'name', 'nextSibling', 'onresizeend', 'onrowenter', 'aria-haspopup', 'childNodes', 'ondragleave', 'canHaveHTML', 'onbeforepaste', 'ondragover', 'onbeforecopy', 'aria-disabled', 'onpage', 'recordNumber', 'previousSibling', 'nodeName', 'onbeforeactivate', 'accessKey', 'currentStyle', 'scrollLeft', 'onbeforeeditfocus', 'oncontrolselect', 'aria-hidden', 'onblur', 'hideFocus', 'clientHeight', 'style', 'onbeforedeactivate', 'dir', 'aria-expanded', 'onkeydown', 'nodeType', 'ondragstart', 'onscroll', 'onpropertychange', 'ondragenter', 'id', 'aria-level', 'onrowsinserted', 'scopeName', 'lang', 'onmouseup', 'aria-busy', 'oncontextmenu', 'language', 'scrollTop', 'offsetWidth', 'onbeforeupdate', 'onreadystatechange', 'onmouseenter', 'filters', 'onresize', 'isContentEditable', 'aria-checked', 'aria-readonly', 'oncopy', 'onselectstart', 'scrollHeight', 'onmove', 'ondragend', 'onrowexit', 'lastChild', 'aria-secret', 'onactivate', 'canHaveChildren', 'onfocus', 'onfocusin', 'isMultiLine', 'onmouseover', 'offsetTop', 'oncut', 'parentNode', 'tagName', 'className', 'onmousemove', 'title', 'role', 'behaviorUrns', 'onfocusout', 'onfilterchange', 'disabled', 'parentTextEdit', 'ownerDocument', 'offsetParent', 'aria-posinset', 'ondrop', 'ondblclick', 'onrowsdelete', 'tabIndex', 'onkeypress', 'aria-relevant', 'onlosecapture', 'innerText', 'aria-live', 'parentElement', 'ondeactivate', 'aria-labelledby', 'aria-pressed', 'children', 'ondatasetchanged', 'ondataavailable', 'aria-invalid', 'onafterupdate', 'nodeValue', 'onmousewheel', 'onkeyup', 'readyState', 'onmovestart', 'aria-valuenow', 'aria-selected', 'onmouseout', 'aria-owns', 'aria-valuemax', 'onmoveend', 'contentEditable', 'document', 'firstChild', 'sourceIndex', 'outerText', 'isTextEdit', 'isDisabled', 'oncellchange', 'runtimeStyle', 'scrollWidth', 'aria-valuemin', 'onlayoutcomplete', 'onhelp', 'attributes', 'offsetHeight', 'onerrorupdate', 'onmousedown', 'clientTop', 'aria-setsize', 'clientWidth', 'onpaste', 'tagUrn', 'onmouseleave', 'onclick', 'outerHTML', 'ondrag', 'aria-controls', 'onresizestart', 'aria-flowto', 'ondatasetcomplete', 'aria-required', 'clientLeft', 'aria-describedby', 'all', 'onbeforecut', 'innerHTML', 'aria-activedescendant', 'aria-multiselectable', 'offsetLeft', 'dataSrc', 'dataFld', 'dataFormatAs', 'name'];
 
+/** 
+ * @param {String} name a property name
+ * @return {Boolean} is this a DOM property name? see {@link tent.DOMPropertyNames}
+ */
 tent.isDOMProperty = function(name){
     if (!tent.DOMPropertyNames.indexOf) {
         tent.DOMPropertyNames.indexOf = tent.arrays.functions.indexOf;
@@ -139,8 +195,17 @@ tent.isDOMProperty = function(name){
     return tent.DOMPropertyNames.indexOf(name) >= 0;
 }
 
+/**
+ * Clones objects using DOM object instances (eg: span elements).
+ *
+ * This is useful in browsers that only support property change tracking on DOM objects (eg: IE8)
+ * @param {Object} object or array to clone
+ * @param {Object} [options] cloning options
+ * @param {Boolean} [options.deep] clone deeply, traverse through object properties?
+ * @param {Boolean} [options.onlyForTracking] only clone if the current browser support tracking on DOM objects only (eg: IE8), otherwise original obj is returned
+ * @return {Object} a clone of obj (or obj if no cloning was performed)
+ */
 tent.domClone = function(obj, options){
-  
     if (obj === null) {
         return null;
     }
@@ -161,7 +226,7 @@ tent.domClone = function(obj, options){
                 }
                 else 
                     if (options.deep && !options.deepStack) {
-                        options.deepStack = tent.arrays.addFunctions([]);
+                        options.deepStack = tent.arrays.extend([]);
                     }
                 
                 if (obj instanceof Array) {
@@ -170,7 +235,7 @@ tent.domClone = function(obj, options){
                         if (options.deep) {
                             options.deepStack.push(obj);
                             if (options.deepStack.lastIndexOf(obj[i]) < 0) {
-                                
+                            
                                 cloneObj.push(tent.domClone(obj[i], options));
                             }
                             options.deepStack.pop();

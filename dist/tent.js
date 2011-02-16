@@ -1,5 +1,5 @@
 var tent = tent || {};
-tent.global = window;
+tent.global = typeof window == "undefined" ? this : window;
 tent.Namespace = function Namespace(parent, path) {
   if(!path) {
     if(!parent) {
@@ -53,7 +53,20 @@ try {
 }catch(ex) {
 }
 tent.Namespace.prototype.expand = function(expander) {
-  expander(this);
+  if(expander instanceof Function) {
+    expander(this)
+  }else {
+    if(typeof expander == "object") {
+      for(var propName in expander) {
+        if(expander.hasOwnProperty(propName)) {
+          if(typeof this[propName] != "undefined") {
+            throw this.fullname + "." + propName + " already exists";
+          }
+          this[propName] = expander[propName]
+        }
+      }
+    }
+  }
   return this
 };
 tent.declare = function() {
@@ -70,7 +83,7 @@ tent.declare = function() {
           ns = new tent.Namespace(ns, a)
         }
       }else {
-        if(a instanceof Function) {
+        if(a instanceof Function || typeof a == "object") {
           if(!ns) {
             throw"no namespace provided";
           }
@@ -123,7 +136,7 @@ tent.domClone = function(obj, options) {
           options = {}
         }else {
           if(options.deep && !options.deepStack) {
-            options.deepStack = tent.arrays.addFunctions([])
+            options.deepStack = tent.arrays.extend([])
           }
         }
         if(obj instanceof Array) {
@@ -163,16 +176,16 @@ tent.domClone = function(obj, options) {
     }
   }
   return obj
-};tent.declare("tent.arrays", function(exports) {
-  exports.addFunctions = function(array, override) {
-    for(var fname in exports.functions) {
+};tent.declare("tent.arrays", function() {
+  tent.arrays.extend = function(array, override) {
+    for(var fname in tent.arrays.functions) {
       if(override || !(array[fname] instanceof Function)) {
-        array[fname] = exports.functions[fname]
+        array[fname] = tent.arrays.functions[fname]
       }
     }
     return array
   };
-  exports.functions = {indexOf:function(item) {
+  tent.arrays.functions = {indexOf:function(item) {
     for(var i = 0, l = this.length;i < l;i++) {
       if(this[i] === item) {
         return i
@@ -210,6 +223,7 @@ tent.domClone = function(obj, options) {
     if(removed) {
       return true
     }
+    return false
   }, set:function(i, item) {
     this.splice(i, 1, item)
   }, pushUnique:function() {
@@ -255,15 +269,14 @@ tent.domClone = function(obj, options) {
       return false
     }
     for(var i = this.length;i >= 0;i--) {
-      if(this[i] != array[i]) {
+      if(this[i] !== array[i]) {
         return false
       }
     }
     return true
-  }};
-  return exports
-});tent.declare("tent.coreTypes", function(exports) {
-  exports.Enum = function Enum() {
+  }}
+});tent.declare("tent.coreTypes", function() {
+  tent.coreTypes.Enum = function Enum() {
     this.__names__ = [];
     this.__values__ = {};
     this.__flags__ = false;
@@ -272,7 +285,7 @@ tent.domClone = function(obj, options) {
       this.add.apply(this, arguments)
     }
   };
-  exports.Enum.prototype.getName = function(value) {
+  tent.coreTypes.Enum.prototype.getName = function(value) {
     if(this.__names__) {
       if(this.__names__[value]) {
         return this.__names__[value]
@@ -299,7 +312,7 @@ tent.domClone = function(obj, options) {
       }
     }
   };
-  exports.Enum.prototype.__freeValue__ = function() {
+  tent.coreTypes.Enum.prototype.__freeValue__ = function() {
     var free = typeof this.__maxValue__ == "undefined" ? 1 : this.__maxValue__ + 1;
     if(this.__values__ && typeof this.__values__[free] != "undefined") {
       for(var n in this.__values__) {
@@ -318,7 +331,7 @@ tent.domClone = function(obj, options) {
     }
     return free
   };
-  exports.Enum.prototype.useFlags = function(uf) {
+  tent.coreTypes.Enum.prototype.useFlags = function(uf) {
     this.__flags__ = uf;
     return this
   };
@@ -332,7 +345,7 @@ tent.domClone = function(obj, options) {
       _enum.__maxValue__ = value
     }
   };
-  exports.Enum.prototype.add = function() {
+  tent.coreTypes.Enum.prototype.add = function() {
     if(arguments.length < 1) {
       return this
     }
@@ -400,10 +413,10 @@ tent.domClone = function(obj, options) {
     }
     return s
   };
-  exports.NameCounter = function NameCounter(name) {
+  tent.coreTypes.NameCounter = function NameCounter(name) {
     this.root = {_name:name || "", _count:0, toString:NameCounter_NodeToString}
   };
-  exports.NameCounter.prototype.__nodeAdd__ = function(node, inc) {
+  tent.coreTypes.NameCounter.prototype.__nodeAdd__ = function(node, inc) {
     node._count = (node._count || 0) + inc;
     if(node._parent) {
       if(node._count == 0 && !node._childrenCount) {
@@ -415,7 +428,7 @@ tent.domClone = function(obj, options) {
       this.__nodeAdd__(node._parent, inc)
     }
   };
-  exports.NameCounter.prototype.add = function(name, inc) {
+  tent.coreTypes.NameCounter.prototype.add = function(name, inc) {
     if(typeof inc != "number") {
       inc = 1
     }
@@ -430,60 +443,75 @@ tent.domClone = function(obj, options) {
     }
     this.__nodeAdd__(node, inc)
   };
-  exports.NameCounter.prototype.reset = function() {
+  tent.coreTypes.NameCounter.prototype.reset = function() {
     this.root = {_name:this.root._name, _count:0, toString:NameCounter_NodeToString}
   };
-  exports.NameCounter.prototype.toString = function() {
+  tent.coreTypes.NameCounter.prototype.toString = function() {
     return NameCounter_NodeToString.apply(this.root)
-  };
-  return exports
-});tent.declare("tent.logging", function(exports) {
-  exports.Levels = new tent.coreTypes.Enum("TRACE,DEBUG,INFO,WARN,ERROR,FATAL");
-  exports.Log = function Log() {
-    if(arguments.length > 0) {
-      this.add.apply(this, arguments)
-    }
-    if(typeof console != "undefined") {
-      this.out = {TRACE:function(msg) {
-        if(console.trace) {
-          console.trace(msg)
-        }else {
-          console.info(msg)
-        }
-      }, DEBUG:function(msg) {
-        if(console.debug) {
-          console.debug(msg)
-        }else {
-          console.info(msg)
-        }
-      }, INFO:function(msg) {
-        console.info(msg)
-      }, WARN:function(msg) {
-        console.warn(msg)
-      }, ERROR:function(msg) {
-        console.error(msg)
-      }, FATAL:function(msg) {
-        console.error(msg)
-      }}
-    }
+  }
+});tent.declare("tent.logging", function() {
+  tent.logging.Levels = new tent.coreTypes.Enum("TRACE,DEBUG,INFO,WARN,ERROR,FATAL");
+  tent.logging.Log = function Log() {
     this.listeners = []
   };
-  tent.log = new exports.Log;
-  exports.Log.prototype.bind = function(callback, level) {
+  tent.logging.Log.prototype.bindToConsole = function(level) {
+    if(typeof console != "undefined") {
+      this.bind(tent.logging.consoleLogger, level)
+    }
+    return this
+  };
+  tent.logging.Log.prototype.bindToAlert = function(level) {
+    this.bind(tent.logging.alertLogger, level);
+    return this
+  };
+  tent.logging.Log.prototype.bindToHtml = function(outputElement, level) {
+    this.bind(tent.logging.createHtmlAppendLogger(outputElement), level);
+    return this
+  };
+  tent.logging.Log.prototype.unbindConsole = function() {
+    if(typeof console != "undefined") {
+      this.unbind(tent.logging.consoleLogger)
+    }
+    return this
+  };
+  tent.logging.Log.prototype.unbindAlert = function() {
+    this.unbind(tent.logging.alertLogger, level);
+    return this
+  };
+  tent.logging.Log.prototype.unbindHtml = function(outputElement) {
+    for(var i = this.listeners.length;i >= 0;i--) {
+      if(this.listeners[i].callback.outputElement === outputElement) {
+        this.listeners.splice(i, 1)
+      }
+    }
+    return this
+  };
+  tent.logging.Log.prototype.bind = function(callback, level) {
     if(!callback instanceof Function) {
       throw"a callback Function must be provided";
     }
     var lvl = level;
     if(typeof lvl != "number") {
       if(typeof lvl == "undefined") {
-        lvl = exports.Levels.TRACE
+        lvl = tent.logging.Levels.TRACE
       }else {
-        lvl = exports.Levels[lvl] || exports.Levels.TRACE
+        lvl = tent.logging.Levels[lvl] || tent.logging.Levels.TRACE
       }
     }
-    this.listeners.push({callback:callback, level:lvl})
+    var found = false;
+    for(var i = this.listeners.length - 1;i >= 0;i--) {
+      var list = this.listeners[i];
+      if(list.callback === callback) {
+        list.level = lvl;
+        found = true
+      }
+    }
+    if(!found) {
+      this.listeners.push({callback:callback, level:lvl})
+    }
+    return this
   };
-  exports.Log.prototype.unbind = function(callback) {
+  tent.logging.Log.prototype.unbind = function(callback) {
     if(!callback instanceof Function) {
       throw"a callback Function must be provided";
     }
@@ -492,14 +520,15 @@ tent.domClone = function(obj, options) {
         this.listeners.splice(i, 1)
       }
     }
+    return this
   };
-  exports.Log.prototype.notify = function(message, level) {
+  tent.logging.Log.prototype.notify = function(message, level) {
     var lvl = level;
     if(typeof lvl != "number") {
       if(!lvl) {
-        lvl = exports.Levels.INFO
+        lvl = tent.logging.Levels.INFO
       }else {
-        lvl = exports.Levels[lvl] || exports.Levels.INFO
+        lvl = tent.logging.Levels[lvl] || tent.logging.Levels.INFO
       }
     }
     for(var i = 0, l = this.listeners.length;i < l;i++) {
@@ -511,45 +540,37 @@ tent.domClone = function(obj, options) {
       }
     }
   };
-  exports.Log.prototype.__log__ = function(message, level) {
-    level = level || exports.Levels.INFO;
-    var levelName = exports.Levels.getName(level);
-    if(this.out && this.out[levelName]) {
-      this.out[levelName](exports.Levels.getName(level) + " " + message)
-    }
-    this.notify(message, level)
-  };
-  exports.Log.prototype.trace = function() {
+  tent.logging.Log.prototype.trace = function() {
     var message = this.stringOrStringify.apply(this, arguments);
-    this.__log__(message, exports.Levels.TRACE)
+    this.notify(message, tent.logging.Levels.TRACE)
   };
-  exports.Log.prototype.debug = function() {
+  tent.logging.Log.prototype.debug = function() {
     var message = this.stringOrStringify.apply(this, arguments);
-    this.__log__(message, exports.Levels.DEBUG)
+    this.notify(message, tent.logging.Levels.DEBUG)
   };
-  exports.Log.prototype.info = function() {
+  tent.logging.Log.prototype.info = function() {
     var message = this.stringOrStringify.apply(this, arguments);
-    this.__log__(message, exports.Levels.INFO)
+    this.notify(message, tent.logging.Levels.INFO)
   };
-  exports.Log.prototype.warn = function() {
+  tent.logging.Log.prototype.warn = function() {
     var message = this.stringOrStringify.apply(this, arguments);
-    this.__log__(message, exports.Levels.WARN)
+    this.notify(message, tent.logging.Levels.WARN)
   };
-  exports.Log.prototype.error = function() {
+  tent.logging.Log.prototype.error = function() {
     var message = this.stringOrStringify.apply(this, arguments);
-    this.__log__(message, exports.Levels.ERROR)
+    this.notify(message, tent.logging.Levels.ERROR)
   };
-  exports.Log.prototype.fatal = function() {
+  tent.logging.Log.prototype.fatal = function() {
     var message = this.stringOrStringify.apply(this, arguments);
-    this.__log__(message, exports.Levels.FATAL)
+    this.notify(message, tent.logging.Levels.FATAL)
   };
-  exports.Log.prototype.stringify = function() {
+  tent.logging.Log.prototype.stringify = function() {
     var s = "";
     try {
       var options = arguments.length > 0 && arguments[arguments.length - 1] && arguments[arguments.length - 1]._options ? arguments[arguments.length - 1] : {_options:true};
       if(!options.deepStack) {
         options.deepStack = [];
-        tent.arrays.addFunctions(options.deepStack)
+        tent.arrays.extend(options.deepStack)
       }
       for(var i = 0, l = arguments.length;i < l;i++) {
         if(arguments[i] && typeof arguments[i] == "object" && arguments[i]._options) {
@@ -629,20 +650,93 @@ tent.domClone = function(obj, options) {
     }
     return s
   };
-  exports.Log.prototype.stringOrStringify = function() {
+  tent.logging.Log.prototype.stringOrStringify = function() {
     if(arguments.length == 1 && typeof arguments[0] == "string") {
       return arguments[0]
     }else {
       return this.stringify.apply(this, arguments)
     }
   };
-  return exports
-});tent.declare("tent.changes", function(exports) {
-  exports.EventTypes = new tent.coreTypes.Enum("ANY,MANYCHANGES,CHANGING,CHANGED,ADDING,ADDED,REMOVING,REMOVED");
-  exports.InterceptorTypes = new tent.coreTypes.Enum("PROPERTY,FUNCTION");
-  exports.PropertyInterceptModes = new tent.coreTypes.Enum("NONE,DEFINESETTER,DEFINEPROPERTY,DEFINEPROPERTYONLYDOM");
+  tent.logging.consoleLogger = function(message, level) {
+    if(level == tent.logging.Levels.TRACE) {
+      if(console.trace) {
+        console.trace(message)
+      }else {
+        console.info(message)
+      }
+    }
+    if(level == tent.logging.Levels.DEBUG) {
+      if(console.debug) {
+        console.debug(message)
+      }else {
+        console.info(message)
+      }
+    }
+    if(level == tent.logging.Levels.INFO) {
+      console.info(message)
+    }
+    if(level == tent.logging.Levels.WARN) {
+      if(console.warn) {
+        console.warn(message)
+      }else {
+        console.info(message)
+      }
+    }
+    if(level == tent.logging.Levels.ERROR) {
+      console.error(message)
+    }
+    if(level == tent.logging.Levels.FATAL) {
+      console.error(message)
+    }
+  };
+  tent.logging.alertLogger = function(message, level) {
+    alert(message)
+  };
+  tent.logging.createHtmlAppendLogger = function(outputElement) {
+    var f = null;
+    if(outputElement.tagName == "INPUT") {
+      f = function(message, level) {
+        outputElement.value += "\n[" + tent.logging.Levels.getName(level) + "] " + message
+      }
+    }else {
+      if(outputElement.tagName == "UL") {
+        f = function(message, level) {
+          var li = document.createElement("li");
+          li.innerHTML = "[" + tent.logging.Levels.getName(level) + "] " + message;
+          outputElement.appendChild(li)
+        }
+      }else {
+        if(outputElement.tagName == "TABLE") {
+          f = function(message, level) {
+            var tr = document.createElement("tr");
+            var td1 = document.createElement("td");
+            td1.setAttribute("class", "eventType");
+            td1.innerHTML = tent.logging.Levels.getName(level);
+            tr.appendChild(td1);
+            var td2 = document.createElement("td");
+            td2.setAttribute("class", "eventMessage");
+            td2.innerHTML = message.replace(/(\<)/g, "&lt;").replace(/(\>)/g, "&gt;").replace(/(\&)/g, "&amp;").replace(/(\s)/g, "&nbsp;");
+            tr.appendChild(td2);
+            var tbody = outputElement.tBodies[0];
+            tbody.appendChild(tr)
+          }
+        }else {
+          f = function(message, level) {
+            outputElement.innerHTML += "<br/>[" + tent.logging.Levels.getName(level) + "] " + message
+          }
+        }
+      }
+    }
+    f.outputElement = outputElement;
+    return f
+  };
+  tent.log = (new tent.logging.Log).bindToConsole()
+});tent.declare("tent.changes", function() {
+  tent.changes.EventTypes = new tent.coreTypes.Enum("ANY,MANYCHANGES,CHANGING,CHANGED,ADDING,ADDED,REMOVING,REMOVED");
+  tent.changes.InterceptorTypes = new tent.coreTypes.Enum("PROPERTY,FUNCTION");
+  tent.changes.PropertyInterceptModes = new tent.coreTypes.Enum("NONE,DEFINESETTER,DEFINEPROPERTY,DEFINEPROPERTYONLYDOM");
   var _PropertyInterceptMode;
-  exports.getPropertyInterceptMode = function() {
+  tent.changes.getPropertyInterceptMode = function() {
     if(typeof _PropertyInterceptMode == "undefined") {
       var anobject = {};
       if(Object.defineProperty) {
@@ -654,7 +748,7 @@ tent.domClone = function(obj, options) {
           }});
           anobject.myproperty = "my value";
           if(anobject.myproperty === "my value" && anobject._myproperty === "my value") {
-            _PropertyInterceptMode = exports.PropertyInterceptModes.DEFINEPROPERTY
+            _PropertyInterceptMode = tent.changes.PropertyInterceptModes.DEFINEPROPERTY
           }
         }catch(err) {
           if(document && document.createElement) {
@@ -667,7 +761,7 @@ tent.domClone = function(obj, options) {
               }});
               adomobject.myproperty = "my value";
               if(adomobject.myproperty === "my value" && adomobject._myproperty === "my value") {
-                _PropertyInterceptMode = exports.PropertyInterceptModes.DEFINEPROPERTYONLYDOM
+                _PropertyInterceptMode = tent.changes.PropertyInterceptModes.DEFINEPROPERTYONLYDOM
               }
             }catch(err) {
             }
@@ -686,34 +780,34 @@ tent.domClone = function(obj, options) {
             });
             anobject.myproperty = "my value";
             if(anobject.myproperty === "my value" && anobject._myproperty === "my value") {
-              _PropertyInterceptMode = exports.PropertyInterceptModes.DEFINESETTER
+              _PropertyInterceptMode = tent.changes.PropertyInterceptModes.DEFINESETTER
             }
           }catch(err) {
           }
         }
       }
       if(typeof _PropertyInterceptMode == "undefined") {
-        _PropertyInterceptMode = exports.PropertyInterceptModes.NONE
+        _PropertyInterceptMode = tent.changes.PropertyInterceptModes.NONE
       }
     }
     return _PropertyInterceptMode
   };
-  exports.getPropertyInterceptModeName = function() {
-    return exports.PropertyInterceptModes.getName(exports.getPropertyInterceptMode())
+  tent.changes.getPropertyInterceptModeName = function() {
+    return tent.changes.PropertyInterceptModes.getName(tent.changes.getPropertyInterceptMode())
   };
-  exports.Change = function Change(subject, eventType, data) {
+  tent.changes.Change = function Change(subject, eventType, data) {
     this.subject = subject;
     this.eventType = eventType;
     this.data = data
   };
-  exports.ChangeStringifiers = [];
-  exports.Change.prototype.toString = function() {
-    if(typeof exports.ChangeStringifiers[this.eventType] != "undefined") {
-      exports.ChangeStringifiers[this.eventType](this)
+  tent.changes.ChangeStringifiers = [];
+  tent.changes.Change.prototype.toString = function() {
+    if(typeof tent.changes.ChangeStringifiers[this.eventType] != "undefined") {
+      tent.changes.ChangeStringifiers[this.eventType](this)
     }else {
       var change = this;
-      var message = exports.EventTypes.getName(change.eventType);
-      if(change.eventType == exports.EventTypes.MANYCHANGES) {
+      var message = tent.changes.EventTypes.getName(change.eventType);
+      if(change.eventType == tent.changes.EventTypes.MANYCHANGES) {
         message += ": ";
         if(change.data.length <= 3) {
           for(var i = 0, l = change.data.length;i < l;i++) {
@@ -725,16 +819,16 @@ tent.domClone = function(obj, options) {
             et[change.data[i].eventType] = (et[change.data[i].eventType] || 0) + 1
           }
           for(var e in et) {
-            message += exports.EventTypes.getName(e) + "(" + et[e] + "),"
+            message += tent.changes.EventTypes.getName(e) + "(" + et[e] + "),"
           }
         }
       }else {
         if(change.data.propertyName) {
           message += " " + change.data.propertyName;
-          if(change.eventType == exports.EventTypes.CHANGING) {
+          if(change.eventType == tent.changes.EventTypes.CHANGING) {
             message += " from " + change.data.current + " to " + change.data.newValue
           }else {
-            if(change.eventType == exports.EventTypes.CHANGED) {
+            if(change.eventType == tent.changes.EventTypes.CHANGED) {
               message += " from " + change.data.oldValue + " to " + change.data.current
             }
           }
@@ -756,42 +850,44 @@ tent.domClone = function(obj, options) {
       return"[Change: " + message + "]"
     }
   };
-  exports.Observable = function Observable(subject) {
+  tent.changes.Observable = function Observable(subject) {
     this.subject = subject;
     this.handlers = {};
     this.interceptors = {};
-    this.suspended = false
+    this.suspended = false;
+    this.changesWhileSuspended = null
   };
   var defaultBackPropertyPrefix = "_";
-  exports.Observable.prototype.interceptFunction = function(name, override) {
+  tent.changes.Observable.prototype.interceptFunction = function(name, override) {
     if(this.interceptors[name]) {
       return
     }
     var _name = defaultBackPropertyPrefix + name;
-    var intercept = {name:name, _name:_name, type:exports.InterceptorTypes.FUNCTION};
+    var intercept = {name:name, _name:_name, type:tent.changes.InterceptorTypes.FUNCTION};
     this.subject[_name] = this.subject[name];
     this.subject[name] = override;
     this.interceptors[name] = intercept
   };
-  exports.parent.pset = function(subject, propertyName, value) {
+  tent.pset = function(subject, propertyName, value) {
     if(subject.__observable__ && subject.__observable__.interceptors && subject.__observable__.interceptors[propertyName]) {
       subject.__observable__.interceptors[propertyName].newsetter.call(subject, value)
     }else {
       subject[propertyName] = value
     }
+    return value
   };
-  exports.parent.pget = function(subject, propertyName) {
+  tent.pget = function(subject, propertyName) {
     if(subject.__observable__ && subject.__observable__.interceptors && subject.__observable__.interceptors[propertyName]) {
       return subject.__observable__.interceptors[propertyName].newgetter.call(subject)
     }else {
       return subject[propertyName]
     }
   };
-  exports.Observable.prototype.interceptProperty = function(name, _name, getter, setter) {
+  tent.changes.Observable.prototype.interceptProperty = function(name, _name, getter, setter) {
     if(this.interceptors[name]) {
-      return
+      return this.interceptors[name]
     }
-    var intercept = {name:name, type:exports.InterceptorTypes.PROPERTY, newsetter:setter, newgetter:getter};
+    var intercept = {name:name, type:tent.changes.InterceptorTypes.PROPERTY, newsetter:setter, newgetter:getter};
     if(_name) {
       _name = defaultBackPropertyPrefix + name;
       try {
@@ -801,8 +897,8 @@ tent.domClone = function(obj, options) {
       }
       intercept._name = _name
     }
-    var mode = exports.getPropertyInterceptMode();
-    if(mode == exports.PropertyInterceptModes.DEFINEPROPERTY || mode == exports.PropertyInterceptModes.DEFINEPROPERTYONLYDOM && tent.isDOMObject(this.subject)) {
+    var mode = tent.changes.getPropertyInterceptMode();
+    if(mode == tent.changes.PropertyInterceptModes.DEFINEPROPERTY || mode == tent.changes.PropertyInterceptModes.DEFINEPROPERTYONLYDOM && tent.isDOMObject(this.subject)) {
       try {
         intercept.descriptor = Object.getOwnPropertyDescriptor(this.subject, name)
       }catch(err) {
@@ -820,7 +916,7 @@ tent.domClone = function(obj, options) {
         tent.log.warn("Object.defineProperty for property '" + name + "' failed: " + error)
       }
     }else {
-      if(mode == exports.PropertyInterceptModes.DEFINESETTER) {
+      if(mode == tent.changes.PropertyInterceptModes.DEFINESETTER) {
         try {
           intercept.getter = this.subject.__lookupGetter__(name);
           intercept.setter = this.subject.__lookupSetter__(name)
@@ -846,14 +942,15 @@ tent.domClone = function(obj, options) {
     if(intercept) {
       this.interceptors[name] = intercept
     }
+    return intercept
   };
   var buildPropertySetter = function(propName, _propName) {
     return function(value) {
       var current = this[_propName];
       if(current != value) {
-        this.__observable__.notifyChange(exports.EventTypes.CHANGING, {propertyName:propName, current:current, newValue:value});
+        this.__observable__.notifyChange(tent.changes.EventTypes.CHANGING, {propertyName:propName, current:current, newValue:value});
         this[_propName] = value;
-        this.__observable__.notifyChange(exports.EventTypes.CHANGED, {propertyName:propName, current:value, oldValue:current})
+        this.__observable__.notifyChange(tent.changes.EventTypes.CHANGED, {propertyName:propName, current:value, oldValue:current})
       }
     }
   };
@@ -865,7 +962,7 @@ tent.domClone = function(obj, options) {
   var defaultPropertyInterceptFilter = function(obj, propName) {
     return propName.substr(0, 1) != defaultBackPropertyPrefix
   };
-  exports.Observable.prototype.interceptProperties = function(options) {
+  tent.changes.Observable.prototype.interceptProperties = function(options) {
     if(!options) {
       options = {}
     }
@@ -886,52 +983,60 @@ tent.domClone = function(obj, options) {
         tent.log.warn("Error intercepting property '" + propName + "': " + error)
       }
     }
+    return this
   };
-  exports.Observable.prototype.isDOMObject = function() {
+  tent.changes.Observable.prototype.isDOMObject = function() {
     if(typeof this._isDomObject == "undefined") {
       this._isDOMObject = tent.isDOMObject(this.subject)
     }
     return this._isDOMObject
   };
-  exports.Observable.prototype.interceptArrayModifiers = function(options) {
-    var array = this.subject;
-    if(!array instanceof Array) {
-      return false
+  tent.changes.Observable.prototype.interceptArrayModifiers = function(options) {
+    if(!this.subject instanceof Array) {
+      return this
     }
+    var array = this.subject;
+    this.subject.setLength = function(l) {
+      if(this.length > l) {
+        this.splice(l, this.length - l)
+      }else {
+        this.lengh = l
+      }
+    };
     this.interceptFunction("push", function() {
       var index = this.length;
       var itemsToAdd = itemsToAdd = Array.prototype.slice.call(arguments);
-      this.__observable__.notifyChange(exports.EventTypes.ADDING, {items:itemsToAdd, index:index, propertyName:this.__propertyName__});
+      this.__observable__.notifyChange(tent.changes.EventTypes.ADDING, {items:itemsToAdd, index:index, propertyName:this.__propertyName__});
       this._push.apply(this, arguments);
-      this.__observable__.notifyChange(exports.EventTypes.ADDED, {items:itemsToAdd, index:index, propertyName:this.__propertyName__})
+      this.__observable__.notifyChange(tent.changes.EventTypes.ADDED, {items:itemsToAdd, index:index, propertyName:this.__propertyName__})
     });
     this.interceptFunction("unshift", function() {
       var itemsToAdd = itemsToAdd = Array.prototype.slice.call(arguments);
-      this.__observable__.notifyChange(exports.EventTypes.ADDING, {items:itemsToAdd, index:0, propertyName:this.__propertyName__});
+      this.__observable__.notifyChange(tent.changes.EventTypes.ADDING, {items:itemsToAdd, index:0, propertyName:this.__propertyName__});
       this._unshift.apply(this, arguments);
-      this.__observable__.notifyChange(exports.EventTypes.ADDED, {items:itemsToAdd, index:0, propertyName:this.__propertyName__})
+      this.__observable__.notifyChange(tent.changes.EventTypes.ADDED, {items:itemsToAdd, index:0, propertyName:this.__propertyName__})
     });
     this.interceptFunction("pop", function() {
       var index = this.length - 1;
-      this.__observable__.notifyChange(exports.EventTypes.REMOVING, {items:[this[index]], index:index, propertyName:this.__propertyName__});
+      this.__observable__.notifyChange(tent.changes.EventTypes.REMOVING, {items:[this[index]], index:index, propertyName:this.__propertyName__});
       var item = this._pop();
-      this.__observable__.notifyChange(exports.EventTypes.REMOVED, {items:[item], index:index, propertyName:this.__propertyName__});
+      this.__observable__.notifyChange(tent.changes.EventTypes.REMOVED, {items:[item], index:index, propertyName:this.__propertyName__});
       return item
     });
     this.interceptFunction("shift", function() {
-      this.__observable__.notifyChange(exports.EventTypes.REMOVING, {items:[this[0]], index:0, propertyName:this.__propertyName__});
+      this.__observable__.notifyChange(tent.changes.EventTypes.REMOVING, {items:[this[0]], index:0, propertyName:this.__propertyName__});
       var item = this._shift();
-      this.__observable__.notifyChange(exports.EventTypes.REMOVED, {items:[item], index:0, propertyName:this.__propertyName__});
+      this.__observable__.notifyChange(tent.changes.EventTypes.REMOVED, {items:[item], index:0, propertyName:this.__propertyName__});
       return item
     });
     this.interceptFunction("splice", function(start, deleteCnt) {
       var itemsToAdd;
       if(deleteCnt && deleteCnt > 0) {
-        this.__observable__.notifyChange(exports.EventTypes.REMOVING, {items:this.slice(start, start + deleteCnt), index:start, propertyName:this.__propertyName__})
+        this.__observable__.notifyChange(tent.changes.EventTypes.REMOVING, {items:this.slice(start, start + deleteCnt), index:start, propertyName:this.__propertyName__})
       }
       if(arguments.length > 2) {
         itemsToAdd = Array.prototype.slice.call(arguments, 2);
-        this.__observable__.notifyChange(exports.EventTypes.ADDING, {items:itemsToAdd, index:start, propertyName:this.__propertyName__})
+        this.__observable__.notifyChange(tent.changes.EventTypes.ADDING, {items:itemsToAdd, index:start, propertyName:this.__propertyName__})
       }
       if(itemsToAdd && itemsToAdd.length > 0) {
         var spliceArgs = itemsToAdd.slice(0);
@@ -941,20 +1046,13 @@ tent.domClone = function(obj, options) {
         var removedItems = this._splice(start, deleteCnt)
       }
       if(removedItems && removedItems.length > 0) {
-        this.__observable__.notifyChange(exports.EventTypes.REMOVED, {items:removedItems, index:start, propertyName:this.__propertyName__})
+        this.__observable__.notifyChange(tent.changes.EventTypes.REMOVED, {items:removedItems, index:start, propertyName:this.__propertyName__})
       }
       if(arguments.length > 2) {
-        this.__observable__.notifyChange(exports.EventTypes.ADDED, {items:itemsToAdd, index:start, propertyName:this.__propertyName__})
+        this.__observable__.notifyChange(tent.changes.EventTypes.ADDED, {items:itemsToAdd, index:start, propertyName:this.__propertyName__})
       }
       return removedItems
     });
-    array.setLength = function(l) {
-      if(this.length > l) {
-        this.splice(l, this.length - l)
-      }else {
-        this.lengh = l
-      }
-    };
     array.remove = tent.arrays.functions.remove;
     array.set = tent.arrays.functions.set;
     if(!array.indexOf) {
@@ -963,24 +1061,24 @@ tent.domClone = function(obj, options) {
     if(!array.lastIndexOf) {
       array.lastIndexOf = tent.arrays.functions.lastIndexOf
     }
-    return true
+    return this
   };
-  exports.Observable.prototype.removeInterceptor = function(name) {
+  tent.changes.Observable.prototype.removeInterceptor = function(name) {
     var interceptor = this.interceptors[name];
     if(interceptor._name) {
-      if(interceptor.type != exports.InterceptorTypes.FUNCTION) {
+      if(interceptor.type != tent.changes.InterceptorTypes.FUNCTION) {
         try {
           delete this.subject[interceptor.name]
         }catch(error) {
           tent.log.warn("Error deleting property interceptor '" + interceptor.name + "': " + error)
         }
-        var mode = exports.getPropertyInterceptMode();
-        if(mode == exports.PropertyInterceptModes.DEFINEPROPERTY || mode == exports.PropertyInterceptModes.DEFINEPROPERTYONLYDOM && tent.isDOMObject(this.subject)) {
+        var mode = tent.changes.getPropertyInterceptMode();
+        if(mode == tent.changes.PropertyInterceptModes.DEFINEPROPERTY || mode == tent.changes.PropertyInterceptModes.DEFINEPROPERTYONLYDOM && tent.isDOMObject(this.subject)) {
           if(interceptor.descriptor && interceptor.descriptor.name) {
             Object.defineProperty(this.subject, name, interceptor.descriptor)
           }
         }else {
-          if(mode == exports.PropertyInterceptModes.DEFINESETTER) {
+          if(mode == tent.changes.PropertyInterceptModes.DEFINESETTER) {
             if(interceptor.getter) {
               this.subject.__defineGetter__(name, interceptor.getter)
             }
@@ -1006,7 +1104,7 @@ tent.domClone = function(obj, options) {
         tent.log.warn("Error deleting back storage property '" + interceptor._name + "': " + error)
       }
     }else {
-      if(interceptor.type != exports.InterceptorTypes.FUNCTION) {
+      if(interceptor.type != tent.changes.InterceptorTypes.FUNCTION) {
         var val = this.subject[interceptor.name];
         delete this.subject[interceptor.name];
         this.subject[interceptor.name] = val
@@ -1014,7 +1112,7 @@ tent.domClone = function(obj, options) {
     }
     delete interceptor[name]
   };
-  exports.Observable.prototype.removeInterceptors = function() {
+  tent.changes.Observable.prototype.removeInterceptors = function() {
     for(var propName in this.interceptors) {
       try {
         this.removeInterceptor(propName)
@@ -1024,10 +1122,10 @@ tent.domClone = function(obj, options) {
     }
     this.interceptors = {}
   };
-  exports.Observable.prototype.suspend = function() {
+  tent.changes.Observable.prototype.suspend = function() {
     this.suspended = true
   };
-  exports.Observable.prototype.resume = function() {
+  tent.changes.Observable.prototype.resume = function() {
     this.suspended = false;
     if(this.changesWhileSuspended) {
       if(this.changesWhileSuspended.length < 5) {
@@ -1036,13 +1134,13 @@ tent.domClone = function(obj, options) {
         }
       }else {
         if(this.changesWhileSuspended.length > 1) {
-          this.notifyChange(exports.EventTypes.MANYCHANGES, this.changesWhileSuspended)
+          this.notifyChange(tent.changes.EventTypes.MANYCHANGES, this.changesWhileSuspended)
         }
       }
       delete this.changesWhileSuspended
     }
   };
-  exports.Observable.prototype.isValidHandler = function(handler) {
+  tent.changes.Observable.prototype.isValidHandler = function(handler) {
     if(!handler) {
       return false
     }
@@ -1051,11 +1149,11 @@ tent.domClone = function(obj, options) {
     }
     return false
   };
-  exports.Observable.prototype.bind = function(eventType, handler) {
+  tent.changes.Observable.prototype.bind = function(eventType, handler) {
     if(!handler) {
       if(this.isValidHandler(eventType)) {
         handler = eventType;
-        eventType = exports.EventTypes.ANY
+        eventType = tent.changes.EventTypes.ANY
       }else {
         throw"must specify a handler: function (Change) or and object with a handle(Change) function";
       }
@@ -1064,7 +1162,7 @@ tent.domClone = function(obj, options) {
       throw"must specify a handler: function (Change) or and object with a handle(Change) function";
     }
     if(!eventType) {
-      eventType = exports.EventTypes.ANY
+      eventType = tent.changes.EventTypes.ANY
     }
     var ehandlers = this.handlers[eventType];
     if(!ehandlers) {
@@ -1078,11 +1176,11 @@ tent.domClone = function(obj, options) {
     this.handlers[eventType].push(handler);
     return true
   };
-  exports.Observable.prototype.unbind = function(eventType, handler) {
+  tent.changes.Observable.prototype.unbind = function(eventType, handler) {
     if(!handler) {
       if(this.isValidHandler(eventType)) {
         handler = eventType;
-        eventType = exports.EventTypes.ANY
+        eventType = tent.changes.EventTypes.ANY
       }else {
         throw"must specify a handler to remove";
       }
@@ -1091,7 +1189,7 @@ tent.domClone = function(obj, options) {
       throw"must specify a handler to remove";
     }
     if(!eventType) {
-      eventType = exports.EventTypes.ANY
+      eventType = tent.changes.EventTypes.ANY
     }
     var ehandlers = this.handlers[eventType];
     var removed = false;
@@ -1107,7 +1205,7 @@ tent.domClone = function(obj, options) {
     }
     return removed
   };
-  exports.Observable.prototype.unbindWhere = function(filter) {
+  tent.changes.Observable.prototype.unbindWhere = function(filter) {
     var changed = false;
     for(var eventType in this.handlers) {
       var ehandlers = this.handlers[eventType];
@@ -1122,7 +1220,7 @@ tent.domClone = function(obj, options) {
     }
     return changed
   };
-  exports.Observable.prototype.notifyHandler = function(change, handler) {
+  tent.changes.Observable.prototype.notifyHandler = function(change, handler) {
     try {
       if(typeof handler == "function") {
         return handler.call(this.subject, change)
@@ -1142,7 +1240,7 @@ tent.domClone = function(obj, options) {
       return err
     }
   };
-  exports.Observable.prototype.notifyChange = function(eventType, data) {
+  tent.changes.Observable.prototype.notifyChange = function(eventType, data) {
     if(this.suspended) {
       if(!this.changesWhileSuspended) {
         this.changesWhileSuspended = [];
@@ -1160,27 +1258,27 @@ tent.domClone = function(obj, options) {
         };
         this.changesWhileSuspended.findPropertyChanged = function(subject, propertyName) {
           for(var i = 0, l = this.length;i < l;i++) {
-            if(this[i].subject == subject && this[i].eventType == exports.EventTypes.CHANGED && this[i].data.propertyName == propertyName) {
+            if(this[i].subject == subject && this[i].eventType == tent.changes.EventTypes.CHANGED && this[i].data.propertyName == propertyName) {
               return this[i]
             }
           }
         };
         this.changesWhileSuspended.findArrayChanged = function(array) {
           for(var i = 0, l = this.length;i < l;i++) {
-            if(this[i].subject == subject && (this[i].eventType == exports.EventTypes.ADDED || this[i].eventType == exports.EventTypes.REMOVED)) {
+            if(this[i].subject == subject && (this[i].eventType == tent.changes.EventTypes.ADDED || this[i].eventType == tent.changes.EventTypes.REMOVED)) {
               return this[i]
             }
           }
         }
       }
-      this.changesWhileSuspended.push(new exports.Change(this.subject, eventType, data));
+      this.changesWhileSuspended.push(new tent.changes.Change(this.subject, eventType, data));
       return
     }
     var change;
-    if(eventType instanceof exports.Change) {
+    if(eventType instanceof tent.changes.Change) {
       change = eventType
     }else {
-      change = new exports.Change(this.subject, eventType, data)
+      change = new tent.changes.Change(this.subject, eventType, data)
     }
     var ehandlers = this.handlers[eventType];
     if(ehandlers) {
@@ -1188,7 +1286,7 @@ tent.domClone = function(obj, options) {
         this.notifyHandler(change, ehandlers[i])
       }
     }
-    ehandlers = this.handlers[exports.EventTypes.ANY];
+    ehandlers = this.handlers[tent.changes.EventTypes.ANY];
     if(ehandlers) {
       for(var i = 0, l = ehandlers.length;i < l;i++) {
         this.notifyHandler(change, ehandlers[i])
@@ -1196,10 +1294,13 @@ tent.domClone = function(obj, options) {
     }
   };
   var defaultLogHandler;
-  exports.Observable.prototype.log = function(enable) {
+  tent.changes.Observable.prototype.log = function(enable) {
+    if(typeof enable == "undefined") {
+      enable = true
+    }
     if(enable) {
       if(!defaultLogHandler) {
-        defaultLogHandler = exports.LogHandler()
+        defaultLogHandler = new tent.changes.LogHandler
       }
       return this.bind(defaultLogHandler)
     }else {
@@ -1209,7 +1310,7 @@ tent.domClone = function(obj, options) {
     }
     return false
   };
-  exports.LogHandler = function(prefix) {
+  tent.changes.LogHandler = function LogHandler(prefix) {
     if(typeof prefix == "undefined") {
       prefix = ""
     }else {
@@ -1217,9 +1318,10 @@ tent.domClone = function(obj, options) {
         prefix += " "
       }
     }
-    return function(change) {
-      tent.log.info(prefix + change.toString())
-    }
+    this.prefix = prefix
+  };
+  tent.changes.LogHandler.prototype.handle = function(change) {
+    tent.log.info(this.prefix + change.toString())
   };
   var buildLivePropagateHandler = function(options) {
     var propagateOptions = {};
@@ -1229,21 +1331,21 @@ tent.domClone = function(obj, options) {
       }
     }
     var f = function(change) {
-      if(change.eventType == exports.EventTypes.CHANGED) {
+      if(change.eventType == tent.changes.EventTypes.CHANGED) {
         if(typeof change.data.current == "object") {
           if(propagateOptions.deepOverDOM || !tent.isDOMObject(change.data.current)) {
             propagateOptions.deepStack = [change.data.subject];
-            exports.track(change.data.current, propagateOptions);
+            tent.changes.track(change.data.current, propagateOptions);
             delete propagateOptions.deepStack
           }
         }
       }else {
-        if(change.eventType == exports.EventTypes.ADDED) {
+        if(change.eventType == tent.changes.EventTypes.ADDED) {
           for(var i = 0, l = change.data.items.length;i < l;i++) {
             if(typeof change.data.items[i] == "object") {
               if(propagateOptions.deepOverDOM || !tent.isDOMObject(change.data.current)) {
                 propagateOptions.deepStack = [change.data.subject];
-                exports.track(change.data.items[i], propagateOptions);
+                tent.changes.track(change.data.items[i], propagateOptions);
                 delete propagateOptions.deepStack
               }
             }
@@ -1254,7 +1356,7 @@ tent.domClone = function(obj, options) {
     f.isLivePropagator = true;
     return f
   };
-  exports.track = function(obj, options) {
+  tent.changes.track = function(obj, options) {
     if(!options) {
       options = {}
     }
@@ -1278,12 +1380,9 @@ tent.domClone = function(obj, options) {
         obj.__observable__ = options.observable;
         obj.__observable__.subject = obj
       }else {
-        obj.__observable__ = new exports.Observable(obj)
+        obj.__observable__ = new tent.changes.Observable(obj)
       }
       changed = true;
-      obj.getObservable = function() {
-        return this.__observable__
-      };
       if(!options.interceptOptions) {
         options.interceptOptions = {}
       }
@@ -1360,7 +1459,7 @@ tent.domClone = function(obj, options) {
         for(var i = 0, l = obj.length;i < l;i++) {
           var subObj = obj[i];
           if(subObj && typeof subObj == "object" && options.deepStack.lastIndexOf(subObj) < 0) {
-            if(exports.track(subObj, options)) {
+            if(tent.changes.track(subObj, options)) {
               changed = true
             }
           }
@@ -1374,7 +1473,7 @@ tent.domClone = function(obj, options) {
             var subObj = obj[propName];
             if(options.deepOverDOM || !tent.isDOMObject(subject)) {
               if(typeof subObj == "object" && options.deepStack.lastIndexOf(subObj) < 0) {
-                if(exports.track(subObj, options)) {
+                if(tent.changes.track(subObj, options)) {
                   changed = true
                 }
               }
@@ -1386,7 +1485,7 @@ tent.domClone = function(obj, options) {
     }
     return changed
   };
-  exports.untrack = function(obj, options) {
+  tent.changes.untrack = function(obj, options) {
     if(!options) {
       options = {removeAll:true}
     }else {
@@ -1394,12 +1493,12 @@ tent.domClone = function(obj, options) {
         options.removeAll = true
       }
     }
-    return exports.track(obj, options)
+    return tent.changes.track(obj, options)
   };
-  exports.isTracked = function(obj) {
-    return obj.__observable__ && obj.__observable__ instanceof exports.Observable
+  tent.changes.isTracked = function(obj) {
+    return obj.__observable__ && obj.__observable__ instanceof tent.changes.Observable
   };
-  exports.bind = function(obj, options) {
+  tent.changes.bind = function(obj, options) {
     var eventType;
     if(typeof options == "string") {
       var eventType = options;
@@ -1425,9 +1524,9 @@ tent.domClone = function(obj, options) {
         options.bindings.push({eventType:eventType, handler:arguments[i]})
       }
     }
-    return exports.track(obj, options)
+    return tent.changes.track(obj, options)
   };
-  exports.unbind = function(obj, options) {
+  tent.changes.unbind = function(obj, options) {
     var eventType;
     if(typeof options == "string") {
       var eventType = options;
@@ -1460,10 +1559,9 @@ tent.domClone = function(obj, options) {
         options.remove = true
       }
     }
-    return exports.track(obj, options)
-  };
-  return exports
-});tent.declare("tent.databinding", function(exports) {
+    return tent.changes.track(obj, options)
+  }
+});tent.declare("tent.databinding", function() {
   var buildTargetUpdater = function(source, sourceProperty, target, targetProperty, options) {
     var handler = {};
     handler.handle = function(change) {
@@ -1527,7 +1625,7 @@ tent.domClone = function(obj, options) {
         }
         if(update) {
           if(options.template) {
-            exports.parseTemplate(options.template, currentValue, tgt, tgtProp)
+            tent.databinding.parseTemplate(options.template, currentValue, tgt, tgtProp)
           }else {
             if(typeof options.format == "function") {
               currentValue = options.format(currentValue)
@@ -1541,7 +1639,7 @@ tent.domClone = function(obj, options) {
     };
     return handler
   };
-  exports.bind = function(source, sourceProperty, target, targetProperty, options) {
+  tent.databinding.bind = function(source, sourceProperty, target, targetProperty, options) {
     if(!options) {
       options = {}
     }
@@ -1567,11 +1665,11 @@ tent.domClone = function(obj, options) {
         target[targetProperty] = currentValue
       }
     }else {
-      exports.parseTemplate(options.template, currentValue, target, targetProperty)
+      tent.databinding.parseTemplate(options.template, currentValue, target, targetProperty)
     }
   };
   var _tmplCache = {};
-  exports.parseTemplate = function(template, data, target, targetProperty) {
+  tent.databinding.parseTemplate = function(template, data, target, targetProperty) {
     var str = template;
     var result;
     try {
@@ -1595,8 +1693,8 @@ tent.domClone = function(obj, options) {
     return result
   };
   return exports
-});tent.declare("tent.changes.reverseProperties", function(exports) {
-  exports.setReverseProperty = function(obj, name, prop) {
+});tent.declare("tent.changes.reverseProperties", function() {
+  tent.changes.reverseProperties.setReverseProperty = function(obj, name, prop) {
     if(!prop) {
       prop = {}
     }
@@ -1629,24 +1727,24 @@ tent.domClone = function(obj, options) {
       obj.__reverseProperties__[name] = reverseProp
     }
   };
-  exports.setReverseProperties = function(obj, properties) {
+  tent.changes.reverseProperties.setReverseProperties = function(obj, properties) {
     if(properties) {
       for(var name in properties) {
         if(properties[name].reverse) {
-          exports.setReverseProperty(obj, name, properties[name])
+          tent.changes.reverseProperties.setReverseProperty(obj, name, properties[name])
         }
       }
     }
   };
-  exports.Set = function Set(properties) {
+  tent.changes.reverseProperties.Set = function Set(properties) {
     this.properties = properties
   };
-  exports.Set.prototype.create = function() {
+  tent.changes.reverseProperties.Set.prototype.create = function() {
     var obj = {};
-    exports.setReverseProperties(obj, this.properties);
+    this.applyTo(obj);
     return obj
   };
-  exports.Set.prototype.applyTo = function() {
+  tent.changes.reverseProperties.Set.prototype.applyTo = function() {
     var result = [];
     result.bind = function(options) {
       if(!options) {
@@ -1675,22 +1773,14 @@ tent.domClone = function(obj, options) {
     };
     if(this.properties) {
       for(var i = 0;i < arguments.length;i++) {
-        exports.setReverseProperties(arguments[i], this.properties)
+        tent.changes.reverseProperties.setReverseProperties(arguments[i], this.properties)
       }
       result.push.apply(result, arguments)
     }
     return result
   };
-  exports.Set.prototype.applyToAndBind = function() {
-    if(this.properties && this.properties.length > 0) {
-      for(var i = 0;i < arguments.length;i++) {
-        exports.setReverseProperties(arguments[i], this.properties);
-        tent.changes.bind(arguments[i], {deep:true, reverseProperties:true})
-      }
-    }
-  };
   var reversePropertyHandler;
-  exports.getHandler = function() {
+  tent.changes.reverseProperties.getHandler = function() {
     if(!reversePropertyHandler) {
       reversePropertyHandler = function(change) {
         if(change.eventType == tent.changes.EventTypes.ADDED) {
@@ -1793,11 +1883,10 @@ tent.domClone = function(obj, options) {
       }
     }
     return reversePropertyHandler
-  };
-  return exports
-});tent.declare("tent.entities", function(exports) {
-  exports.ChangeStates = new tent.coreTypes.Enum("DETACHED,UNCHANGED,ADDED,MODIFIED,DELETED");
-  exports.Type = function Type(name, properties) {
+  }
+});tent.declare("tent.entities", function() {
+  tent.entities.ChangeStates = new tent.coreTypes.Enum("DETACHED,UNCHANGED,ADDED,MODIFIED,DELETED");
+  tent.entities.Type = function Type(name, properties) {
     this.name = name;
     this.properties = properties;
     if(properties instanceof tent.changes.reverseProperties.Set) {
@@ -1810,10 +1899,10 @@ tent.domClone = function(obj, options) {
       }
     }
   };
-  exports.Type.prototype.toString = function() {
+  tent.entities.Type.prototype.toString = function() {
     return"EntityType(" + this.name + ")"
   };
-  exports.Type.prototype.applyTo = function() {
+  tent.entities.Type.prototype.applyTo = function() {
     this.reversePropertySet.applyTo.apply(this.reversePropertySet, arguments);
     for(var i = 0;i < arguments.length;i++) {
       if(arguments[i].__entityType__ != this) {
@@ -1831,14 +1920,14 @@ tent.domClone = function(obj, options) {
       }
     }
   };
-  exports.Collection = function Collection(context, type, name) {
+  tent.entities.Collection = function Collection(context, type, name) {
     this.context = context;
     this.type = type;
     this.name = name || type.name;
     this.items = [];
-    tent.arrays.addFunctions(this.items)
+    tent.arrays.extend(this.items)
   };
-  exports.Collection.prototype.push = function() {
+  tent.entities.Collection.prototype.push = function() {
     for(var i = 0;i < arguments.length;i++) {
       if(arguments[i] instanceof Array) {
         this.push.apply(this, arguments[i])
@@ -1873,7 +1962,7 @@ tent.domClone = function(obj, options) {
     }
     return this.items.length
   };
-  exports.Collection.prototype.attach = function() {
+  tent.entities.Collection.prototype.attach = function() {
     for(var i = 0;i < arguments.length;i++) {
       if(arguments[i] instanceof Array) {
         throw"cannot attach arrays to a Collection";
@@ -1895,7 +1984,7 @@ tent.domClone = function(obj, options) {
           }
           if(this.items.lastIndexOf(arguments[i]) < 0) {
             arguments[i].__collection__ = this;
-            if(arguments[i].__changeState__ != exports.ChangeStates.DELETED) {
+            if(arguments[i].__changeState__ != tent.entities.ChangeStates.DELETED) {
               this.items.push(arguments[i])
             }
             if(this.context.changeHandler) {
@@ -1910,7 +1999,7 @@ tent.domClone = function(obj, options) {
     }
     return this.items.length
   };
-  exports.Collection.prototype.remove = function() {
+  tent.entities.Collection.prototype.remove = function() {
     var removed = false;
     for(var i = 0, l = arguments.length;i < l;i++) {
       var item = arguments[i];
@@ -1926,11 +2015,11 @@ tent.domClone = function(obj, options) {
     }
     return removed
   };
-  exports.Collection.prototype.detach = function() {
+  tent.entities.Collection.prototype.detach = function() {
     var removed = false;
     for(var i = 0, l = arguments.length;i < l;i++) {
       var item = arguments[i];
-      if(this.items.remove(item) || item.__changeState__ == exports.ChangeStates.DELETED) {
+      if(this.items.remove(item) || item.__changeState__ == tent.entities.ChangeStates.DELETED) {
         removed = true;
         if(this.context.changeHandler) {
           this.context.changeHandler.itemDetached(item)
@@ -1943,7 +2032,7 @@ tent.domClone = function(obj, options) {
     }
     return removed
   };
-  exports.Collection.prototype.detachAll = function() {
+  tent.entities.Collection.prototype.detachAll = function() {
     if(this.items.length < 1) {
       return false
     }
@@ -1961,29 +2050,30 @@ tent.domClone = function(obj, options) {
     this.items.length = 0;
     return true
   };
-  exports.Context = function Context(trackChanges) {
+  tent.entities.Context = function Context(trackChanges) {
     this.__collections__ = {};
     this.__types__ = {};
     if(trackChanges === true) {
       this.trackChanges()
     }
+    this.changes = null
   };
-  exports.MyContext = new exports.Context;
-  exports.Context.prototype.all = function() {
+  tent.entities.MyContext = new tent.entities.Context;
+  tent.entities.Context.prototype.all = function() {
     var items = [];
     for(var collname in this.__collections__) {
       items.push.apply(items, this.__collections__[collname].items)
     }
     return items
   };
-  exports.Context.prototype.filter = function(condition) {
+  tent.entities.Context.prototype.filter = function(condition) {
     var items = [];
     for(var collname in this.__collections__) {
       items.push.apply(items, this.__collections__[collname].items.filter(condition))
     }
     return items
   };
-  exports.Context.prototype.contains = function() {
+  tent.entities.Context.prototype.contains = function() {
     for(var ai = 0;ai < arguments.length;ai++) {
       var item = arguments[ai];
       if(!item) {
@@ -1994,12 +2084,12 @@ tent.domClone = function(obj, options) {
             return false
           }
         }else {
-          if(item instanceof exports.Type) {
+          if(item instanceof tent.entities.Type) {
             if(this.__types__[item.name] != item) {
               return false
             }
           }else {
-            if(item instanceof exports.Collection) {
+            if(item instanceof tent.entities.Collection) {
               if(this != item.context) {
                 return false
               }
@@ -2012,12 +2102,12 @@ tent.domClone = function(obj, options) {
     }
     return true
   };
-  exports.Context.prototype.createCollection = function(type, name) {
+  tent.entities.Context.prototype.createCollection = function(type, name) {
     if(!name) {
       if(!type) {
         name = "_Object"
       }else {
-        if(type instanceof exports.Type) {
+        if(type instanceof tent.entities.Type) {
           name = type.name
         }else {
           if(typeof type == "string") {
@@ -2029,12 +2119,12 @@ tent.domClone = function(obj, options) {
         }
       }
     }else {
-      if(type && !type instanceof exports.Type) {
+      if(type && !type instanceof tent.entities.Type) {
         throw"provided type is not a Type instance";
       }
     }
     if(!this.__collections__[name]) {
-      this.__collections__[name] = new exports.Collection(this, type, name);
+      this.__collections__[name] = new tent.entities.Collection(this, type, name);
       var shortcutName = name;
       while(this[shortcutName]) {
         shortcutName += "_"
@@ -2043,16 +2133,16 @@ tent.domClone = function(obj, options) {
     }
     return this.__collections__[name]
   };
-  exports.Context.prototype.pushModel = function(model) {
+  tent.entities.Context.prototype.pushModel = function(model) {
     if(model) {
       if(model.types) {
         for(var typeName in model.types) {
-          this.push(new exports.Type(typeName, model.types[typeName]))
+          this.push(new tent.entities.Type(typeName, model.types[typeName]))
         }
       }
     }
   };
-  exports.Context.prototype.push = function() {
+  tent.entities.Context.prototype.push = function() {
     for(var i = 0;i < arguments.length;i++) {
       if(arguments[i] instanceof Array) {
         throw"cannot push arrays into a Context";
@@ -2064,7 +2154,7 @@ tent.domClone = function(obj, options) {
             throw"cannot push this item, it belongs to another Context";
           }
         }else {
-          if(arguments[i] instanceof exports.Type) {
+          if(arguments[i] instanceof tent.entities.Type) {
             if(!arguments[i].name) {
               throw"cannot add an EntityType without name";
             }
@@ -2078,7 +2168,7 @@ tent.domClone = function(obj, options) {
             this.__types__[arguments[i].name] = arguments[i];
             this.createCollection(arguments[i])
           }else {
-            if(arguments[i] instanceof exports.Context) {
+            if(arguments[i] instanceof tent.entities.Context) {
               throw"cannot add an EntityContext to an EntityContext";
             }else {
               if(typeof arguments[i] == "object") {
@@ -2101,18 +2191,22 @@ tent.domClone = function(obj, options) {
       }
     }
   };
-  exports.Context.prototype.attach = function() {
+  tent.entities.Context.prototype.attach = function() {
     for(var i = 0;i < arguments.length;i++) {
       if(arguments[i] instanceof Array) {
         throw"cannot attach arrays";
       }else {
-        if(arguments[i].__collection__ && arguments[i].__collection__.context == this) {
-          continue
+        if(arguments[i].__collection__) {
+          if(arguments[i].__collection__.context == this) {
+            continue
+          }else {
+            throw"cannot attach this item, it belongs to another Context";
+          }
         }else {
-          if(arguments[i] instanceof exports.Type) {
+          if(arguments[i] instanceof tent.entities.Type) {
             throw"cannot attach EntityTypes";
           }else {
-            if(arguments[i] instanceof exports.Context) {
+            if(arguments[i] instanceof tent.entities.Context) {
               throw"cannot attach an EntityContext to an EntityContext";
             }else {
               if(typeof arguments[i] == "object") {
@@ -2135,12 +2229,12 @@ tent.domClone = function(obj, options) {
       }
     }
   };
-  exports.Context.prototype.remove = function() {
+  tent.entities.Context.prototype.remove = function() {
     for(var i = 0;i < arguments.length;i++) {
-      if(arguments[i] instanceof exports.Type) {
+      if(arguments[i] instanceof tent.entities.Type) {
         throw"cannot remove EntityTypes";
       }else {
-        if(arguments[i] instanceof exports.Context) {
+        if(arguments[i] instanceof tent.entities.Context) {
           throw"cannot remove an EntityContext from an EntityContext";
         }else {
           if(typeof arguments[i] == "object") {
@@ -2152,15 +2246,15 @@ tent.domClone = function(obj, options) {
       }
     }
   };
-  exports.Context.prototype.detach = function() {
+  tent.entities.Context.prototype.detach = function() {
     for(var i = 0;i < arguments.length;i++) {
       if(arguments[i] instanceof Array) {
         throw"cannot detach arrays";
       }
-      if(arguments[i] instanceof exports.Type) {
+      if(arguments[i] instanceof tent.entities.Type) {
         throw"cannot detach EntityTypes";
       }else {
-        if(arguments[i] instanceof exports.Context) {
+        if(arguments[i] instanceof tent.entities.Context) {
           throw"cannot detach an EntityContext from an EntityContext";
         }else {
           if(typeof arguments[i] == "object") {
@@ -2172,7 +2266,7 @@ tent.domClone = function(obj, options) {
       }
     }
   };
-  exports.Context.prototype.detachAll = function() {
+  tent.entities.Context.prototype.detachAll = function() {
     var removed = false;
     for(var i = 0;i < this.__collections__.length;i++) {
       if(this.__collections__[i].detachAll()) {
@@ -2181,12 +2275,12 @@ tent.domClone = function(obj, options) {
     }
     return removed
   };
-  exports.Context.prototype.touch = function() {
+  tent.entities.Context.prototype.touch = function() {
     if(this.changeHandler) {
       return this.changeHandler.touch.apply(this.changeHandler, arguments)
     }
   };
-  exports.Context.prototype.__cascadePush__ = function() {
+  tent.entities.Context.prototype.__cascadePush__ = function() {
     for(var i = 0;i < arguments.length;i++) {
       var item = arguments[i];
       if(item.__entityType__) {
@@ -2219,7 +2313,7 @@ tent.domClone = function(obj, options) {
       }
     }
   };
-  exports.Context.prototype.__cascadeAttach__ = function() {
+  tent.entities.Context.prototype.__cascadeAttach__ = function() {
     for(var i = 0;i < arguments.length;i++) {
       var item = arguments[i];
       if(item.__entityType__) {
@@ -2252,7 +2346,7 @@ tent.domClone = function(obj, options) {
       }
     }
   };
-  exports.Context.prototype.__cascadeRemove__ = function() {
+  tent.entities.Context.prototype.__cascadeRemove__ = function() {
     for(var i = 0;i < arguments.length;i++) {
       var item = arguments[i];
       if(item.__entityType__) {
@@ -2273,7 +2367,7 @@ tent.domClone = function(obj, options) {
       }
     }
   };
-  exports.Context.prototype.__cascadeDetach__ = function() {
+  tent.entities.Context.prototype.__cascadeDetach__ = function() {
     for(var i = 0;i < arguments.length;i++) {
       var item = arguments[i];
       if(item.__entityType__) {
@@ -2294,49 +2388,49 @@ tent.domClone = function(obj, options) {
       }
     }
   };
-  exports.Context.prototype.trackChanges = function() {
+  tent.entities.Context.prototype.trackChanges = function() {
     if(!this.changeHandler) {
-      this.changeHandler = new exports.ContextChangeHandler(this);
+      this.changeHandler = new tent.entities.ContextChangeHandler(this);
       this.changeHandler.init()
     }
   };
-  exports.Context.prototype.hasChanges = function() {
+  tent.entities.Context.prototype.hasChanges = function() {
     return!!(this.changes && this.changes.items.length > 0)
   };
-  exports.Context.prototype.acceptChanges = function() {
+  tent.entities.Context.prototype.acceptChanges = function() {
     if(this.changeHandler) {
       this.changeHandler.acceptChanges()
     }
   };
-  exports.EntityLink = function EntityLink(from, to, propertyName, changeState) {
+  tent.entities.EntityLink = function EntityLink(from, to, propertyName, changeState) {
     this.from = from;
     this.to = to;
     this.propertyName = propertyName;
-    this.__changeState__ = changeState || exports.ChangeStates.DETACHED
+    this.__changeState__ = changeState || tent.entities.ChangeStates.DETACHED
   };
-  exports.ContextChanges = function ContextChanges(context) {
+  tent.entities.ContextChanges = function ContextChanges(context) {
     this.context = context;
     this.items = [];
-    tent.arrays.addFunctions(this.items)
+    tent.arrays.extend(this.items)
   };
-  exports.ContextChanges.prototype.toString = function() {
+  tent.entities.ContextChanges.prototype.toString = function() {
     var count = new tent.coreTypes.NameCounter;
     for(var i = 0, l = this.items.length;i < l;i++) {
-      count.add(exports.ChangeStates.getName(this.items[i].__changeState__) + "." + this.items[i].__collection__.name)
+      count.add(tent.entities.ChangeStates.getName(this.items[i].__changeState__) + "." + this.items[i].__collection__.name)
     }
     return count.toString()
   };
-  exports.ContextChangeHandler = function ContextChangeHandler(context) {
+  tent.entities.ContextChangeHandler = function ContextChangeHandler(context) {
     this.context = context
   };
-  exports.ContextChangeHandler.prototype.isDetached = function(item) {
-    return!item.__changeState__ || item.__changeState__ == exports.ChangeStates.DETACHED
+  tent.entities.ContextChangeHandler.prototype.isDetached = function(item) {
+    return!item.__changeState__ || item.__changeState__ == tent.entities.ChangeStates.DETACHED
   };
-  exports.ContextChangeHandler.prototype.bindArrayProperties = function(item) {
+  tent.entities.ContextChangeHandler.prototype.bindArrayProperties = function(item) {
     if(item.__entityType__) {
       for(var n in item.__entityType__.properties) {
         var prop = item.__entityType__.properties[n];
-        if(prop.cardinality && prop.cardinality[1] != "1" && item[n] instanceof Array) {
+        if(prop.cardinality && prop.cardinality.substr(1, 1) != "1" && item[n] instanceof Array) {
           item[n].__parent__ = item;
           item[n].__propertyName__ = n;
           tent.changes.bind(item[n], this)
@@ -2344,27 +2438,27 @@ tent.domClone = function(obj, options) {
       }
     }
   };
-  exports.ContextChangeHandler.prototype.unbindArrayProperties = function(item) {
+  tent.entities.ContextChangeHandler.prototype.unbindArrayProperties = function(item) {
     if(item.__entityType__) {
       for(var n in item.__entityType__.properties) {
         var prop = item.__entityType__.properties[n];
-        if(prop.cardinality && prop.cardinality[1] != "1" && item[n] instanceof Array) {
+        if(prop.cardinality && prop.cardinality.substr(1, 1) != "1" && item[n] instanceof Array) {
           tent.changes.unbind(item[n], this)
         }
       }
     }
   };
-  exports.ContextChangeHandler.prototype.setAdded = function(item) {
-    if(item.__changeState__ == exports.ChangeStates.ADDED) {
+  tent.entities.ContextChangeHandler.prototype.setAdded = function(item) {
+    if(item.__changeState__ == tent.entities.ChangeStates.ADDED) {
       return
     }
     if(!item.__collection__) {
-      item.__changeState__ = exports.ChangeStates.ADDED
+      item.__changeState__ = tent.entities.ChangeStates.ADDED
     }else {
       if(item.__collection__.context == this.context) {
-        item.__changeState__ = exports.ChangeStates.ADDED;
+        item.__changeState__ = tent.entities.ChangeStates.ADDED;
         if(!this.context.changes) {
-          this.context.changes = new exports.ContextChanges(this.context)
+          this.context.changes = new tent.entities.ContextChanges(this.context)
         }
         this.context.changes.items.pushUnique(item)
       }else {
@@ -2372,26 +2466,26 @@ tent.domClone = function(obj, options) {
       }
     }
   };
-  exports.ContextChangeHandler.prototype.setRemoved = function(item) {
-    if(this.isDetached(item) || item.__changeState__ == exports.ChangeStates.DELETED) {
+  tent.entities.ContextChangeHandler.prototype.setRemoved = function(item) {
+    if(this.isDetached(item) || item.__changeState__ == tent.entities.ChangeStates.DELETED) {
       return
     }
     if(!item.__collection__) {
-      item.__changeState__ = exports.ChangeStates.DELETED
+      item.__changeState__ = tent.entities.ChangeStates.DELETED
     }else {
       if(item.__collection__.context == this.context) {
-        if(item.__changeState__ == exports.ChangeStates.UNCHANGED || item.__changeState__ == exports.ChangeStates.MODIFIED) {
-          item.__changeState__ = exports.ChangeStates.DELETED;
+        if(item.__changeState__ == tent.entities.ChangeStates.UNCHANGED || item.__changeState__ == tent.entities.ChangeStates.MODIFIED) {
+          item.__changeState__ = tent.entities.ChangeStates.DELETED;
           if(!this.context.changes) {
-            this.context.changes = new exports.ContextChanges(this.context)
+            this.context.changes = new tent.entities.ContextChanges(this.context)
           }
           this.context.changes.items.pushUnique(item)
         }else {
-          if(item.__changeState__ == exports.ChangeStates.ADDED) {
-            item.__changeState__ = exports.ChangeStates.DETACHED;
+          if(item.__changeState__ == tent.entities.ChangeStates.ADDED) {
+            item.__changeState__ = tent.entities.ChangeStates.DETACHED;
             delete item.__collection__;
             if(!this.context.changes) {
-              this.context.changes = new exports.ContextChanges(this.context)
+              this.context.changes = new tent.entities.ContextChanges(this.context)
             }
             this.context.changes.items.remove(item)
           }
@@ -2401,47 +2495,47 @@ tent.domClone = function(obj, options) {
       }
     }
   };
-  exports.ContextChangeHandler.prototype.touch = function() {
+  tent.entities.ContextChangeHandler.prototype.touch = function() {
     for(var i = 0, l = arguments.length;i < l;i++) {
-      if(arguments[i] && arguments[i].__changeState__ == exports.ChangeStates.UNCHANGED && arguments[i].__collection__ && arguments[i].__collection__.context == this.context) {
+      if(arguments[i] && arguments[i].__changeState__ == tent.entities.ChangeStates.UNCHANGED && arguments[i].__collection__ && arguments[i].__collection__.context == this.context) {
         if(!this.context.changes) {
-          this.context.changes = new exports.ContextChanges(this)
+          this.context.changes = new tent.entities.ContextChanges(this)
         }
-        arguments[i].__changeState__ = exports.ChangeStates.MODIFIED;
+        arguments[i].__changeState__ = tent.entities.ChangeStates.MODIFIED;
         this.context.changes.items.pushUnique(arguments[i])
       }
     }
   };
-  exports.ContextChangeHandler.prototype.itemAdded = function(item) {
+  tent.entities.ContextChangeHandler.prototype.itemAdded = function(item) {
     if(this.isDetached(item)) {
       this.setAdded(item)
     }else {
-      if(item.__changeState__ != exports.ChangeStates.UNCHANGED) {
+      if(item.__changeState__ != tent.entities.ChangeStates.UNCHANGED) {
         if(!this.context.changes) {
-          this.context.changes = new exports.ContextChanges(this.context)
+          this.context.changes = new tent.entities.ContextChanges(this.context)
         }
         this.context.changes.items.pushUnique(item)
       }
     }
-    if(item.__changeState__ != exports.ChangeStates.DELETED) {
+    if(item.__changeState__ != tent.entities.ChangeStates.DELETED) {
       tent.changes.bind(item, this);
       this.bindArrayProperties(item)
     }
   };
-  exports.ContextChangeHandler.prototype.itemAttached = function(item) {
+  tent.entities.ContextChangeHandler.prototype.itemAttached = function(item) {
     if(this.isDetached(item)) {
-      item.__changeState__ = exports.ChangeStates.UNCHANGED
+      item.__changeState__ = tent.entities.ChangeStates.UNCHANGED
     }
     this.itemAdded(item)
   };
-  exports.ContextChangeHandler.prototype.itemRemoved = function(item) {
+  tent.entities.ContextChangeHandler.prototype.itemRemoved = function(item) {
     this.setRemoved(item);
     tent.changes.unbind(item, this);
     this.unbindArrayProperties(item)
   };
-  exports.ContextChangeHandler.prototype.itemDetached = function(item) {
+  tent.entities.ContextChangeHandler.prototype.itemDetached = function(item) {
     var changes = this.context.changes;
-    if(item.__changeState__ != exports.ChangeStates.UNCHANGED) {
+    if(item.__changeState__ != tent.entities.ChangeStates.UNCHANGED) {
       if(changes) {
         changes.items.remove(item)
       }
@@ -2450,7 +2544,7 @@ tent.domClone = function(obj, options) {
     tent.changes.unbind(item, this);
     this.unbindArrayProperties(item)
   };
-  exports.ContextChangeHandler.prototype.objectLinked = function(subject, propertyName, property, obj) {
+  tent.entities.ContextChangeHandler.prototype.objectLinked = function(subject, propertyName, property, obj) {
     if(typeof obj != "object") {
       return
     }
@@ -2470,7 +2564,7 @@ tent.domClone = function(obj, options) {
       }
     }else {
       if(obj !== null && typeof obj != "undefined") {
-        if(obj.__changeState__ == exports.ChangeStates.DELETED) {
+        if(obj.__changeState__ == tent.entities.ChangeStates.DELETED) {
           throw'cannot link a DELETED object to property "' + property + '"';
         }
         if(obj.__collection__) {
@@ -2498,25 +2592,25 @@ tent.domClone = function(obj, options) {
           var elink = null, elinki = -1;
           for(var i = this.context.changes.items.length - 1;i >= 0;i--) {
             var chg = this.context.changes.items[i];
-            if(chg instanceof exports.EntityLink && chg.from === subject && chg.to === obj && chg.propertyName == propertyName) {
+            if(chg instanceof tent.entities.EntityLink && chg.from === subject && chg.to === obj && chg.propertyName == propertyName) {
               elink = chg;
               elinki = i;
               break
             }
           }
           if(!elink) {
-            elink = new exports.EntityLink(subject, obj, propertyName, exports.ChangeStates.ADDED);
+            elink = new tent.entities.EntityLink(subject, obj, propertyName, tent.entities.ChangeStates.ADDED);
             this.context.changes.items.push(elink)
           }else {
-            if(elink.__changeState__ == exports.ChangeStates.DELETED) {
-              elink.__changeState__ = exports.ChangeStates.UNCHANGED
+            if(elink.__changeState__ == tent.entities.ChangeStates.DELETED) {
+              elink.__changeState__ = tent.entities.ChangeStates.UNCHANGED
             }
           }
         }
       }
     }
   };
-  exports.ContextChangeHandler.prototype.objectUnlinked = function(subject, propertyName, property, obj) {
+  tent.entities.ContextChangeHandler.prototype.objectUnlinked = function(subject, propertyName, property, obj) {
     if(typeof obj != "object") {
       return
     }
@@ -2538,21 +2632,21 @@ tent.domClone = function(obj, options) {
           var elink = null, elinki = -1;
           for(var i = this.context.changes.items.length - 1;i >= 0;i--) {
             var chg = this.context.changes.items[i];
-            if(chg instanceof exports.EntityLink && chg.from === subject && chg.to === obj && chg.propertyName == propertyName) {
+            if(chg instanceof tent.entities.EntityLink && chg.from === subject && chg.to === obj && chg.propertyName == propertyName) {
               elink = chg;
               elinki = i;
               break
             }
           }
           if(!elink) {
-            elink = new exports.EntityLink(subject, obj, propertyName, exports.ChangeStates.DELETED);
+            elink = new tent.entities.EntityLink(subject, obj, propertyName, tent.entities.ChangeStates.DELETED);
             this.context.changes.items.push(elink)
           }else {
-            if(elink.__changeState__ == exports.ChangeStates.ADDED) {
+            if(elink.__changeState__ == tent.entities.ChangeStates.ADDED) {
               this.context.changes.items.splice(elinki, 1)
             }else {
-              if(elink.__changeState__ != exports.ChangeStates.DELETED) {
-                elink.__changeState__ = exports.ChangeStates.DELETED
+              if(elink.__changeState__ != tent.entities.ChangeStates.DELETED) {
+                elink.__changeState__ = tent.entities.ChangeStates.DELETED
               }
             }
           }
@@ -2560,13 +2654,13 @@ tent.domClone = function(obj, options) {
       }
     }
   };
-  exports.ContextChangeHandler.prototype.getTrackedProperty = function(subject, propertyName) {
+  tent.entities.ContextChangeHandler.prototype.getTrackedProperty = function(subject, propertyName) {
     var prop;
-    if(subject.__entityType__ && subject.__changeState__ && subject.__changeState__ != exports.ChangeStates.DELETED && subject.__changeState__ != exports.ChangeStates.DETACHED && subject.__collection__ && subject.__collection__.context == this.context && (prop = subject.__entityType__.properties[propertyName])) {
+    if(subject.__entityType__ && subject.__changeState__ && subject.__changeState__ != tent.entities.ChangeStates.DELETED && subject.__changeState__ != tent.entities.ChangeStates.DETACHED && subject.__collection__ && subject.__collection__.context == this.context && (prop = subject.__entityType__.properties[propertyName])) {
       return prop
     }
   };
-  exports.ContextChangeHandler.prototype.handle = function(change) {
+  tent.entities.ContextChangeHandler.prototype.handle = function(change) {
     if(!change.subject) {
       return
     }
@@ -2603,7 +2697,7 @@ tent.domClone = function(obj, options) {
     }
     tent.changes.reverseProperties.getHandler()(change)
   };
-  exports.ContextChangeHandler.prototype.init = function() {
+  tent.entities.ContextChangeHandler.prototype.init = function() {
     if(this.context.log) {
       var rec = new tent.coreTypes.NameCounter
     }
@@ -2624,20 +2718,19 @@ tent.domClone = function(obj, options) {
       }
     }
   };
-  exports.ContextChangeHandler.prototype.acceptChanges = function() {
+  tent.entities.ContextChangeHandler.prototype.acceptChanges = function() {
     if(this.context.hasChanges()) {
       if(this.context.log) {
         tent.log.debug("Context: accepting changes, " + this.context.changes)
       }
       var items = this.context.changes.items;
       for(var i = 0, l = items.length;i < l;i++) {
-        items[i].__changeState__ = exports.ChangeStates.UNCHANGED
+        items[i].__changeState__ = tent.entities.ChangeStates.UNCHANGED
       }
       items.length = 0;
       if(this.context.log) {
         tent.log.debug("Context: all changes accepted")
       }
     }
-  };
-  return exports
+  }
 });

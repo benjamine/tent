@@ -1,17 +1,56 @@
-
-tent.declare('tent.coreTypes', function(exports){
-
-    exports.Enum = function Enum(){
+/**
+ * Utility classes used by this library
+ * @requires tent
+ * @name tent.coreTypes
+ * @namespace Utility classes used by this library
+ */
+tent.declare('tent.coreTypes', function(){
+    
+    /**
+     * Creates a new Enum.
+     * 
+     * @example
+     * 
+     * var WeekDays = new tent.coreTypes.Enum('FRIDAY,SATURDAY,SUNDAY');
+     * assertTrue(WeekDays.FRIDAY === 1 &&
+	 * 	 WeekDays.SATURDAY === 2 &&
+     * 	 WeekDays.SUNDAY == 3);
+     * 
+     * // flag enum
+     * var FontStyles = new tent.coreTypes.Enum('_FLAGS,BOLD,ITALIC,UNDERLINE,SMALLCAPS');
+     * assertTrue(FontStyles.BOLD == 1 &&
+     *   FontStyles.ITALIC == 2 &&
+     *   FontStyles.UNDERLINE == 4 &&
+     *   FontStyles.SMALLCAPS == 8);
+     * 
+     * // get names
+     * assertEquals('SATURDAY',WeekDays.getName(2));
+     * assertEquals('ITALIC|SMALLCAPS',FontStyles.getName(10));
+     * 
+     * @class an Enum of Number values
+     * @constructor
+     * @param arguments Enum names, string arguments, comma separated allowed (eg: ('ONE,TWO,THREE','FOUR')), use '_FLAGS' special name to create a flag based enum (every name gets a Math.pow(2,n) value)
+     */
+    tent.coreTypes.Enum = function Enum(){
         this.__names__ = [];
         this.__values__ = {};
+		/**
+		 * Indicates if flag enabled values are used (ie Math.pow(2,n))
+		 * @field
+		 */
         this.__flags__ = false;
         this.__enum = true; // identify as Enum, e.g. provides intellisense is VisualStudio
         if (arguments.length > 0) {
             this.add.apply(this, arguments);
         }
-    };
+    }
     
-    exports.Enum.prototype.getName = function(value){
+    /**
+     * @param {Number} value
+     * @return {String} the name of a numeric value (if it's a combination of flags, returns a pipe separated string)
+     */
+    tent.coreTypes.Enum.prototype.getName = function(value){
+    
         if (this.__names__) {
             if (this.__names__[value]) {
                 return this.__names__[value];
@@ -38,8 +77,8 @@ tent.declare('tent.coreTypes', function(exports){
                 }
         }
     };
-    
-    exports.Enum.prototype.__freeValue__ = function(){
+	
+    tent.coreTypes.Enum.prototype.__freeValue__ = function(){
         var free = (typeof this.__maxValue__ == 'undefined' ? 1 : this.__maxValue__ + 1);
         if (this.__values__ && typeof this.__values__[free] != 'undefined') {
             // __maxValue is out-dated, recalculate
@@ -62,7 +101,12 @@ tent.declare('tent.coreTypes', function(exports){
         return free;
     };
     
-    exports.Enum.prototype.useFlags = function(uf){
+    /**
+     * Activates/Deactivates the use of flag enabled values (Math.pow(2,n))
+     * @param {Boolean} use flag enabled values?
+     * @return {tent.Enum} this Enum
+     */
+    tent.coreTypes.Enum.prototype.useFlags = function(uf){
         this.__flags__ = uf;
         return this;
     };
@@ -79,7 +123,12 @@ tent.declare('tent.coreTypes', function(exports){
         }
     };
     
-    exports.Enum.prototype.add = function(){
+    /**
+     * Adds names to this Enum
+     * @param arguments Enum names, string arguments, comma separated allowed (eg: ('ONE,TWO,THREE','FOUR')), use '_FLAGS' special name to create a flag based enum (every name gets a Math.pow(2,n) value)
+     * @return {tent.Enum} this Enum
+     */
+    tent.coreTypes.Enum.prototype.add = function(){
     
         if (arguments.length < 1) {
             return this;
@@ -163,7 +212,28 @@ tent.declare('tent.coreTypes', function(exports){
         return s;
     };
     
-    exports.NameCounter = function NameCounter(name){
+    
+    /**
+     * Creates a new NameCounter
+     * 
+     * @example
+     * 
+     * var counter = new tent.coreTypes.NameCounter();
+     * counter.add('reptiles.frog');
+     * counter.add('mammals.cat',4);
+     * counter.add('reptiles.frog');
+     * counter.add('mammals.rat',8);
+     * counter.add('reptiles',2);
+     * 
+     * // check totals
+     * assertEquals('animals=(15){mammals(12){cat(4), rat(8)}, reptiles(4){frog(2)}}',
+     * 		'animals='+counter);
+     * 
+     * @class a NameCounter that holds a (hierarchical) collection of named numeric counters, use {@link #toString} to get the current human-readable totals
+     * @constructor
+     * @param {String} name Counter root Name
+     */
+    tent.coreTypes.NameCounter = function NameCounter(name){
         this.root = {
             _name: name || '',
             _count: 0,
@@ -171,7 +241,7 @@ tent.declare('tent.coreTypes', function(exports){
         };
     };
     
-    exports.NameCounter.prototype.__nodeAdd__ = function(node, inc){
+    tent.coreTypes.NameCounter.prototype.__nodeAdd__ = function(node, inc){
     
         node._count = (node._count || 0) + inc;
         if (node._parent) {
@@ -185,7 +255,12 @@ tent.declare('tent.coreTypes', function(exports){
         }
     };
     
-    exports.NameCounter.prototype.add = function(name, inc){
+    /**
+     * Increments the count for a certain name
+     * @param {String} name the name of the counter, a hierarchical counter can be specified using dot-separated name
+     * @param {Number} inc
+     */
+    tent.coreTypes.NameCounter.prototype.add = function(name, inc){
         if (typeof inc != "number") {
             inc = 1;
         }
@@ -209,7 +284,10 @@ tent.declare('tent.coreTypes', function(exports){
         
     };
     
-    exports.NameCounter.prototype.reset = function(){
+    /**
+     * Resets all counters
+     */
+    tent.coreTypes.NameCounter.prototype.reset = function(){
         this.root = {
             _name: this.root._name,
             _count: 0,
@@ -217,10 +295,9 @@ tent.declare('tent.coreTypes', function(exports){
         };
     };
     
-    exports.NameCounter.prototype.toString = function(){
+    tent.coreTypes.NameCounter.prototype.toString = function(){
         return NameCounter_NodeToString.apply(this.root);
     };
     
-    return exports;
 });
 

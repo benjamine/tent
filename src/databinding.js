@@ -1,10 +1,30 @@
+/**
+ * Provides some basic data binding for object-to-object (optionally bidirectional) and object-to-DOM,
+ * Probably most of this will be replaced by a connector to jQuery Templates and Data Linking
+ * 
+ * @requires tent.changes
+ * @name tent.databinding
+ * @namespace Data Binding objects or DOM elements
+ */
+tent.declare('tent.databinding', function(){
 
-tent.declare('tent.databinding', function(exports){
-
+	/**
+	 * Creates a change handler that binds to objects
+	 * @private
+	 * @param {Object} source
+	 * @param {Object} sourceProperty
+	 * @param {Object} target
+	 * @param {Object} targetProperty
+	 * @param {Object} options
+	 */
     var buildTargetUpdater = function(source, sourceProperty, target, targetProperty, options){
     
         var handler = {};
         
+		/**
+		 * @inner
+		 * @param {Object} change
+		 */
         handler.handle = function(change){
         
             var update = false;
@@ -85,7 +105,7 @@ tent.declare('tent.databinding', function(exports){
                 }
                 if (update) {
                     if (options.template) {
-                        exports.parseTemplate(options.template, currentValue, tgt, tgtProp);
+                        tent.databinding.parseTemplate(options.template, currentValue, tgt, tgtProp);
                     }
                     else {
                         if (typeof options.format == 'function') {
@@ -101,7 +121,20 @@ tent.declare('tent.databinding', function(exports){
         return handler;
     }
     
-    exports.bind = function(source, sourceProperty, target, targetProperty, options){
+	/**
+	 * Binds to objects, keeping values synchronized
+	 * @param {Object} source
+	 * @param {String} sourceProperty property in source object
+	 * @param {Object} target
+	 * @param {String} [targetProperty]
+	 * @param {Object} [options] binding options
+	 * @param {Boolean} [options.bidirectional] if true updates source when target is changed 
+	 * @param {Boolean} [options.deep] if true recursively traverse Object properties and Array items 
+	 * @param {Boolean} [options.live] if true combined with options.deep, when new Objects or Arrays are added/linked to tracked ones they get tracked too 
+	 * @param {Boolean} [options.log] log detected changes
+	 * @param {String} [options.template] javascript template used when updating target 
+	 */
+    tent.databinding.bind = function(source, sourceProperty, target, targetProperty, options){
     
         if (!options) {
             options = {};
@@ -153,14 +186,25 @@ tent.declare('tent.databinding', function(exports){
             }
         }
         else {
-            exports.parseTemplate(options.template, currentValue, target, targetProperty);
+            tent.databinding.parseTemplate(options.template, currentValue, target, targetProperty);
         }
         
     }
     
+	/**
+	 * private
+	 */
     var _tmplCache = {};
     
-    exports.parseTemplate = function(template, data, target, targetProperty){
+	/**
+	 * parses a Javascript template
+	 * @param {String} template a Javascript template
+	 * @param {Object} data parameter data for the template
+	 * @param {Object} [target] target object to update
+	 * @param {Object} [targetProperty] target property to update
+	 * @return {String} the rendered result
+	 */
+    tent.databinding.parseTemplate = function(template, data, target, targetProperty){
         var str = template;
         var result;
         try {

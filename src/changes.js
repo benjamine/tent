@@ -1,15 +1,39 @@
+/**
+ * @requires tent
+ * @requires tent.arrays
+ * @requires tent.coreTypes
+ * @name tent.changes
+ * @namespace Change Tracking for Javascript Objects and Arrays
+ */
+tent.declare('tent.changes', function(){
 
-tent.declare('tent.changes', function(exports){
-
-    exports.EventTypes = new tent.coreTypes.Enum('ANY,MANYCHANGES,CHANGING,CHANGED,ADDING,ADDED,REMOVING,REMOVED');
+    /**
+     * Event change type
+     * @type tent.coreTypes.Enum
+     * @enum
+     */
+    tent.changes.EventTypes = new tent.coreTypes.Enum('ANY,MANYCHANGES,CHANGING,CHANGED,ADDING,ADDED,REMOVING,REMOVED');
     
-    exports.InterceptorTypes = new tent.coreTypes.Enum('PROPERTY,FUNCTION');
+    /**
+     * Interceptor types
+     * @type tent.coreTypes.Enum
+     * @enum
+     */
+    tent.changes.InterceptorTypes = new tent.coreTypes.Enum('PROPERTY,FUNCTION');
     
-    exports.PropertyInterceptModes = new tent.coreTypes.Enum('NONE,DEFINESETTER,DEFINEPROPERTY,DEFINEPROPERTYONLYDOM');
-    
+    /**
+     * Property setter intercept modes
+     * @type tent.coreTypes.Enum
+     * @enum
+     */
+    tent.changes.PropertyInterceptModes = new tent.coreTypes.Enum('NONE,DEFINESETTER,DEFINEPROPERTY,DEFINEPROPERTYONLYDOM');
+	
     var _PropertyInterceptMode;
     
-    exports.getPropertyInterceptMode = function(){
+    /**
+     * @return {Number} the best property setter intercept mode support in the current environment, a value of {@link tent.changes.PropertyInterceptModes}
+     */
+    tent.changes.getPropertyInterceptMode = function(){
         if (typeof _PropertyInterceptMode == 'undefined') {
             // detect available property intercept mode
             
@@ -26,7 +50,7 @@ tent.declare('tent.changes', function(exports){
                     })
                     anobject.myproperty = 'my value';
                     if (anobject.myproperty === 'my value' && anobject._myproperty === 'my value') {
-                        _PropertyInterceptMode = exports.PropertyInterceptModes.DEFINEPROPERTY;
+                        _PropertyInterceptMode = tent.changes.PropertyInterceptModes.DEFINEPROPERTY;
                     }
                 } 
                 catch (err) {
@@ -44,7 +68,7 @@ tent.declare('tent.changes', function(exports){
                             })
                             adomobject.myproperty = 'my value';
                             if (adomobject.myproperty === 'my value' && adomobject._myproperty === 'my value') {
-                                _PropertyInterceptMode = exports.PropertyInterceptModes.DEFINEPROPERTYONLYDOM;
+                                _PropertyInterceptMode = tent.changes.PropertyInterceptModes.DEFINEPROPERTYONLYDOM;
                             }
                         } 
                         catch (err) {
@@ -65,7 +89,7 @@ tent.declare('tent.changes', function(exports){
                         });
                         anobject.myproperty = 'my value';
                         if (anobject.myproperty === 'my value' && anobject._myproperty === 'my value') {
-                            _PropertyInterceptMode = exports.PropertyInterceptModes.DEFINESETTER;
+                            _PropertyInterceptMode = tent.changes.PropertyInterceptModes.DEFINESETTER;
                         }
                     } 
                     catch (err) {
@@ -73,30 +97,58 @@ tent.declare('tent.changes', function(exports){
                 }
             }
             if (typeof _PropertyInterceptMode == 'undefined') {
-                _PropertyInterceptMode = exports.PropertyInterceptModes.NONE;
+                _PropertyInterceptMode = tent.changes.PropertyInterceptModes.NONE;
             }
         }
         return _PropertyInterceptMode;
     }
     
-    exports.getPropertyInterceptModeName = function(){
-        return exports.PropertyInterceptModes.getName(exports.getPropertyInterceptMode());
+    /**
+     * @return {String} the name of the best property setter intercept mode support in the current environment, a member of {@link tent.changes.PropertyInterceptModes}
+     */
+    tent.changes.getPropertyInterceptModeName = function(){
+        return tent.changes.PropertyInterceptModes.getName(tent.changes.getPropertyInterceptMode());
     }
     
-    exports.Change = function Change(subject, eventType, data){
+    /**
+     * Creates a new Change
+     * @class represents a detected change in an Object
+     * @param {Object} subject the change object
+     * @param {Number} eventType a value of {@link tent.changes.EventTypes}
+     * @param {Object} [data] additional change data
+     */
+    tent.changes.Change = function Change(subject, eventType, data){
+		/**
+		 * The Object that changed
+		 * @type Object|Array
+		 * @field
+		 */
         this.subject = subject;
+		/**
+		 * the type of change, a value of {@link tent.change.EventTypes}
+		 * @type Number
+		 * @field
+		 */
         this.eventType = eventType;
+		/**	
+		 * additional information, depending on {@link #eventType}
+		 * @field
+		 */
         this.data = data;
     }
     
-    exports.ChangeStringifiers = [];
+	/**
+	 * Functions that stringify a {link tent.changes.Change} indexed by eventType (a value of {@link tent.changes.EventTypes})
+	 * @type function[]
+	 */
+    tent.changes.ChangeStringifiers = [];
     
-    exports.Change.prototype.toString = function(){
+    tent.changes.Change.prototype.toString = function(){
     
     
-        if (typeof exports.ChangeStringifiers[this.eventType] != 'undefined') {
+        if (typeof tent.changes.ChangeStringifiers[this.eventType] != 'undefined') {
         
-            exports.ChangeStringifiers[this.eventType](this);
+            tent.changes.ChangeStringifiers[this.eventType](this);
             
         }
         else {
@@ -104,8 +156,8 @@ tent.declare('tent.changes', function(exports){
             // default change stringifier
             
             var change = this;
-            var message = exports.EventTypes.getName(change.eventType);
-            if (change.eventType == exports.EventTypes.MANYCHANGES) {
+            var message = tent.changes.EventTypes.getName(change.eventType);
+            if (change.eventType == tent.changes.EventTypes.MANYCHANGES) {
                 message += ': ';
                 if (change.data.length <= 3) {
                     for (var i = 0, l = change.data.length; i < l; i++) {
@@ -119,18 +171,18 @@ tent.declare('tent.changes', function(exports){
                         et[change.data[i].eventType] = (et[change.data[i].eventType] || 0) + 1;
                     }
                     for (var e in et) {
-                        message += exports.EventTypes.getName(e) + '(' + et[e] + '),';
+                        message += tent.changes.EventTypes.getName(e) + '(' + et[e] + '),';
                     }
                 }
             }
             else {
                 if (change.data.propertyName) {
                     message += ' ' + change.data.propertyName;
-                    if (change.eventType == exports.EventTypes.CHANGING) {
+                    if (change.eventType == tent.changes.EventTypes.CHANGING) {
                         message += ' from ' + change.data.current + ' to ' + change.data.newValue;
                     }
                     else 
-                        if (change.eventType == exports.EventTypes.CHANGED) {
+                        if (change.eventType == tent.changes.EventTypes.CHANGED) {
                             message += ' from ' + change.data.oldValue + ' to ' + change.data.current;
                         }
                     message += ' (on ' + change.subject + ')';
@@ -153,16 +205,55 @@ tent.declare('tent.changes', function(exports){
         }
     }
     
-    exports.Observable = function Observable(subject){
-        this.subject = subject;
+    
+    /**
+     * Creates a new Observable that notifies changes on a Javascript object, 
+     * see http://en.wikipedia.org/wiki/Observer_pattern
+     * @class Observes changes on a Javascript object and notifies them to subscribed handlers
+     * @param {Object} subject the object to observe
+     */
+    tent.changes.Observable = function Observable(subject){
+		
+		/**
+		 * Object or Array beeing observed
+		 * @field
+		 * @type Object|Array
+		 */
+        this.subject = subject;				
         this.handlers = {};
         this.interceptors = {};
+		
+		/**
+		 * Indicates if change notification is suspended, see {@link #suspend} and {@link #resume}
+		 * 
+		 * This can be used to suspend notifications while performing bulk changes.
+		 * Changes while suspended are notified on resume.
+		 * @field
+		 * @type Boolean
+		 */
         this.suspended = false;
+		
+		/**
+		 * Changes (Array of {@link tent.changes.Change} occurred while suspended (see {@link #suspend})
+		 * 
+		 * @type Array
+		 * @field
+		 */
+		this.changesWhileSuspended=null;
     }
     
+	/**
+	 * Default prefix for back storage properties (used for intercepted properties)
+	 * @type String
+	 */
     var defaultBackPropertyPrefix = '_';
     
-    exports.Observable.prototype.interceptFunction = function(name, override){
+	/**
+	 * Intercepts a function on {@link #subject}
+	 * @param {Object} name the function name
+	 * @param {Object} override the function to use as replacement
+	 */
+    tent.changes.Observable.prototype.interceptFunction = function(name, override){
         if (this.interceptors[name]) {
             return;
         }
@@ -170,14 +261,26 @@ tent.declare('tent.changes', function(exports){
         var intercept = {
             name: name,
             _name: _name,
-            type: exports.InterceptorTypes.FUNCTION
+            type: tent.changes.InterceptorTypes.FUNCTION
         };
         this.subject[_name] = this.subject[name];
         this.subject[name] = override;
         this.interceptors[name] = intercept;
     }
     
-    exports.parent.pset = function(subject, propertyName, value){
+	/**
+	 * Sets an object property value. If subject is an observed object, it ensures that its {@link tent.changes.Observable} is notified.
+	 * 
+	 * Its useful when no property intercept mode is supported {link tent.changes.PropertyInterceptModes}.  
+	 * Equivalent to:
+	 * 		subject[propertyName] = value; 
+	 * 
+	 * @param {Object} subject the modified object
+	 * @param {String} propertyName the property to set
+	 * @param value the value to set on property
+	 * @return the set value
+	 */
+    tent.pset = function(subject, propertyName, value){
         if (subject.__observable__ && subject.__observable__.interceptors &&
         subject.__observable__.interceptors[propertyName]) {
             subject.__observable__.interceptors[propertyName].newsetter.call(subject, value);
@@ -185,9 +288,21 @@ tent.declare('tent.changes', function(exports){
         else {
             subject[propertyName] = value;
         }
+		return value;
     }
     
-    exports.parent.pget = function(subject, propertyName){
+	/**
+	 * Gets the value of an object property. If subject is an observed object, it ensures that current value is obtained.
+	 * 
+	 * Its useful when no property intercept mode is supported {link tent.changes.PropertyInterceptModes}.  
+	 * Equivalent to:
+	 * 		subject[propertyName] 
+	 * 
+	 * @param {Object} subject the object to read
+	 * @param {String} propertyName the property to read
+	 * @return the property value
+	 */
+    tent.pget = function(subject, propertyName){
         if (subject.__observable__ && subject.__observable__.interceptors &&
         subject.__observable__.interceptors[propertyName]) {
             return subject.__observable__.interceptors[propertyName].newgetter.call(subject);
@@ -197,15 +312,23 @@ tent.declare('tent.changes', function(exports){
         }
     }
     
-    exports.Observable.prototype.interceptProperty = function(name, _name, getter, setter){
+	/**
+	 * Intercepts a property on {@link #subject}
+	 * @param {String} name property name
+	 * @param {String} _name back storage property name
+	 * @param {function()} getter getter function
+	 * @param {function()} setter setter function
+	 * @return {Object} the new interceptor, or the already existing if there was one.
+	 */
+    tent.changes.Observable.prototype.interceptProperty = function(name, _name, getter, setter){
     
         if (this.interceptors[name]) {
-            return;
+            return this.interceptors[name];
         }
         
         var intercept = {
             name: name,
-            type: exports.InterceptorTypes.PROPERTY,
+            type: tent.changes.InterceptorTypes.PROPERTY,
             newsetter: setter,
             newgetter: getter
         };
@@ -222,10 +345,10 @@ tent.declare('tent.changes', function(exports){
             intercept._name = _name;
         }
         
-        var mode = exports.getPropertyInterceptMode();
+        var mode = tent.changes.getPropertyInterceptMode();
         
-        if ((mode == exports.PropertyInterceptModes.DEFINEPROPERTY) ||
-        ((mode == exports.PropertyInterceptModes.DEFINEPROPERTYONLYDOM) &&
+        if ((mode == tent.changes.PropertyInterceptModes.DEFINEPROPERTY) ||
+        ((mode == tent.changes.PropertyInterceptModes.DEFINEPROPERTYONLYDOM) &&
         (tent.isDOMObject(this.subject)))) {
         
             try {
@@ -253,7 +376,7 @@ tent.declare('tent.changes', function(exports){
             }
         }
         else 
-            if (mode == exports.PropertyInterceptModes.DEFINESETTER) {
+            if (mode == tent.changes.PropertyInterceptModes.DEFINESETTER) {
             
                 try {
                     intercept.getter = this.subject.__lookupGetter__(name);
@@ -288,43 +411,71 @@ tent.declare('tent.changes', function(exports){
         if (intercept) {
             this.interceptors[name] = intercept;
         }
+		return intercept;
     }
     
+	/**
+	 * Creates a setter for a property that notifies the {@link tent.changes.Observable}
+	 * @private
+	 * @param {String} propName
+	 * @param {String} _propName back storage property
+	 * @return {function()} setter function
+	 */
     var buildPropertySetter = function(propName, _propName){
         return function(value){
-
+        
             var current = this[_propName];
             if (current != value) {
-
-                this.__observable__.notifyChange(exports.EventTypes.CHANGING, {
+            
+                this.__observable__.notifyChange(tent.changes.EventTypes.CHANGING, {
                     propertyName: propName,
                     current: current,
                     newValue: value
                 });
-
+                
                 this[_propName] = value;
-
-                this.__observable__.notifyChange(exports.EventTypes.CHANGED, {
+                
+                this.__observable__.notifyChange(tent.changes.EventTypes.CHANGED, {
                     propertyName: propName,
                     current: value,
                     oldValue: current
                 });
-
+                
             }
         }
     };
     
+	/**
+	 * Creates a getter for a property that uses a back storage property
+	 * @private
+	 * @param {String} propName
+	 * @param {String} _propName back storage property
+	 * @return {function()} getter function
+	 */
     var buildPropertyGetter = function(propName, _propName){
         return function(){
             return this[_propName];
         }
     };
     
+	/**
+	 * Default filter for properties to intercept, by default it filters properties starting with underscore, ie: '_'
+	 * @param {Object} obj
+	 * @param {String} propName
+	 */
     var defaultPropertyInterceptFilter = function(obj, propName){
         return propName.substr(0, 1) != defaultBackPropertyPrefix;
     };
     
-    exports.Observable.prototype.interceptProperties = function(options){
+	/**
+	 * Intercepts properties of {@link #subject}, if new properties are added this function can be called again (it's idempotent)
+	 * @param {Object} [options] intercepting options
+	 * @param {function()} [options.propertyFilter] property filter, by default all properties starting with underscore are filtered
+	 * @param {String} [options.backPropertyPrefix] prefix for back storage properties, by default is underscore
+	 * @param {Boolean} [options.trackDomProperties] if true dom properties are intercepted too (by default false), see {@link tent.isDomObject} and {@link tent.isDomProperty}
+	 * @return {tent.changes.Observable} this
+	 */
+    tent.changes.Observable.prototype.interceptProperties = function(options){
     
         if (!options) {
             options = {};
@@ -345,7 +496,7 @@ tent.declare('tent.changes', function(exports){
             try {
                 if (((valueType = typeof this.subject[propName]) != 'function') && filter(this.subject, propName)) {
                     var _propName = backPropertyPrefix + propName;
-
+                    
                     this.interceptProperty(propName, _propName, buildPropertyGetter(propName, _propName), buildPropertySetter(propName, _propName));
                 }
             } 
@@ -353,33 +504,63 @@ tent.declare('tent.changes', function(exports){
                 tent.log.warn('Error intercepting property \'' + propName + '\': ' + error);
             }
         }
-        
+		return this;        
     }
     
-    exports.Observable.prototype.isDOMObject = function(){
+	/**
+	 * @return {Boolean} true if {@link #subject} is a DOM Object, see {@link tent.isDOMObject}
+	 */
+    tent.changes.Observable.prototype.isDOMObject = function(){
         if (typeof this._isDomObject == 'undefined') {
             this._isDOMObject = tent.isDOMObject(this.subject);
         }
         return this._isDOMObject;
     }
     
-    exports.Observable.prototype.interceptArrayModifiers = function(options){
+	/**
+	 * Intercepts all array modifying functions on {@link #subject} (if {@link #subject} is an Array)
+	 * <p>
+	 * The only modifications that are not intercepted are:
+	 * <ul>
+	 *   <li>setting by index, ie: array[index]=value, use array.set(index,value) instead.</li>
+	 *   <li>setting array length property, ie: array.length = newlength, use array.setLength(newLength) instead.</li>
+	 * </ul>
+	 * </p>	
+	 * @param {Object} [options] intercepting options
+	 * @return {tent.changes.Observable} this
+	 */
+    tent.changes.Observable.prototype.interceptArrayModifiers = function(options){
     
+        if (!this.subject instanceof Array) {
+            return this;
+        }
+		
         var array = this.subject;
-        if (!array instanceof Array) {
-            return false;
+       
+	   	/**
+	   	 * @inner
+	   	 * @param {Object} l
+	   	 */
+        this.subject.setLength = function(l){
+			// length setter that uses splice to trim arrays
+            if (this.length > l) {
+                this.splice(l, this.length - l);
+            }
+            else {
+                this.lengh = l;
+            }
         }
         
         this.interceptFunction('push', function(){
             var index = this.length;
             var itemsToAdd = itemsToAdd = Array.prototype.slice.call(arguments);
-            this.__observable__.notifyChange(exports.EventTypes.ADDING, {
+            this.__observable__.notifyChange(tent.changes.EventTypes.ADDING, {
                 items: itemsToAdd,
                 index: index,
                 propertyName: this.__propertyName__
             });
             this._push.apply(this, arguments);
-            this.__observable__.notifyChange(exports.EventTypes.ADDED, {
+            this.__observable__.notifyChange(tent.changes.EventTypes.ADDED, {
                 items: itemsToAdd,
                 index: index,
                 propertyName: this.__propertyName__
@@ -388,13 +569,13 @@ tent.declare('tent.changes', function(exports){
         
         this.interceptFunction('unshift', function(){
             var itemsToAdd = itemsToAdd = Array.prototype.slice.call(arguments);
-            this.__observable__.notifyChange(exports.EventTypes.ADDING, {
+            this.__observable__.notifyChange(tent.changes.EventTypes.ADDING, {
                 items: itemsToAdd,
                 index: 0,
                 propertyName: this.__propertyName__
             });
             this._unshift.apply(this, arguments);
-            this.__observable__.notifyChange(exports.EventTypes.ADDED, {
+            this.__observable__.notifyChange(tent.changes.EventTypes.ADDED, {
                 items: itemsToAdd,
                 index: 0,
                 propertyName: this.__propertyName__
@@ -403,13 +584,13 @@ tent.declare('tent.changes', function(exports){
         
         this.interceptFunction('pop', function(){
             var index = this.length - 1;
-            this.__observable__.notifyChange(exports.EventTypes.REMOVING, {
+            this.__observable__.notifyChange(tent.changes.EventTypes.REMOVING, {
                 items: [this[index]],
                 index: index,
                 propertyName: this.__propertyName__
             });
             var item = this._pop();
-            this.__observable__.notifyChange(exports.EventTypes.REMOVED, {
+            this.__observable__.notifyChange(tent.changes.EventTypes.REMOVED, {
                 items: [item],
                 index: index,
                 propertyName: this.__propertyName__
@@ -418,13 +599,13 @@ tent.declare('tent.changes', function(exports){
         });
         
         this.interceptFunction('shift', function(){
-            this.__observable__.notifyChange(exports.EventTypes.REMOVING, {
+            this.__observable__.notifyChange(tent.changes.EventTypes.REMOVING, {
                 items: [this[0]],
                 index: 0,
                 propertyName: this.__propertyName__
             });
             var item = this._shift();
-            this.__observable__.notifyChange(exports.EventTypes.REMOVED, {
+            this.__observable__.notifyChange(tent.changes.EventTypes.REMOVED, {
                 items: [item],
                 index: 0,
                 propertyName: this.__propertyName__
@@ -436,7 +617,7 @@ tent.declare('tent.changes', function(exports){
         
             var itemsToAdd;
             if (deleteCnt && deleteCnt > 0) {
-                this.__observable__.notifyChange(exports.EventTypes.REMOVING, {
+                this.__observable__.notifyChange(tent.changes.EventTypes.REMOVING, {
                     items: this.slice(start, start + deleteCnt),
                     index: start,
                     propertyName: this.__propertyName__
@@ -444,7 +625,7 @@ tent.declare('tent.changes', function(exports){
             }
             if (arguments.length > 2) {
                 itemsToAdd = Array.prototype.slice.call(arguments, 2);
-                this.__observable__.notifyChange(exports.EventTypes.ADDING, {
+                this.__observable__.notifyChange(tent.changes.EventTypes.ADDING, {
                     items: itemsToAdd,
                     index: start,
                     propertyName: this.__propertyName__
@@ -461,14 +642,14 @@ tent.declare('tent.changes', function(exports){
             }
             
             if (removedItems && removedItems.length > 0) {
-                this.__observable__.notifyChange(exports.EventTypes.REMOVED, {
+                this.__observable__.notifyChange(tent.changes.EventTypes.REMOVED, {
                     items: removedItems,
                     index: start,
                     propertyName: this.__propertyName__
                 });
             }
             if (arguments.length > 2) {
-                this.__observable__.notifyChange(exports.EventTypes.ADDED, {
+                this.__observable__.notifyChange(tent.changes.EventTypes.ADDED, {
                     items: itemsToAdd,
                     index: start,
                     propertyName: this.__propertyName__
@@ -478,16 +659,7 @@ tent.declare('tent.changes', function(exports){
             return removedItems;
         });
         
-        // length setter that uses splice to trim arrays
-        array.setLength = function(l){
-            if (this.length > l) {
-                this.splice(l, this.length - l);
-            }
-            else {
-                this.lengh = l;
-            }
-        }
-        
+
         //// intercept length setter is not allowed on some browsers
         //        this.interceptProperty('length', null, null, function(value) {
         //            if (this.length > value) {
@@ -510,14 +682,18 @@ tent.declare('tent.changes', function(exports){
             array.lastIndexOf = tent.arrays.functions.lastIndexOf;
         }
         
-        return true;
+        return this;
     }
     
-    exports.Observable.prototype.removeInterceptor = function(name){
+	/**
+	 * Removes an interceptor by name, restoring the property or function original state
+	 * @param {String} name a function or property name on {@link #subject}
+	 */
+    tent.changes.Observable.prototype.removeInterceptor = function(name){
         var interceptor = this.interceptors[name];
         
         if (interceptor._name) {
-            if (interceptor.type != exports.InterceptorTypes.FUNCTION) {
+            if (interceptor.type != tent.changes.InterceptorTypes.FUNCTION) {
                 try {
                     delete this.subject[interceptor.name];
                 } 
@@ -525,16 +701,16 @@ tent.declare('tent.changes', function(exports){
                     tent.log.warn('Error deleting property interceptor \'' + interceptor.name + '\': ' + error);
                 }
                 
-                var mode = exports.getPropertyInterceptMode();
-                if (mode == exports.PropertyInterceptModes.DEFINEPROPERTY ||
-                (mode == exports.PropertyInterceptModes.DEFINEPROPERTYONLYDOM &&
+                var mode = tent.changes.getPropertyInterceptMode();
+                if (mode == tent.changes.PropertyInterceptModes.DEFINEPROPERTY ||
+                (mode == tent.changes.PropertyInterceptModes.DEFINEPROPERTYONLYDOM &&
                 tent.isDOMObject(this.subject))) {
                     if (interceptor.descriptor && interceptor.descriptor.name) {
                         Object.defineProperty(this.subject, name, interceptor.descriptor);
                     }
                 }
                 else 
-                    if (mode == exports.PropertyInterceptModes.DEFINESETTER) {
+                    if (mode == tent.changes.PropertyInterceptModes.DEFINESETTER) {
                         if (interceptor.getter) {
                             this.subject.__defineGetter__(name, interceptor.getter);
                         }
@@ -567,7 +743,7 @@ tent.declare('tent.changes', function(exports){
             }
         }
         else {
-            if (interceptor.type != exports.InterceptorTypes.FUNCTION) {
+            if (interceptor.type != tent.changes.InterceptorTypes.FUNCTION) {
                 var val = this.subject[interceptor.name];
                 delete this.subject[interceptor.name];
                 this.subject[interceptor.name] = val;
@@ -576,7 +752,10 @@ tent.declare('tent.changes', function(exports){
         delete interceptor[name];
     }
     
-    exports.Observable.prototype.removeInterceptors = function(){
+	/**
+	 * Removes all interceptors, see {@link #removeInterceptor}
+	 */
+    tent.changes.Observable.prototype.removeInterceptors = function(){
         for (var propName in this.interceptors) {
             try {
                 this.removeInterceptor(propName);
@@ -588,11 +767,20 @@ tent.declare('tent.changes', function(exports){
         this.interceptors = {};
     }
     
-    exports.Observable.prototype.suspend = function(){
+	/**
+	 * Suspends change notification, see {@link #suspended}
+	 */
+    tent.changes.Observable.prototype.suspend = function(){
         this.suspended = true;
     }
     
-    exports.Observable.prototype.resume = function(){
+	/**
+	 * Resumes change notification, notifying at once all changes ocurred while suspended
+	 * 
+	 * If few changes have ocurred while suspended (5 or less) they are all notified in order.
+	 * If many changes have ocurred a {@link tent.changes.EventTypes.MANYCHANGES} event is fired with all changes packed in its data
+	 */
+    tent.changes.Observable.prototype.resume = function(){
         this.suspended = false;
         if (this.changesWhileSuspended) {
             // notify changes while suspended
@@ -605,13 +793,20 @@ tent.declare('tent.changes', function(exports){
             else 
                 if (this.changesWhileSuspended.length > 1) {
                     // too many changes, notify MANYCHANGES, list of changes data can be used to find specific changes
-                    this.notifyChange(exports.EventTypes.MANYCHANGES, this.changesWhileSuspended);
+                    this.notifyChange(tent.changes.EventTypes.MANYCHANGES, this.changesWhileSuspended);
                 }
             delete this.changesWhileSuspended;
         }
     }
-    
-    exports.Observable.prototype.isValidHandler = function(handler){
+
+	/**
+	 * Test if an object is a valid change handler, eg: a function or an object with handle() function 
+	 * 
+	 * This function is used to test handlers when binding {@link #bind}
+	 * @param {Object|function()} handler
+	 * @return {Boolean} true if handler is a valid change handler
+	 */    
+    tent.changes.Observable.prototype.isValidHandler = function(handler){
         if (!handler) {
             return false;
         }
@@ -622,11 +817,17 @@ tent.declare('tent.changes', function(exports){
         return false;
     }
     
-    exports.Observable.prototype.bind = function(eventType, handler){
+	/**
+	 * Binds a change handler to an event type, see {@link tent.changes.EventTypes}
+	 * @param {Number} [eventType] a value of {@link tent.changes.EventTypes}, if none is provided all events are included
+	 * @param {Object|function()} handler a valid change handler, see {@link #isValidHandler}
+	 * @return {Boolean} false if no action has been performed (ie: the binding already exists)
+	 */
+    tent.changes.Observable.prototype.bind = function(eventType, handler){
         if (!handler) {
             if (this.isValidHandler(eventType)) {
                 handler = eventType;
-                eventType = exports.EventTypes.ANY;
+                eventType = tent.changes.EventTypes.ANY;
             }
             else {
                 throw 'must specify a handler: function (Change) or and object with a handle(Change) function';
@@ -638,7 +839,7 @@ tent.declare('tent.changes', function(exports){
         }
         
         if (!eventType) {
-            eventType = exports.EventTypes.ANY;
+            eventType = tent.changes.EventTypes.ANY;
         }
         var ehandlers = this.handlers[eventType];
         if (!ehandlers) {
@@ -653,11 +854,17 @@ tent.declare('tent.changes', function(exports){
         return true;
     }
     
-    exports.Observable.prototype.unbind = function(eventType, handler){
+	/**
+	 * Unbinds a handler
+	 * @param {Number} [eventType] a value of {@link tent.changes.EventTypes}, if none is provided all events are included
+	 * @param {Object|function()} handler the handler to unbind
+	 * @return {Boolean} false if no action has been performed (ie: the binding doesn't exists)
+	 */
+    tent.changes.Observable.prototype.unbind = function(eventType, handler){
         if (!handler) {
             if (this.isValidHandler(eventType)) {
                 handler = eventType;
-                eventType = exports.EventTypes.ANY;
+                eventType = tent.changes.EventTypes.ANY;
             }
             else {
                 throw 'must specify a handler to remove';
@@ -669,7 +876,7 @@ tent.declare('tent.changes', function(exports){
         }
         
         if (!eventType) {
-            eventType = exports.EventTypes.ANY;
+            eventType = tent.changes.EventTypes.ANY;
         }
         var ehandlers = this.handlers[eventType];
         var removed = false;
@@ -686,7 +893,12 @@ tent.declare('tent.changes', function(exports){
         return removed;
     }
     
-    exports.Observable.prototype.unbindWhere = function(filter){
+	/**
+	 * Unbinds all handlers that pass a filter
+	 * @param {function()} filter a function that receives a handler and returns true if it must be unbound
+	 * @return {Boolean} false if no action has been performed (ie: no handler has been unbound)
+	 */
+    tent.changes.Observable.prototype.unbindWhere = function(filter){
         var changed = false;
         for (var eventType in this.handlers) {
             var ehandlers = this.handlers[eventType];
@@ -702,7 +914,14 @@ tent.declare('tent.changes', function(exports){
         return changed;
     }
     
-    exports.Observable.prototype.notifyHandler = function(change, handler){
+	/**
+	 * Notifies a handler of a {@link tent.changes.Change}
+	 * @private
+	 * @param {tent.changes.Change} change a change to notify
+	 * @param {Object|function()} handler a change handler, see {@link #isValidHandler}
+	 * @return the handler result 
+	 */
+    tent.changes.Observable.prototype.notifyHandler = function(change, handler){
         try {
             if (typeof handler == 'function') {
                 return handler.call(this.subject, change);
@@ -725,7 +944,13 @@ tent.declare('tent.changes', function(exports){
         }
     }
     
-    exports.Observable.prototype.notifyChange = function(eventType, data){
+	/**
+	 * Notifies a {@link tent.changes.Change} to bound handlers 
+	 * @private
+	 * @param {Number|tent.changes.Change} [eventType] a value of {@link tent.changes.EventTypes}, or a {@link tent.changes.Change} (in this case data parameter is ignored)
+	 * @param {Object} [data] change additional data
+	 */
+    tent.changes.Observable.prototype.notifyChange = function(eventType, data){
         if (this.suspended) {
             // register changes while suspended to notify them on resume
             if (!this.changesWhileSuspended) {
@@ -745,7 +970,7 @@ tent.declare('tent.changes', function(exports){
                 this.changesWhileSuspended.findPropertyChanged = function(subject, propertyName){
                     for (var i = 0, l = this.length; i < l; i++) {
                         if (this[i].subject == subject &&
-                        this[i].eventType == exports.EventTypes.CHANGED &&
+                        this[i].eventType == tent.changes.EventTypes.CHANGED &&
                         this[i].data.propertyName == propertyName) {
                             return this[i];
                         }
@@ -754,22 +979,22 @@ tent.declare('tent.changes', function(exports){
                 this.changesWhileSuspended.findArrayChanged = function(array){
                     for (var i = 0, l = this.length; i < l; i++) {
                         if (this[i].subject == subject &&
-                        (this[i].eventType == exports.EventTypes.ADDED ||
-                        this[i].eventType == exports.EventTypes.REMOVED)) {
+                        (this[i].eventType == tent.changes.EventTypes.ADDED ||
+                        this[i].eventType == tent.changes.EventTypes.REMOVED)) {
                             return this[i];
                         }
                     }
                 }
             }
-            this.changesWhileSuspended.push(new exports.Change(this.subject, eventType, data));
+            this.changesWhileSuspended.push(new tent.changes.Change(this.subject, eventType, data));
             return;
         }
         var change;
-        if (eventType instanceof exports.Change) {
+        if (eventType instanceof tent.changes.Change) {
             change = eventType;
         }
         else {
-            change = new exports.Change(this.subject, eventType, data);
+            change = new tent.changes.Change(this.subject, eventType, data);
         }
         var ehandlers = this.handlers[eventType];
         if (ehandlers) {
@@ -777,7 +1002,7 @@ tent.declare('tent.changes', function(exports){
                 this.notifyHandler(change, ehandlers[i]);
             }
         }
-        ehandlers = this.handlers[exports.EventTypes.ANY];
+        ehandlers = this.handlers[tent.changes.EventTypes.ANY];
         if (ehandlers) {
             for (var i = 0, l = ehandlers.length; i < l; i++) {
                 this.notifyHandler(change, ehandlers[i]);
@@ -787,10 +1012,18 @@ tent.declare('tent.changes', function(exports){
     
     var defaultLogHandler;
     
-    exports.Observable.prototype.log = function(enable){
+	/**
+	 * Activates/Deactivates logging of changes, a default {@link tent.changes.LogHandler} is used.
+	 * @param {Boolean} [enable] true to enable (default), false to disable
+	 * @return {Boolean} false if no action has been performed (ie: logging was already enabled/disabled)
+	 */
+    tent.changes.Observable.prototype.log = function(enable){
+		if (typeof enable=='undefined'){
+			enable = true;
+		}
         if (enable) {
             if (!defaultLogHandler) {
-                defaultLogHandler = exports.LogHandler();
+                defaultLogHandler = new tent.changes.LogHandler();
             }
             return this.bind(defaultLogHandler);
         }
@@ -801,9 +1034,15 @@ tent.declare('tent.changes', function(exports){
         }
         return false;
     }
-    
-    exports.LogHandler = function(prefix){
-    
+ 
+ 	/**
+ 	 * Creates a new change handler that sends change data to the log, see {@link tent.log.info} 
+ 	 * @class Change handler that sends change data to log, see {@link tent.log.info}
+ 	 * @constructor
+ 	 * @param {String} [prefix] a prefix for log entries of this handler
+ 	 */   
+    tent.changes.LogHandler = function LogHandler(prefix){
+    	
         if (typeof prefix == 'undefined') {
             prefix = ''
         }
@@ -811,11 +1050,29 @@ tent.declare('tent.changes', function(exports){
             if (prefix && prefix[prefix.length - 1] != ' ') {
                 prefix += ' ';
             }
-        return function(change){
-            tent.log.info(prefix + change.toString());
-        }
+		
+		/**
+		 * prefix for log entries
+		 * @type String
+		 * @field
+		 */
+		this.prefix = prefix;
     }
+	
+	/**
+	 * Logs a {@link tent.changes.Change}
+	 * @param {tent.changes.Change} change
+	 */	
+	tent.changes.LogHandler.prototype.handle = function(change){
+	    tent.log.info(this.prefix + change.toString());
+	}
     
+	/**
+	 * Creates a live propagate handler, a handler that binds current handlers on new added/connected objects
+	 * @private
+	 * @param {Object} [options] propagate options
+	 * @param {Boolean} [options.deepOverDOM] propagate thru dom properties, see {@link tent.isDomProperty}
+	 */
     var buildLivePropagateHandler = function(options){
         var propagateOptions = {};
         for (opName in options) {
@@ -824,22 +1081,22 @@ tent.declare('tent.changes', function(exports){
             }
         }
         var f = function(change){
-            if (change.eventType == exports.EventTypes.CHANGED) {
+            if (change.eventType == tent.changes.EventTypes.CHANGED) {
                 if (typeof change.data.current == 'object') {
                     if (propagateOptions.deepOverDOM || !tent.isDOMObject(change.data.current)) {
                         propagateOptions.deepStack = [change.data.subject];
-                        exports.track(change.data.current, propagateOptions);
+                        tent.changes.track(change.data.current, propagateOptions);
                         delete propagateOptions.deepStack;
                     }
                 }
             }
             else 
-                if (change.eventType == exports.EventTypes.ADDED) {
+                if (change.eventType == tent.changes.EventTypes.ADDED) {
                     for (var i = 0, l = change.data.items.length; i < l; i++) {
                         if (typeof change.data.items[i] == 'object') {
                             if (propagateOptions.deepOverDOM || !tent.isDOMObject(change.data.current)) {
                                 propagateOptions.deepStack = [change.data.subject];
-                                exports.track(change.data.items[i], propagateOptions);
+                                tent.changes.track(change.data.items[i], propagateOptions);
                                 delete propagateOptions.deepStack;
                             }
                         }
@@ -850,7 +1107,28 @@ tent.declare('tent.changes', function(exports){
         return f;
     }
     
-    exports.track = function(obj, options){
+	/**
+	 * Activates Change Tracking on a Javascript Object or Array.
+	 * Optionally binds change handlers. This function is idempotent.
+	 * 
+	 * <p>
+	 * 		The attached {@link tent.changes.Observable} is stored on the obj.__observable__ property.
+	 * </p>
+	 * @param {Object|Array} obj an Object or Array to track. 
+	 * @param {Object} [options] tracking options
+	 * @param {tent.changes.Observable} [options.observable] an {@link tent.changes.Observable} to attach (otherwise a new one is created)
+	 * @param {Boolean} [options.remove] if true, indicates that specified bindings must be removed 
+	 * @param {Boolean} [options.removeAll] if true, indicates that all bindings, even {@link tent.changes.Observable} instances must be removed
+	 * @param {Object} [options.interceptOptions] options to use when calling {@link tent.changes.Observable.interceptProperties} or {@link tent.changes.Observable.interceptArrayModifiers}
+	 * @param {Object[]} [options.bindings] bindings to add (or remove, see options.remove), eg: { eventType: tent.changes.EventTypes.CHANGED, handler: function(change){alert(change+'');} };
+	 * @param {Boolean} [options.log] if true log handlier is included, see {@link tent.changes.LogHandler}
+	 * @param {Boolean} [options.reverseProperties] if true reverse properties handling is included, see {@link tent.changes.reverseProperties.getHandler}
+	 * @param {Boolean} [options.deep] if true recursively traverse Object properties and Array items
+	 * @param {Boolean} [options.live] if true combined with options.deep, when new Objects or Arrays are added/linked to tracked ones they get tracked too 
+	 * @param {function()} [options.propertyFilter] if true combined with options.deep, when traversing Object properties, properties that doesn't satisfy this condition are ignored
+	 * @return {Boolean} false if no action has been performed (ie: the object was already tracked)
+	 */
+    tent.changes.track = function(obj, options){
     
         if (!options) {
             options = {};
@@ -882,15 +1160,11 @@ tent.declare('tent.changes', function(exports){
                 obj.__observable__.subject = obj;
             }
             else {
-                obj.__observable__ = new exports.Observable(obj);
+                obj.__observable__ = new tent.changes.Observable(obj);
             }
             
             changed = true;
-            
-            obj.getObservable = function(){
-                return this.__observable__;
-            }
-            
+              
             if (!options.interceptOptions) {
                 options.interceptOptions = {};
             }
@@ -987,7 +1261,7 @@ tent.declare('tent.changes', function(exports){
                 for (var i = 0, l = obj.length; i < l; i++) {
                     var subObj = obj[i];
                     if (subObj && typeof subObj == "object" && options.deepStack.lastIndexOf(subObj) < 0) {
-                        if (exports.track(subObj, options)) {
+                        if (tent.changes.track(subObj, options)) {
                             changed = true;
                         }
                     }
@@ -1003,7 +1277,7 @@ tent.declare('tent.changes', function(exports){
                         var subObj = obj[propName];
                         if (options.deepOverDOM || !tent.isDOMObject(subject)) {
                             if (typeof subObj == "object" && options.deepStack.lastIndexOf(subObj) < 0) {
-                                if (exports.track(subObj, options)) {
+                                if (tent.changes.track(subObj, options)) {
                                     changed = true;
                                 }
                             }
@@ -1018,7 +1292,15 @@ tent.declare('tent.changes', function(exports){
         return changed;
     }
     
-    exports.untrack = function(obj, options){
+	/**
+	 * Deactivates Change Tracking on a Javascript Object or Array.
+	 * Optionally unbinds change handlers. This function is idempotent.
+	 * 
+	 * @param {Object|Array} obj an Object or Array to deactivate tracking. 
+	 * @param {Object} [options] untracking options, for details see {@link tent.changes.track} options, this functions forces options.removeAll=true
+	 * @return {Boolean} false if no action has been performed (ie: the object wasn't tracked)
+	 */
+    tent.changes.untrack = function(obj, options){
         if (!options) {
             options = {
                 removeAll: true
@@ -1028,14 +1310,25 @@ tent.declare('tent.changes', function(exports){
             if (!options.removeAll) {
                 options.removeAll = true;
             }
-        return exports.track(obj, options);
+        return tent.changes.track(obj, options);
     }
     
-    exports.isTracked = function(obj){
-        return obj.__observable__ && obj.__observable__ instanceof exports.Observable;
+	/**
+	 * Indicates if an Object or Array is being tracked
+	 * @return {Boolean} true if the object is being change tracked, see {@link tent.changes.track}
+	 * @param {Object} obj
+	 */
+    tent.changes.isTracked = function(obj){
+        return obj.__observable__ && obj.__observable__ instanceof tent.changes.Observable;
     }
     
-    exports.bind = function(obj, options){
+	/**
+	 * Binds change handlers to a Javascript Object or Array (it activates change tracking, see {@link tent.changes.track})
+	 * @param {Object|Array} obj an Object or Array to track changes and bind change handlers
+	 * @param {Object|function()} [options] binding options or a change handler to bind, for details see {@link tent.changes.track} options, this functions fills options.bindings
+	 * @return {Boolean} false if no action has been performed (ie: the binding already exists)
+	 */
+    tent.changes.bind = function(obj, options){
     
         var eventType;
         if (typeof options == "string") {
@@ -1078,10 +1371,16 @@ tent.declare('tent.changes', function(exports){
             }
         }
         
-        return exports.track(obj, options);
+        return tent.changes.track(obj, options);
     }
     
-    exports.unbind = function(obj, options){
+	/**
+	 * Unbinds change handlers from a Javascript Object or Array
+	 * @param {Object|Array} obj an Object or Array to unbind change handlers
+	 * @param {Object|function()} [options] unbinding options or a change handler to unbind, for details see {@link tent.changes.track} options, this functions sets options.remove=true and fills options.bindings
+	 * @return {Boolean} false if no action has been performed (ie: the binding doesn't exists)
+	 */
+    tent.changes.unbind = function(obj, options){
     
         var eventType;
         if (typeof options == "string") {
@@ -1134,9 +1433,11 @@ tent.declare('tent.changes', function(exports){
                 options.remove = true;
             }
         
-        return exports.track(obj, options);
+        return tent.changes.track(obj, options);
     }
     
-    return exports;
 });
+
+
+
 

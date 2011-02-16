@@ -8,11 +8,11 @@ TestCase("ArraysTest", {
         assertNotNull(tent.arrays);
     },
 
-    testAddFunctions: function() {
+    testExtend: function() {
 
         var a = [1, 2, 6];
 
-        assertSame(a, tent.arrays.addFunctions(a, overrideNative));
+        assertSame(a, tent.arrays.extend(a, overrideNative));
 
         assertFunction(a.pushUnique);
         assertFunction(a.indexOf);
@@ -25,7 +25,7 @@ TestCase("ArraysTest", {
     },
 
     testIndexOf: function() {
-        var a = tent.arrays.addFunctions([1, 2, 5, 6, 1, 2, 8, 1, 3], overrideNative);
+        var a = tent.arrays.extend([1, 2, 5, 6, 1, 2, 8, 1, 3], overrideNative);
         var b = a.clone();
 
         assertEquals(0, a.indexOf(1));
@@ -39,7 +39,7 @@ TestCase("ArraysTest", {
     },
 
     testLastIndexOf: function() {
-        var a = tent.arrays.addFunctions([1, 2, 5, 6, 1, 2, 8, 1, 3], overrideNative);
+        var a = tent.arrays.extend([1, 2, 5, 6, 1, 2, 8, 1, 3], overrideNative);
         var b = a.clone();
 
         assertEquals(7, a.lastIndexOf(1));
@@ -54,7 +54,7 @@ TestCase("ArraysTest", {
 
     testIndexOfByRef: function() {
         var c = { prop: 'value' };
-        var a = tent.arrays.addFunctions([12, 0, false, '', null, undefined, c, 3], overrideNative);
+        var a = tent.arrays.extend([12, 0, false, '', null, undefined, c, 3], overrideNative);
         var b = a.clone();
 
         assertEquals(1, a.indexOf(0));
@@ -69,7 +69,7 @@ TestCase("ArraysTest", {
 
     testLastIndexOfByRef: function() {
         var c = { prop: 'value' };
-        var a = tent.arrays.addFunctions([12, 0, false, '', null, undefined, c, 3], overrideNative);
+        var a = tent.arrays.extend([12, 0, false, '', null, undefined, c, 3], overrideNative);
         var b = a.clone();
 
         assertEquals(1, a.lastIndexOf(0));
@@ -83,11 +83,11 @@ TestCase("ArraysTest", {
     },
 
     testFilter: function() {
-        var a = tent.arrays.addFunctions([1, 2, 5, 6, 1, 2, 8, 1, 3], overrideNative);
+        var a = tent.arrays.extend([1, 2, 5, 6, 1, 2, 8, 1, 3], overrideNative);
         var b = a.clone();
 
         var f = a.filter(function(item) { return item % 2 === 0; });
-        tent.arrays.addFunctions(f, overrideNative);
+        tent.arrays.extend(f, overrideNative);
 
         assertTrue(f.isCloneOf([2, 6, 2, 8]));
 
@@ -95,7 +95,7 @@ TestCase("ArraysTest", {
     },
 
     testRemove: function() {
-        var a = tent.arrays.addFunctions([1, 2, 5, 6, 1, 2, 8, 1, 3], overrideNative);
+        var a = tent.arrays.extend([1, 2, 5, 6, 1, 2, 8, 1, 3], overrideNative);
         var b = a.clone();
 
         a.remove(1);
@@ -107,7 +107,7 @@ TestCase("ArraysTest", {
     },
 
     testSet: function() {
-        var a = tent.arrays.addFunctions([1, 2, 5, 6, 1, 2, 8, 1, 3], overrideNative);
+        var a = tent.arrays.extend([1, 2, 5, 6, 1, 2, 8, 1, 3], overrideNative);
         var b = a.clone();
 
         a.set(2, 115);
@@ -124,7 +124,7 @@ TestCase("ArraysTest", {
     },
 
     testPushUnique: function() {
-        var a = tent.arrays.addFunctions([1, 2, 5, 6, 1, 2, 8, 1, 3], overrideNative);
+        var a = tent.arrays.extend([1, 2, 5, 6, 1, 2, 8, 1, 3], overrideNative);
         var b = a.clone();
 
         a.pushUnique(1);
@@ -144,7 +144,7 @@ TestCase("ArraysTest", {
     },
 
     testCloneAndIsCloneOf: function() {
-        var a = tent.arrays.addFunctions([1, 2, 5, 6, 1, 2, 8, 1, 3], overrideNative);
+        var a = tent.arrays.extend([1, 2, 5, 6, 1, 2, 8, 1, 3], overrideNative);
         var b = a.clone();
         assertTrue(a.isCloneOf(b));
     }
