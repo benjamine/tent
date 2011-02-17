@@ -10,6 +10,7 @@ tent.declare('tent.entities', function(){
 
 	/**
 	 * Entity change states
+	 * @type tent.coreTypes.Enum
 	 */
     tent.entities.ChangeStates = new tent.coreTypes.Enum('DETACHED,UNCHANGED,ADDED,MODIFIED,DELETED');
     
@@ -22,7 +23,7 @@ tent.declare('tent.entities', function(){
 	 *  	name: {}, // scalar property
 	 *  	age: {}, // scalar property	
 	 *  	pet: {
-	 *  		reverse: 'owner', // each Person is his pet's owner
+	 *  		reverse: 'owner', // each Person is his pet''s owner
 	 *  		cardinality: '11', // one Person has one pet (optional, as '11' is the default)
 	 *  		collection: 'Animal', // pets belong to the 'Animal' collection (see {@link tent.entities.Collection}
 	 *  	} 
@@ -481,7 +482,7 @@ tent.declare('tent.entities', function(){
 	 *  	name: {}, // scalar property
 	 *  	age: {}, // scalar property	
 	 *  	pet: {
-	 *  		reverse: 'owner', // each Person is his pet's owner
+	 *  		reverse: 'owner', // each Person is his pet''s owner
 	 *  		cardinality: '11', // one Person has one pet (optional, as '11' is the default)
 	 *  		collection: 'Animal', // pets belong to the 'Animal' collection (see {@link tent.entities.Collection}
 	 *  	} 
@@ -491,7 +492,7 @@ tent.declare('tent.entities', function(){
 	 *  	age: {}, // scalar property	
 	 *  	color: {}, // scalar property	
 	 *  	owner: {
-	 *  		reverse: 'pet', // each Animal is his owner's pet
+	 *  		reverse: 'pet', // each Animal is his owner''s pet
 	 *  		cardinality: '11', // one Animal has one owner (optional, as '11' is the default)
 	 *  		collection: 'Person', // owner belong to the 'Person' collection (see {@link tent.entities.Collection}
 	 *  	} 
@@ -556,7 +557,7 @@ tent.declare('tent.entities', function(){
                                 var type = arguments[i].__entityType__;
                                 if (type) {
                                     if (this.__types__[type.name]) {
-                                        // the object already has entityType, check it's the same in the context
+                                        // the object already has entityType, check that it is the same in the context
                                         if (this.__types__[type.name] != type) {
                                             throw 'cannot add, object EntityType "' + type.name + '" differs from the Context one';
                                         }
@@ -606,7 +607,7 @@ tent.declare('tent.entities', function(){
                                 var type = arguments[i].__entityType__;
                                 if (type) {
                                     if (this.__types__[type.name]) {
-                                        // the object already has entityType, check it's the same in the context
+                                        // the object already has entityType, check that it is the same in the context
                                         if (this.__types__[type.name] != type) {
                                             throw 'cannot add, object EntityType "' + type.name + '" differs from the Context one';
                                         }
@@ -1373,7 +1374,7 @@ tent.declare('tent.entities', function(){
                 
                 if (parent && (prop = this.getTrackedProperty(parent, change.data.propertyName))) {
                 
-                    // children added don't modify its parent
+                    // children added don''t modify its parent
                     //this.context.touch(parent);
                     
                     for (var i = 0, l = change.data.items.length; i < l; i++) {
@@ -1390,7 +1391,7 @@ tent.declare('tent.entities', function(){
                     
                     if (parent && (prop = this.getTrackedProperty(parent, change.data.propertyName))) {
                     
-                        // children removed don't modify its parent
+                        // children removed don''t modify its parent
                         //this.context.touch(parent);
                         
                         for (var i = 0, l = change.data.items.length; i < l; i++) {

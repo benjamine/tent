@@ -1691,8 +1691,7 @@ tent.domClone = function(obj, options) {
       }
     }
     return result
-  };
-  return exports
+  }
 });tent.declare("tent.changes.reverseProperties", function() {
   tent.changes.reverseProperties.setReverseProperty = function(obj, name, prop) {
     if(!prop) {

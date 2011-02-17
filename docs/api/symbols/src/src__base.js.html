@@ -96,7 +96,7 @@
 <span class='line'> 89</span> 
 <span class='line'> 90</span> </span><span class="COMM">/**
 <span class='line'> 91</span>  * Expands this Namespace
-<span class='line'> 92</span>  * @param {function|Object} expander a function that receives this Namespace as parameter and adds members (eg: classes, constants, functions) or an Object wich properties are copied into this Namespace
+<span class='line'> 92</span>  * @param {function()|Object} expander a function that receives this Namespace as parameter and adds members (eg: classes, constants, functions) or an Object wich properties are copied into this Namespace
 <span class='line'> 93</span>  */</span><span class="WHIT">
 <span class='line'> 94</span> </span><span class="NAME">tent.Namespace.prototype.expand</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">expander</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'> 95</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">expander</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">Function</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
@@ -123,12 +123,12 @@
 <span class='line'>116</span>  * 	  &lt;ul>
 <span class='line'>117</span>  *    &lt;li>{@link tent.Namespace}: changes the current Namespace&lt;/li>
 <span class='line'>118</span>  *    &lt;li>{string} path: changes current Namespace to a subnamespace of the current Namespace (creating Namespaces if needed)&lt;/li>
-<span class='line'>119</span>  *    &lt;li>{function|Object} expander: a function that adds members to the current Namespace or an Object wich properties are copied to the current Namespace&lt;/li>
+<span class='line'>119</span>  *    &lt;li>{function()|Object} expander: a function that adds members to the current Namespace or an Object wich properties are copied to the current Namespace&lt;/li>
 <span class='line'>120</span>  *    &lt;/ul>
 <span class='line'>121</span>  *	&lt;/p>
 <span class='line'>122</span>  * @param {tent.Namespace} [parent] parent Namespace
 <span class='line'>123</span>  * @param {String}  [path] Namespace path, eg: 'web.ajax.json.parsing'
-<span class='line'>124</span>  * @param {function|Object}  [expander] a function that receives the created Namespace and adds members  (eg: classes, constants, functions) or an Object wich properties are copied to the current Namespace
+<span class='line'>124</span>  * @param {function()|Object}  [expander] a function that receives the created Namespace and adds members  (eg: classes, constants, functions) or an Object wich properties are copied to the current Namespace
 <span class='line'>125</span>  * @return {tent.Namespace} the last current Namespace
 <span class='line'>126</span>  */</span><span class="WHIT">
 <span class='line'>127</span> </span><span class="NAME">tent.declare</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="COMM">/*[parent], [path], [expander]*/</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">

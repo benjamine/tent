@@ -10,21 +10,18 @@ tent.declare('tent.changes', function(){
     /**
      * Event change type
      * @type tent.coreTypes.Enum
-     * @enum
      */
     tent.changes.EventTypes = new tent.coreTypes.Enum('ANY,MANYCHANGES,CHANGING,CHANGED,ADDING,ADDED,REMOVING,REMOVED');
     
     /**
      * Interceptor types
      * @type tent.coreTypes.Enum
-     * @enum
      */
     tent.changes.InterceptorTypes = new tent.coreTypes.Enum('PROPERTY,FUNCTION');
     
     /**
      * Property setter intercept modes
      * @type tent.coreTypes.Enum
-     * @enum
      */
     tent.changes.PropertyInterceptModes = new tent.coreTypes.Enum('NONE,DEFINESETTER,DEFINEPROPERTY,DEFINEPROPERTYONLYDOM');
 	
@@ -139,7 +136,7 @@ tent.declare('tent.changes', function(){
     
 	/**
 	 * Functions that stringify a {link tent.changes.Change} indexed by eventType (a value of {@link tent.changes.EventTypes})
-	 * @type function[]
+	 * @type function()[]
 	 */
     tent.changes.ChangeStringifiers = [];
     
@@ -1120,7 +1117,7 @@ tent.declare('tent.changes', function(){
 	 * @param {Boolean} [options.remove] if true, indicates that specified bindings must be removed 
 	 * @param {Boolean} [options.removeAll] if true, indicates that all bindings, even {@link tent.changes.Observable} instances must be removed
 	 * @param {Object} [options.interceptOptions] options to use when calling {@link tent.changes.Observable.interceptProperties} or {@link tent.changes.Observable.interceptArrayModifiers}
-	 * @param {Object[]} [options.bindings] bindings to add (or remove, see options.remove), eg: { eventType: tent.changes.EventTypes.CHANGED, handler: function(change){alert(change+'');} };
+	 * @param {Array} [options.bindings] bindings to add (or remove, see options.remove), eg: { eventType: tent.changes.EventTypes.CHANGED, handler: function(change){alert(change+'');} };
 	 * @param {Boolean} [options.log] if true log handlier is included, see {@link tent.changes.LogHandler}
 	 * @param {Boolean} [options.reverseProperties] if true reverse properties handling is included, see {@link tent.changes.reverseProperties.getHandler}
 	 * @param {Boolean} [options.deep] if true recursively traverse Object properties and Array items

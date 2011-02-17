@@ -149,7 +149,6 @@ tent.declare('tent.arrays', function(){
         /**
          * @param {Object} array an array to compare with
          * @return {Boolean} true if both arrays contains the same elements
-         * @type {Boolean}
          */
         isCloneOf: function(array){
             if (!array) {

@@ -235,5 +235,4 @@ tent.declare('tent.databinding', function(){
         return result;
     }
     
-    return exports;
 });

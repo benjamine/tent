@@ -10,7 +10,6 @@ tent.declare('tent.logging', function(){
     /**
      * Event severity levels
      * @type tent.coreTypes.Enum
-     * @enum
      */
     tent.logging.Levels = new tent.coreTypes.Enum('TRACE,DEBUG,INFO,WARN,ERROR,FATAL');
     

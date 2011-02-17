@@ -1,781 +1,751 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 	<head>
-		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-		<meta name="generator" content="JsDoc Toolkit" />
-		
-		<title>JsDoc Reference - tent.entities.ContextChangeHandler</title>
+		<meta charset="utf-8"></meta>
+		<meta name="generator" content="JsDoc Toolkit"></meta>
+		<title>tent.entities.ContextChangeHandler | Tent Framework API</title>
 
-		<style type="text/css">
-			/* default.css */
-body
-{
-	font: 12px "Lucida Grande", Tahoma, Arial, Helvetica, sans-serif;
-	width: 800px;
-}
+		<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;"></meta>
+		<meta name="mobileoptimized" content="0"></meta>
+	
+		<link rel="stylesheet" href="../css/all.css" media="all"></link>
+		<link rel="stylesheet" href="../css/handheld.css" media="only screen and (max-width: 660px)"></link>
+		<link rel="stylesheet" href="../css/handheld.css" media="handheld"></link>
+		<link rel="stylesheet" href="../css/screen.css" media="screen and (min-width: 661px)"></link>
 
-.header
-{
-	clear: both;
-	background-color: #ccc;
-	padding: 8px;
-}
+		<!-- Syntax Highlighting -->
+		<link rel="stylesheet" href="../css/shCore.css" media="all"></link>
+		<link rel="stylesheet" href="../css/shThemeDefault.css" media="all"></link>
+		<script src="../javascript/shCore.js"></script>
+		<script src="../javascript/shBrushJScript.js"></script>
 
-h1
-{
-	font-size: 150%;
-	font-weight: bold;
-	padding: 0;
-	margin: 1em 0 0 .3em;
-}
-
-hr
-{
-	border: none 0;
-	border-top: 1px solid #7F8FB1;
-	height: 1px;
-}
-
-pre.code
-{
-	display: block;
-	padding: 8px;
-	border: 1px dashed #ccc;
-}
-
-#index
-{
-	margin-top: 24px;
-	float: left;
-	width: 160px;
-	position: absolute;
-	left: 8px;
-	background-color: #F3F3F3;
-	padding: 8px;
-}
-
-#content
-{
-	margin-left: 190px;
-	width: 600px;
-}
-
-.classList
-{
-	list-style-type: none;
-	padding: 0;
-	margin: 0 0 0 8px;
-	font-family: arial, sans-serif;
-	font-size: 1em;
-	overflow: auto;
-}
-
-.classList li
-{
-	padding: 0;
-	margin: 0 0 8px 0;
-}
-
-.summaryTable { width: 100%; }
-
-h1.classTitle
-{
-	font-size:170%;
-	line-height:130%;
-}
-
-h2 { font-size: 110%; }
-caption, div.sectionTitle
-{
-	background-color: #7F8FB1;
-	color: #fff;
-	font-size:130%;
-	text-align: left;
-	padding: 2px 6px 2px 6px;
-	border: 1px #7F8FB1 solid;
-}
-
-div.sectionTitle { margin-bottom: 8px; }
-.summaryTable thead { display: none; }
-
-.summaryTable td
-{
-	vertical-align: top;
-	padding: 4px;
-	border-bottom: 1px #7F8FB1 solid;
-	border-right: 1px #7F8FB1 solid;
-}
-
-/*col#summaryAttributes {}*/
-.summaryTable td.attributes
-{
-	border-left: 1px #7F8FB1 solid;
-	width: 140px;
-	text-align: right;
-}
-
-td.attributes, .fixedFont
-{
-	line-height: 15px;
-	color: #002EBE;
-	font-family: "Courier New",Courier,monospace;
-	font-size: 13px;
-}
-
-.summaryTable td.nameDescription
-{
-	text-align: left;
-	font-size: 13px;
-	line-height: 15px;
-}
-
-.summaryTable td.nameDescription, .description
-{
-	line-height: 15px;
-	padding: 4px;
-	padding-left: 4px;
-}
-
-.summaryTable { margin-bottom: 8px; }
-
-ul.inheritsList
-{
-	list-style: square;
-	margin-left: 20px;
-	padding-left: 0;
-}
-
-.detailList {
-	margin-left: 20px; 
-	line-height: 15px;
-}
-.detailList dt { margin-left: 20px; }
-
-.detailList .heading
-{
-	font-weight: bold;
-	padding-bottom: 6px;
-	margin-left: 0;
-}
-
-.light, td.attributes, .light a:link, .light a:visited
-{
-	color: #777;
-	font-style: italic;
-}
-
-.fineprint
-{
-	text-align: right;
-	font-size: 10px;
-}
-		</style>
+		<script src="../javascript/all.js"></script>
+		<!--[if lt IE 9]>
+			<script src="../javascript/html5.js"></script>
+		<![endif]-->
 	</head>
 
 	<body>
-<!-- ============================== header ================================= -->	
-		<!-- begin static/header.html -->
-		<div id="header">
-</div>
-		<!-- end static/header.html -->
 
-<!-- ============================== classes index ============================ -->
-		<div id="index">
-			<!-- begin publish.classesIndex -->
-			<div align="center"><a href="../index.html">Class Index</a>
-| <a href="../files.html">File Index</a></div>
-<hr />
-<h2>Classes</h2>
-<ul class="classList">
+<div class="index">
+	<div class="menu">
+		<div class="indexLinks">
+			<a href="../index.html">Classes</a>
+			<a href="../files.html">Files</a>
+		</div>
 	
-	<li><i><a href="../symbols/_global_.html">_global_</a></i></li>
-	
-	<li><a href="../symbols/tent.html">tent</a></li>
-	
-	<li><a href="../symbols/tent.arrays.html">tent.arrays</a></li>
-	
-	<li><a href="../symbols/tent.arrays.functions.html">tent.arrays.functions</a></li>
-	
-	<li><a href="../symbols/tent.changes.html">tent.changes</a></li>
-	
-	<li><a href="../symbols/tent.changes.Change.html">tent.changes.Change</a></li>
-	
-	<li><a href="../symbols/tent.changes.LogHandler.html">tent.changes.LogHandler</a></li>
-	
-	<li><a href="../symbols/tent.changes.Observable.html">tent.changes.Observable</a></li>
-	
-	<li><a href="../symbols/tent.changes.reverseProperties.html">tent.changes.reverseProperties</a></li>
-	
-	<li><a href="../symbols/tent.changes.reverseProperties.Set.html">tent.changes.reverseProperties.Set</a></li>
-	
-	<li><a href="../symbols/tent.coreTypes.html">tent.coreTypes</a></li>
-	
-	<li><a href="../symbols/tent.coreTypes.Enum.html">tent.coreTypes.Enum</a></li>
-	
-	<li><a href="../symbols/tent.coreTypes.NameCounter.html">tent.coreTypes.NameCounter</a></li>
-	
-	<li><a href="../symbols/tent.databinding.html">tent.databinding</a></li>
-	
-	<li><a href="../symbols/tent.entities.html">tent.entities</a></li>
-	
-	<li><a href="../symbols/tent.entities.Collection.html">tent.entities.Collection</a></li>
-	
-	<li><a href="../symbols/tent.entities.Context.html">tent.entities.Context</a></li>
-	
-	<li><a href="../symbols/tent.entities.ContextChangeHandler.html">tent.entities.ContextChangeHandler</a></li>
-	
-	<li><a href="../symbols/tent.entities.ContextChanges.html">tent.entities.ContextChanges</a></li>
-	
-	<li><a href="../symbols/tent.entities.EntityLink.html">tent.entities.EntityLink</a></li>
-	
-	<li><a href="../symbols/tent.entities.Type.html">tent.entities.Type</a></li>
-	
-	<li><a href="../symbols/tent.logging.html">tent.logging</a></li>
-	
-	<li><a href="../symbols/tent.logging.Log.html">tent.logging.Log</a></li>
-	
-	<li><a href="../symbols/tent.Namespace.html">tent.Namespace</a></li>
-	
-</ul>
-<hr />
-			<!-- end publish.classesIndex -->
+		<h2 class="heading1">Classes</h2>
+		
+		<input type="text" name="classFilter" class="classFilter" id="ClassFilter" placeholder="Filter"></input>
+		
+		<nav>
+			<ul class="classList" id="ClassList">
+				
+					<li><a href="../symbols/_global_.html">_global_</a></li>
+				
+					<li><a href="../symbols/tent.html">tent</a></li>
+				
+					<li><a href="../symbols/tent.arrays.html">tent<span class='break'> </span>.<span class='break'> </span>arrays</a></li>
+				
+					<li><a href="../symbols/tent.arrays.functions.html">tent<span class='break'> </span>.<span class='break'> </span>arrays<span class='break'> </span>.<span class='break'> </span>functions</a></li>
+				
+					<li><a href="../symbols/tent.changes.html">tent<span class='break'> </span>.<span class='break'> </span>changes</a></li>
+				
+					<li><a href="../symbols/tent.changes.Change.html">tent<span class='break'> </span>.<span class='break'> </span>changes<span class='break'> </span>.<span class='break'> </span>Change</a></li>
+				
+					<li><a href="../symbols/tent.changes.LogHandler.html">tent<span class='break'> </span>.<span class='break'> </span>changes<span class='break'> </span>.<span class='break'> </span>LogHandler</a></li>
+				
+					<li><a href="../symbols/tent.changes.Observable.html">tent<span class='break'> </span>.<span class='break'> </span>changes<span class='break'> </span>.<span class='break'> </span>Observable</a></li>
+				
+					<li><a href="../symbols/tent.changes.reverseProperties.html">tent<span class='break'> </span>.<span class='break'> </span>changes<span class='break'> </span>.<span class='break'> </span>reverseProperties</a></li>
+				
+					<li><a href="../symbols/tent.changes.reverseProperties.Set.html">tent<span class='break'> </span>.<span class='break'> </span>changes<span class='break'> </span>.<span class='break'> </span>reverseProperties<span class='break'> </span>.<span class='break'> </span>Set</a></li>
+				
+					<li><a href="../symbols/tent.coreTypes.html">tent<span class='break'> </span>.<span class='break'> </span>coreTypes</a></li>
+				
+					<li><a href="../symbols/tent.coreTypes.Enum.html">tent<span class='break'> </span>.<span class='break'> </span>coreTypes<span class='break'> </span>.<span class='break'> </span>Enum</a></li>
+				
+					<li><a href="../symbols/tent.coreTypes.NameCounter.html">tent<span class='break'> </span>.<span class='break'> </span>coreTypes<span class='break'> </span>.<span class='break'> </span>NameCounter</a></li>
+				
+					<li><a href="../symbols/tent.databinding.html">tent<span class='break'> </span>.<span class='break'> </span>databinding</a></li>
+				
+					<li><a href="../symbols/tent.entities.html">tent<span class='break'> </span>.<span class='break'> </span>entities</a></li>
+				
+					<li><a href="../symbols/tent.entities.Collection.html">tent<span class='break'> </span>.<span class='break'> </span>entities<span class='break'> </span>.<span class='break'> </span>Collection</a></li>
+				
+					<li><a href="../symbols/tent.entities.Context.html">tent<span class='break'> </span>.<span class='break'> </span>entities<span class='break'> </span>.<span class='break'> </span>Context</a></li>
+				
+					<li><a href="../symbols/tent.entities.ContextChangeHandler.html">tent<span class='break'> </span>.<span class='break'> </span>entities<span class='break'> </span>.<span class='break'> </span>ContextChangeHandler</a></li>
+				
+					<li><a href="../symbols/tent.entities.ContextChanges.html">tent<span class='break'> </span>.<span class='break'> </span>entities<span class='break'> </span>.<span class='break'> </span>ContextChanges</a></li>
+				
+					<li><a href="../symbols/tent.entities.EntityLink.html">tent<span class='break'> </span>.<span class='break'> </span>entities<span class='break'> </span>.<span class='break'> </span>EntityLink</a></li>
+				
+					<li><a href="../symbols/tent.entities.Type.html">tent<span class='break'> </span>.<span class='break'> </span>entities<span class='break'> </span>.<span class='break'> </span>Type</a></li>
+				
+					<li><a href="../symbols/tent.logging.html">tent<span class='break'> </span>.<span class='break'> </span>logging</a></li>
+				
+					<li><a href="../symbols/tent.logging.Log.html">tent<span class='break'> </span>.<span class='break'> </span>logging<span class='break'> </span>.<span class='break'> </span>Log</a></li>
+				
+					<li><a href="../symbols/tent.Namespace.html">tent<span class='break'> </span>.<span class='break'> </span>Namespace</a></li>
+				
+			</ul>
+		</nav>
+	</div>
+	<div class="fineprint" style="clear:both">
+		&copy;2011<br />
+		Documentation generator: <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0<br />
+		Template: <a href="http://www.thebrightlines.com/2010/05/06/new-template-for-jsdoctoolkit-codeview/" target="_blank">Codeview</a> 1.2<br />
+		Generated on: 2011-1-16 21:45
+	</div>
+</div>
+
+<div class="index indexStatic"></div>
+
+<div class="content">
+	<div class="innerContent">
+		<h1 class="classTitle">
+			
+			Class <span>tent.entities.ContextChangeHandler</span>
+		</h1>
+		
+		<div class="intro">
+			<p class="description summary">
+				Handle changes in a <a href="../symbols/tent.entities.Context.html">tent.entities.Context</a>
+			</p>
+				
+			
+				<ul class="summary">
+					
+					
+					
+						<li>Defined in: <a href="../symbols/src/src__entities.js.html">entities.js</a></li>
+					
+						
+				</ul>
+			
 		</div>
 		
-		<div id="content">
-<!-- ============================== class title ============================ -->
-			<h1 class="classTitle">
-				
-				Class tent.entities.ContextChangeHandler
-			</h1>
-
-<!-- ============================== class summary ========================== -->			
-			<p class="description">
-				
-				
-			
-				Handle changes in a <a href="../symbols/tent.entities.Context.html">tent.entities.Context</a>
-				
-				
-					<br /><i>Defined in: </i> <a href="../symbols/src/src__entities.js.html">entities.js</a>.
-				
-			</p>
-
-<!-- ============================== constructor summary ==================== -->			
-			
-			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class tent.entities.ContextChangeHandler.">
-				<caption>Class Summary</caption>
-				<thead>
-					<tr>
-						<th scope="col">Constructor Attributes</th>
-						<th scope="col">Constructor Name and Description</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td class="attributes">&nbsp;</td>
-						<td class="nameDescription" >
-							<div class="fixedFont">
-								<b><a href="../symbols/tent.entities.ContextChangeHandler.html#constructor">tent.entities.ContextChangeHandler</a></b>(context)
-							</div>
-							<div class="description">Creates a new change handler</div>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-			
-
-<!-- ============================== properties summary ===================== -->
-			
-				
-				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class tent.entities.ContextChangeHandler.">
-					<caption>Field Summary</caption>
+		
+			<div class="props">
+				<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class tent.entities.ContextChangeHandler.">
+					<caption class="sectionTitle">Class Summary</caption>
 					<thead>
 						<tr>
-							<th scope="col">Field Attributes</th>
-							<th scope="col">Field Name and Description</th>
+							<th scope="col">Constructor Attributes</th>
+							<th scope="col">Constructor Name and Description</th>
 						</tr>
 					</thead>
 					<tbody>
-					
 						<tr>
 							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
+							<td class="nameDescription" >
 								<div class="fixedFont">
-								<b><a href="../symbols/tent.entities.ContextChangeHandler.html#context">context</a></b>
+									<b><a href="../symbols/tent.entities.ContextChangeHandler.html#constructor">tent.entities.ContextChangeHandler</a></b>(context)
 								</div>
-								<div class="description">Context to which this handler belongs</div>
+								<div class="description">Creates a new change handler</div>
 							</td>
 						</tr>
-					
 					</tbody>
 				</table>
-				
-				
-				
+			</div>
+		
+		
+		
 			
-
-<!-- ============================== methods summary ======================== -->
 			
-				
-				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class tent.entities.ContextChangeHandler.">
-					<caption>Method Summary</caption>
-					<thead>
-						<tr>
-							<th scope="col">Method Attributes</th>
-							<th scope="col">Method Name and Description</th>
-						</tr>
-					</thead>
-					<tbody>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/tent.entities.ContextChangeHandler.html#acceptChanges">acceptChanges</a></b>()
-								</div>
-								<div class="description">Clears all changes detected, and marks all entities as unchanged.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/tent.entities.ContextChangeHandler.html#getTrackedProperty">getTrackedProperty</a></b>(subject, propertyName)
-								</div>
-								<div class="description">Returns a change tracked property descriptor.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/tent.entities.ContextChangeHandler.html#handle">handle</a></b>(change)
-								</div>
-								<div class="description">Handles a <a href="../symbols/tent.changes.Change.html">tent.changes.Change</a> for this context</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/tent.entities.ContextChangeHandler.html#init">init</a></b>()
-								</div>
-								<div class="description">Initializes this change handler, binding itself to all entities in the context</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/tent.entities.ContextChangeHandler.html#isDetached">isDetached</a></b>(item)
-								</div>
-								<div class="description"></div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/tent.entities.ContextChangeHandler.html#setAdded">setAdded</a></b>(item)
-								</div>
-								<div class="description">Marks an entity as added</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/tent.entities.ContextChangeHandler.html#setRemoved">setRemoved</a></b>(item)
-								</div>
-								<div class="description">Marks an entity as deleted</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/tent.entities.ContextChangeHandler.html#touch">touch</a></b>()
-								</div>
-								<div class="description">Marks all arguments as modified</div>
-							</td>
-						</tr>
-					
-					</tbody>
-				</table>
-				
-				
-				
-			
-<!-- ============================== events summary ======================== -->
-			
-
-<!-- ============================== constructor details ==================== -->		
-			
-			<div class="details"><a name="constructor"> </a>
-				<div class="sectionTitle">
-					Class Detail
+				<div class="props">
+					<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class tent.entities.ContextChangeHandler.">
+						<caption class="sectionTitle">Field Summary</caption>
+						
+						<thead>
+							<tr>
+								<th scope="col">Field Attributes</th>
+								<th scope="col">Field Name and Description</th>
+							</tr>
+						</thead>
+						
+						<tbody>
+							
+								<tr>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										<b><a href="../symbols/tent.entities.ContextChangeHandler.html#context">context</a></b>
+										</div>
+										<div class="description">Context to which this handler belongs</div>
+									</td>
+								</tr>
+							
+						</tbody>
+					</table>
 				</div>
+			
+			
+			
+		
+<!--
+#### METHODS SUMMARY
+-->
+		
+			
+			
+			<div class="props">
+				<h2 class="sectionTitle">Method Summary</h2>
 				
-				<div class="fixedFont">
+				
+					<table class="summaryTable" id="MethodsList" cellspacing="0" summary="A summary of the methods documented in the class tent.entities.ContextChangeHandler.">
+						<thead>
+							<tr>
+								<th scope="col">Method Attributes</th>
+								<th scope="col">Method Name and Description</th>
+							</tr>
+						</thead>
+						
+						<tbody>
+							
+							
+								<tr
+									 class='item0'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/tent.entities.ContextChangeHandler.html#acceptChanges">acceptChanges</a></b>()
+										</div>
+										<div class="description">Clears all changes detected, and marks all entities as unchanged.</div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item1'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/tent.entities.ContextChangeHandler.html#getTrackedProperty">getTrackedProperty</a></b>(subject, propertyName)
+										</div>
+										<div class="description">Returns a change tracked property descriptor.</div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item2'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/tent.entities.ContextChangeHandler.html#handle">handle</a></b>(change)
+										</div>
+										<div class="description">Handles a <a href="../symbols/tent.changes.Change.html">tent.changes.Change</a> for this context</div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item3'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/tent.entities.ContextChangeHandler.html#init">init</a></b>()
+										</div>
+										<div class="description">Initializes this change handler, binding itself to all entities in the context</div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item4'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/tent.entities.ContextChangeHandler.html#isDetached">isDetached</a></b>(item)
+										</div>
+										<div class="description"></div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item5'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/tent.entities.ContextChangeHandler.html#setAdded">setAdded</a></b>(item)
+										</div>
+										<div class="description">Marks an entity as added</div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item6'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/tent.entities.ContextChangeHandler.html#setRemoved">setRemoved</a></b>(item)
+										</div>
+										<div class="description">Marks an entity as deleted</div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item7'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/tent.entities.ContextChangeHandler.html#touch">touch</a></b>()
+										</div>
+										<div class="description">Marks all arguments as modified</div>
+									</td>
+								</tr>
+							
+						</tbody>
+					</table>
+				
+			
+				
+			</div>
+		
+		
+<!--
+#### EVENTS SUMMARY
+-->
+		
+<!--
+#### CONSTRUCTOR DETAILS
+-->
+		
+			<div class="details props">
+				<div class="innerProps">
+					<h2 class="sectionTitle" id="constructor">
+						Class Detail
+					</h2>
+					
+					<div class="fixedFont">
 						<b>tent.entities.ContextChangeHandler</b>(context)
-				</div>
-				
-				<div class="description">
-					Creates a new change handler
+					</div>
 					
-				</div>
-				
-				
-				
-				
-					
-						<dl class="detailList">
-						<dt class="heading">Parameters:</dt>
+					<div class="description">
+						Creates a new change handler
 						
-							<dt>
-								<span class="light fixedFont">{<a href="../symbols/tent.entities.Context.html">tent.entities.Context</a>}</span>  <b>context</b>
-								
-							</dt>
+					</div>
+					
+					
+				
+					
+						<dl class="detailList params">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{<a href="../symbols/tent.entities.Context.html">tent.entities.Context</a>}</span>  <b>context</b>
+									
+								</dt>
 								<dd></dd>
-						
+							
 						</dl>
 					
 					
 					
-					
-					
-					
-					
-
+				</div>
 			</div>
-			
-
-<!-- ============================== field details ========================== -->		
-			
-				<div class="sectionTitle">
-					Field Detail
-				</div>
-				
-					<a name="context"> </a>
-					<div class="fixedFont">
-					
-					<span class="light">{<a href="../symbols/tent.entities.Context.html">tent.entities.Context</a>}</span>
-					<b>context</b>
-					
-					</div>
-					<div class="description">
-						Context to which this handler belongs
-						
-						
-					</div>
-					
-					
-
-						
-						
-						
-						
-
-					
-				
-			
-
-<!-- ============================== method details ========================= -->		
-			
-				<div class="sectionTitle">
-					Method Detail
-				</div>
-				
-					<a name="acceptChanges"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>acceptChanges</b>()
-					
-					</div>
-					<div class="description">
-						Clears all changes detected, and marks all entities as unchanged.
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="getTrackedProperty"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>getTrackedProperty</b>(subject, propertyName)
-					
-					</div>
-					<div class="description">
-						Returns a change tracked property descriptor.
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{Object}</span> <b>subject</b>
-									
-								</dt>
-								<dd>the change tracked object</dd>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span> <b>propertyName</b>
-									
-								</dt>
-								<dd>the property being tracked</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd>a property descriptor if the property exists and is being tracked</dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
-				
-					<a name="handle"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>handle</b>(change)
-					
-					</div>
-					<div class="description">
-						Handles a <a href="../symbols/tent.changes.Change.html">tent.changes.Change</a> for this context
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{<a href="../symbols/tent.changes.Change.html">tent.changes.Change</a>}</span> <b>change</b>
-									
-								</dt>
-								<dd></dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="init"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>init</b>()
-					
-					</div>
-					<div class="description">
-						Initializes this change handler, binding itself to all entities in the context
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="isDetached"> </a>
-					<div class="fixedFont">
-					
-					<span class="light">{Boolean}</span>
-					<b>isDetached</b>(item)
-					
-					</div>
-					<div class="description">
-						
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{Object}</span> <b>item</b>
-									
-								</dt>
-								<dd>an entity object</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{Boolean}</span> if item is detached</dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
-				
-					<a name="setAdded"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>setAdded</b>(item)
-					
-					</div>
-					<div class="description">
-						Marks an entity as added
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{Object}</span> <b>item</b>
-									
-								</dt>
-								<dd></dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="setRemoved"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>setRemoved</b>(item)
-					
-					</div>
-					<div class="description">
-						Marks an entity as deleted
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{Object}</span> <b>item</b>
-									
-								</dt>
-								<dd></dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="touch"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>touch</b>()
-					
-					</div>
-					<div class="description">
-						Marks all arguments as modified
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-						
-						
-
-					
-				
-			
-			
-<!-- ============================== event details ========================= -->		
-			
-			
-			<hr />
-		</div>
-
 		
-<!-- ============================== footer ================================= -->
-		<div class="fineprint" style="clear:both">
-			&copy;2011<br />
-			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Wed Feb 16 2011 01:13:52 GMT-0300 (ART)
-		</div>
+<!--
+#### FIELD DETAILS
+-->
+		
+			<div class="details props">
+				<div class="innerProps">
+					<h2 class="sectionTitle">
+						Field Detail
+					</h2>
+					
+					
+						<div class="fixedFont heading" id="context">
+							<span class='lighter'>
+							
+							</span>
+							
+							<span class="light">{<a href="../symbols/tent.entities.Context.html">tent.entities.Context</a>}</span>
+							
+							<b>context</b>							
+						</div>
+						
+						<div class="description">
+							Context to which this handler belongs
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						
+					
+				</div>
+			</div>
+		
+<!--
+#### METHOD DETAILS
+-->		
+		
+			<div class="details props">
+				<div class="innerProps">
+					<h2 class="sectionTitle">
+						Method Detail
+					</h2>
+					
+					<ul class="methodDetail" id="MethodDetail">
+						
+						
+							<li 
+								 class='item0'
+							>
+								<div class="fixedFont heading" id="acceptChanges">
+									<span class='lighter'>
+									
+									</span>
+									
+									
+									
+									<b>acceptChanges</b>()
+								</div>
+								
+								<div class="description">
+									Clears all changes detected, and marks all entities as unchanged.
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+								
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item1'
+							>
+								<div class="fixedFont heading" id="getTrackedProperty">
+									<span class='lighter'>
+									
+									</span>
+									
+									
+									
+									<b>getTrackedProperty</b>(subject, propertyName)
+								</div>
+								
+								<div class="description">
+									Returns a change tracked property descriptor.
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+									<dl class="detailList params">
+										<dt class="heading">Parameters:</dt>
+										
+											<dt>
+												<span class="light fixedFont">{Object}</span> <b>subject</b>
+												
+											</dt>
+											<dd>the change tracked object</dd>
+										
+											<dt>
+												<span class="light fixedFont">{String}</span> <b>propertyName</b>
+												
+											</dt>
+											<dd>the property being tracked</dd>
+										
+									</dl>
+								
+								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd>a property descriptor if the property exists and is being tracked</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item2'
+							>
+								<div class="fixedFont heading" id="handle">
+									<span class='lighter'>
+									
+									</span>
+									
+									
+									
+									<b>handle</b>(change)
+								</div>
+								
+								<div class="description">
+									Handles a <a href="../symbols/tent.changes.Change.html">tent.changes.Change</a> for this context
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+									<dl class="detailList params">
+										<dt class="heading">Parameters:</dt>
+										
+											<dt>
+												<span class="light fixedFont">{<a href="../symbols/tent.changes.Change.html">tent.changes.Change</a>}</span> <b>change</b>
+												
+											</dt>
+											<dd></dd>
+										
+									</dl>
+								
+								
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item3'
+							>
+								<div class="fixedFont heading" id="init">
+									<span class='lighter'>
+									
+									</span>
+									
+									
+									
+									<b>init</b>()
+								</div>
+								
+								<div class="description">
+									Initializes this change handler, binding itself to all entities in the context
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+								
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item4'
+							>
+								<div class="fixedFont heading" id="isDetached">
+									<span class='lighter'>
+									
+									</span>
+									
+									<span class="light">{Boolean}</span>
+									
+									<b>isDetached</b>(item)
+								</div>
+								
+								<div class="description">
+									
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+									<dl class="detailList params">
+										<dt class="heading">Parameters:</dt>
+										
+											<dt>
+												<span class="light fixedFont">{Object}</span> <b>item</b>
+												
+											</dt>
+											<dd>an entity object</dd>
+										
+									</dl>
+								
+								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{Boolean}</span> if item is detached</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item5'
+							>
+								<div class="fixedFont heading" id="setAdded">
+									<span class='lighter'>
+									
+									</span>
+									
+									
+									
+									<b>setAdded</b>(item)
+								</div>
+								
+								<div class="description">
+									Marks an entity as added
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+									<dl class="detailList params">
+										<dt class="heading">Parameters:</dt>
+										
+											<dt>
+												<span class="light fixedFont">{Object}</span> <b>item</b>
+												
+											</dt>
+											<dd></dd>
+										
+									</dl>
+								
+								
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item6'
+							>
+								<div class="fixedFont heading" id="setRemoved">
+									<span class='lighter'>
+									
+									</span>
+									
+									
+									
+									<b>setRemoved</b>(item)
+								</div>
+								
+								<div class="description">
+									Marks an entity as deleted
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+									<dl class="detailList params">
+										<dt class="heading">Parameters:</dt>
+										
+											<dt>
+												<span class="light fixedFont">{Object}</span> <b>item</b>
+												
+											</dt>
+											<dd></dd>
+										
+									</dl>
+								
+								
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item7'
+							>
+								<div class="fixedFont heading" id="touch">
+									<span class='lighter'>
+									
+									</span>
+									
+									
+									
+									<b>touch</b>()
+								</div>
+								
+								<div class="description">
+									Marks all arguments as modified
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+								
+								
+								
+							</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+		
+<!--
+#### EVENT DETAILS
+-->		
+		
+	</div>
+</div>
+		<script type="text/javascript">
+			wbos.CssTools.MediaQueryFallBack.LoadCss('../css/screen.css', '../css/handheld.css', 660);
+			codeview.classFilter.Init();
+			
+			// Syntax Highlighting
+			SyntaxHighlighter.all();
+		</script>
 	</body>
 </html>
+
