@@ -33,6 +33,8 @@ Tent is currently tested on the following platforms:
 * Firefox 4.0 Windows
 * IE 8.0 Windows
 
+[Image](https://github.com/benjamine/tent/blob/master/tests-results.PNG)
+
 [js-test-driver](http://code.google.com/p/js-test-driver/) is used for unit testing, so other browsers could be easily added. 
 
 IE7 is supported, but most unit test won't work on it. IE7 doesn't provide any change tracking solution, so property changing must allways be done using tent.pset/pget functions, ie:
@@ -53,6 +55,12 @@ change tracking support can be obtained using:
 	// prints 'DEFINEPROPERTY' on most modern browsers, Chrome, FF, etc.
 	// prints 'DEFINEPROPERTYONLYDOM' on IE8, change tracking only on DOM objects, you can use tent.domClone() to clone your entities as DOM objects
 	// prints 'NONE' on IE7, use tent.pset()/tent.pget() when changing/reading properties.
+
+Note: I'm planing to move all tests to QUnit to get:
+* Extremely clean, concise and readable syntax
+* Embed tests on static html pages
+And mantain js-test-driver using the qunit-js-test-driver connector, to keep:
+* Run all tests in multiple browsers, multiple machines, asynchronously, and get all results by pressing a button in my IDE!
 
 Including Tent in my application
 ---------------
@@ -136,5 +144,8 @@ __Disclaimer__: At this moment, coverage is pretty low, and as this is my first 
 Documentation
 -------------
 
-Besides this readme, it's under construction.
-I'm starting to write some Quick-Start Guides in the form of Unit Test Cases (I want to mantain all documentation as concise and runnable as posible)
+Tent code is documented using JSDoc syntax. Html API Docs are generated with [jsdoc-toolkit](http://code.google.com/p/jsdoc-toolkit/) and included in the docs/api folder, they also can be accessed at:
+
+[Tent API Docs](http://benjamine.github.com/tent/docs/api/) 
+
+I'll write some Quick-Start Guides in the form of Unit Test Cases soon. (I want to mantain all documentation as concise and runnable as posible)
