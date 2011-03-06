@@ -4,7 +4,7 @@
 	<head>
 		<meta charset="utf-8"></meta>
 		<meta name="generator" content="JsDoc Toolkit"></meta>
-		<title>tent.changes.LogHandler | Tent Framework API</title>
+		<title>tent.persisters.couchdb | Tent Framework API</title>
 
 		<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;"></meta>
 		<meta name="mobileoptimized" content="0"></meta>
@@ -117,12 +117,12 @@
 	<div class="innerContent">
 		<h1 class="classTitle">
 			
-			Class <span>tent.changes.LogHandler</span>
+			Namespace <span>tent.persisters.couchdb</span>
 		</h1>
 		
 		<div class="intro">
 			<p class="description summary">
-				Change handler that sends change data to log, see tent.log.info
+				Apache CouchDB RESTful Persister
 			</p>
 				
 			
@@ -130,7 +130,7 @@
 					
 					
 					
-						<li>Defined in: <a href="../symbols/src/src__changes.js.html">changes.js</a></li>
+						<li>Defined in: <a href="../symbols/src/src_persisters__couchdb.js.html">couchdb.js</a></li>
 					
 						
 				</ul>
@@ -139,8 +139,8 @@
 		
 		
 			<div class="props">
-				<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class tent.changes.LogHandler.">
-					<caption class="sectionTitle">Class Summary</caption>
+				<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class tent.persisters.couchdb.">
+					<caption class="sectionTitle">Namespace Summary</caption>
 					<thead>
 						<tr>
 							<th scope="col">Constructor Attributes</th>
@@ -152,9 +152,9 @@
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription" >
 								<div class="fixedFont">
-									<b><a href="../symbols/tent.changes.LogHandler.html#constructor">tent.changes.LogHandler</a></b>(prefix)
+									<b><a href="../symbols/tent.persisters.couchdb.html#constructor">tent.persisters.couchdb</a></b>
 								</div>
-								<div class="description">Creates a new change handler that sends change data to the log, see tent.log.info</div>
+								<div class="description"></div>
 							</td>
 						</tr>
 					</tbody>
@@ -163,76 +163,9 @@
 		
 		
 		
-			
-			
-				<div class="props">
-					<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class tent.changes.LogHandler.">
-						<caption class="sectionTitle">Field Summary</caption>
-						
-						<thead>
-							<tr>
-								<th scope="col">Field Attributes</th>
-								<th scope="col">Field Name and Description</th>
-							</tr>
-						</thead>
-						
-						<tbody>
-							
-								<tr>
-									<td class="attributes">&nbsp;</td>
-									<td class="nameDescription">
-										<div class="fixedFont">
-										<b><a href="../symbols/tent.changes.LogHandler.html#prefix">prefix</a></b>
-										</div>
-										<div class="description">prefix for log entries</div>
-									</td>
-								</tr>
-							
-						</tbody>
-					</table>
-				</div>
-			
-			
-			
-		
 <!--
 #### METHODS SUMMARY
 -->
-		
-			
-			
-			<div class="props">
-				<h2 class="sectionTitle">Method Summary</h2>
-				
-				
-					<table class="summaryTable" id="MethodsList" cellspacing="0" summary="A summary of the methods documented in the class tent.changes.LogHandler.">
-						<thead>
-							<tr>
-								<th scope="col">Method Attributes</th>
-								<th scope="col">Method Name and Description</th>
-							</tr>
-						</thead>
-						
-						<tbody>
-							
-							
-								<tr
-									 class='item0'
-								>
-									<td class="attributes">&nbsp;</td>
-									<td class="nameDescription">
-										<div class="fixedFont"><b><a href="../symbols/tent.changes.LogHandler.html#handle">handle</a></b>(change)
-										</div>
-										<div class="description">Logs a <a href="../symbols/tent.changes.Change.html">tent.changes.Change</a></div>
-									</td>
-								</tr>
-							
-						</tbody>
-					</table>
-				
-			
-				
-			</div>
 		
 		
 <!--
@@ -246,33 +179,41 @@
 			<div class="details props">
 				<div class="innerProps">
 					<h2 class="sectionTitle" id="constructor">
-						Class Detail
+						Namespace Detail
 					</h2>
 					
 					<div class="fixedFont">
-						<b>tent.changes.LogHandler</b>(prefix)
+						<b>tent.persisters.couchdb</b>
 					</div>
 					
 					<div class="description">
-						Creates a new change handler that sends change data to the log, see tent.log.info
+						
 						
 					</div>
 					
 					
 				
 					
-						<dl class="detailList params">
-							<dt class="heading">Parameters:</dt>
+					
+					
+						<dl class="detailList nomargin">
 							
-								<dt>
-									<span class="light fixedFont">{String}</span>  <b>prefix</b>
-									<i>Optional</i>
-								</dt>
-								<dd>a prefix for log entries of this handler</dd>
+							
+							
+							
+							
+							
+							
+							
+							
+								<dt class="heading">Requires:</dt>
+								
+									<dd>tent.persisters.rest</dd>
+								
+							
+							
 							
 						</dl>
-					
-					
 					
 				</div>
 			</div>
@@ -281,94 +222,9 @@
 #### FIELD DETAILS
 -->
 		
-			<div class="details props">
-				<div class="innerProps">
-					<h2 class="sectionTitle">
-						Field Detail
-					</h2>
-					
-					
-						<div class="fixedFont heading" id="prefix">
-							<span class='lighter'>
-							
-							</span>
-							
-							<span class="light">{String}</span>
-							
-							<b>prefix</b>							
-						</div>
-						
-						<div class="description">
-							prefix for log entries
-							
-							
-							
-						</div>
-						
-						
-							
-						
-						
-					
-				</div>
-			</div>
-		
 <!--
 #### METHOD DETAILS
 -->		
-		
-			<div class="details props">
-				<div class="innerProps">
-					<h2 class="sectionTitle">
-						Method Detail
-					</h2>
-					
-					<ul class="methodDetail" id="MethodDetail">
-						
-						
-							<li 
-								 class='item0'
-							>
-								<div class="fixedFont heading" id="handle">
-									<span class='lighter'>
-									
-									</span>
-									
-									
-									
-									<b>handle</b>(change)
-								</div>
-								
-								<div class="description">
-									Logs a <a href="../symbols/tent.changes.Change.html">tent.changes.Change</a>
-									
-									
-									
-									
-								</div>
-								
-								
-								
-								
-									<dl class="detailList params">
-										<dt class="heading">Parameters:</dt>
-										
-											<dt>
-												<span class="light fixedFont">{<a href="../symbols/tent.changes.Change.html">tent.changes.Change</a>}</span> <b>change</b>
-												
-											</dt>
-											<dd></dd>
-										
-									</dl>
-								
-								
-								
-								
-							</li>
-						
-					</ul>
-				</div>
-			</div>
 		
 		
 <!--

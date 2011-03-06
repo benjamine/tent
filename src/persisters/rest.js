@@ -13,7 +13,7 @@ tent.declare('tent.persisters.rest', function(){
     tent.persisters.rest.uriCombine = function(){
         var uri = '';
         for (var i = 0, l = arguments.length; i < l; i++) {
-            var strarg = arguments + '';
+            var strarg = arguments[i] + '';
             if (strarg) {
             
                 if (strarg.match(/^[A-Za-z]+\:\/\//)) {
@@ -48,6 +48,7 @@ tent.declare('tent.persisters.rest', function(){
                 }
             }
         }
+		return uri;
     }
     
     /**
@@ -122,7 +123,10 @@ tent.declare('tent.persisters.rest', function(){
          * @type function()
          */
         this.updateLocalVersion = function(local, remote){
-            return local._rev = remote.rev || remote._rev;
+            local._rev = remote.rev || remote._rev;
+			if (typeof remote.id != 'undefined' && remote.id !== local._id){
+				local._id = remote.id;
+			}
         };
         
         /**
@@ -202,8 +206,8 @@ tent.declare('tent.persisters.rest', function(){
         catch (err) {
             this.loadingErrors.push(err);
             this.loading = false;
-            if (callback) {
-                callback({
+            if (options.complete) {
+                options.complete({
                     error: err
                 });
             }
@@ -305,17 +309,18 @@ tent.declare('tent.persisters.rest', function(){
                     return null;
                 }
                 var rmt = {};
-                for (var propertyName in obj) {
-                    if (obj.hasOwnProperty(propertyName) &&
+                for (var propertyName in local) {
+                    if (local.hasOwnProperty(propertyName) &&
                     (propertyName.substr(0, 1) !== '_' ||
                     propertyName === '_id' ||
                     propertyName === '_rev')) {
-                        rmt[propertyName] = tent.pget(obj, propertyName);
+                        rmt[propertyName] = tent.pget(local, propertyName);
                     }
                 }
-                if (item.__changeState__ === tent.entities.ChangeStates.DELETED) {
+                if (local.__changeState__ === tent.entities.ChangeStates.DELETED) {
                     rmt._deleted = true;
                 }
+				return rmt;
             };
             
             
@@ -402,7 +407,7 @@ tent.declare('tent.persisters.rest', function(){
                     if (item) {
                     
                     
-                        var localItemFinder = options.localItemFinder || defaultOptions.localItemFinder ||
+                        var localChangeFinder = options.localChangeFinder || defaultOptions.localChangeFinder ||
                         function(ctx, remote, op){
                             if (ctx.hasChanges()) {
                                 for (var j = 0, l = ctx.changes.items.length; j < l; j++) {
@@ -422,8 +427,15 @@ tent.declare('tent.persisters.rest', function(){
                             }
                         };
                         
-                        var localChangeIndex = localItemFinder(options.context, item, options);
+                        var localChangeIndex = localChangeFinder(options.context, item, options);
                         
+                        if (!(typeof localChangeIndex == 'number' && localChangeIndex >= 0)) {
+							if (!(options.unorderedResults || defaultOptions.unorderedResults)) {
+								// if results are in order, the first change in the list, is next
+								localChangeIndex = 0;
+							}
+						}
+						
                         if (typeof localChangeIndex == 'number' && localChangeIndex >= 0) {
                             map(item, localChangeIndex, options);
                         }
@@ -505,36 +517,37 @@ tent.declare('tent.persisters.rest', function(){
         if (!this.loadItemMapper) {
             this.loadItemMapper = tent.persisters.rest.createItemMapper();
         }
+		var persister = this;
         this.loadItemMapper(data, options, function(doc, opt){
         
-            var local = this.localItemFinder(context, doc._id);
+            var local = persister.localItemFinder(context, doc._id);
             
-            if (obj) {
-                if (obj.__changeState__ === tent.entities.ChangeStates.MODIFIED ||
-                obj.__changeState__ === tent.entities.ChangeStates.DELETED) {
-                    if (this.versionEquals(obj, doc)) {
+            if (local) {
+                if (local.__changeState__ === tent.entities.ChangeStates.MODIFIED ||
+                local.__changeState__ === tent.entities.ChangeStates.DELETED) {
+                    if (persister.versionEquals(local, doc)) {
                         // revision unchanged, local version is newer
                     }
                     else {
                         // revision changed, somebody else changed server version, conflict!
-                        obj.__loadErrors__.push({
+                        local.__loadErrors__.push({
                             error: 'conflict',
                             reason: 'document modified recently by another user'
                         });
                     }
                 }
                 else {
-                    if (this.isDeleted(doc)) {
+                    if (persister.isDeleted(doc)) {
                         // item deleted on the server
-                        context.remove(obj);
-                        context.detach(obj);
+                        context.remove(local);
+                        context.detach(local);
                     }
                     else {
                         // update local item with remote version
-                        tent.pset(obj, doc, true);
+                        tent.pset(local, doc, true);
                     }
-                    if (obj.__loadErrors__) {
-                        delete obj.__loadErrors__;
+                    if (local.__loadErrors__) {
+                        delete local.__loadErrors__;
                     }
                 }
             }
@@ -720,7 +733,7 @@ tent.declare('tent.persisters.rest', function(){
             if (!this.changeResponseMapper) {
                 this.changeResponseMapper = tent.persisters.rest.createChangeResponseMapper();
             }
-            
+            var persister = this;
             this.changeResponseMapper(data, options, function(remote, localChangeIndex, opt){
             
                 var local = context.changes.items[localChangeIndex];
@@ -734,7 +747,7 @@ tent.declare('tent.persisters.rest', function(){
                     });
                 }
                 else {
-                    this.updateLocalVersion(local, remote);
+                    persister.updateLocalVersion(local, remote);
                     if (local.__saveErrors__) {
                         delete local.__saveErrors__;
                     }

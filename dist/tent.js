@@ -96,6 +96,14 @@ tent.declare = function() {
   }
   return ns
 };
+tent.mixin = function(target, mixin) {
+  for(var name in mixin.prototype) {
+    if(mixin.prototype.hasOwnProperty(name)) {
+      target.prototype[name] = mixin.prototype[name]
+    }
+  }
+  return target
+};
 tent.isDOMObject = function(obj) {
   if(typeof Node != "undefined" && obj instanceof Node || typeof Element != "undefined" && obj instanceof Element || typeof NodeList != "undefined" && obj instanceof NodeList || obj === window || obj === document) {
     return true
@@ -2800,7 +2808,7 @@ tent.domClone = function(obj, options) {
   tent.persisters.rest.uriCombine = function() {
     var uri = "";
     for(var i = 0, l = arguments.length;i < l;i++) {
-      var strarg = arguments + "";
+      var strarg = arguments[i] + "";
       if(strarg) {
         if(strarg.match(/^[A-Za-z]+\:\/\//)) {
           uri = strarg
@@ -2829,6 +2837,7 @@ tent.domClone = function(obj, options) {
         }
       }
     }
+    return uri
   };
   tent.persisters.rest.RestPersister = function RestPersister() {
     this.baseUri = "http://127.0.0.1:5984/mydb";
@@ -2848,7 +2857,10 @@ tent.domClone = function(obj, options) {
       return local._rev === remote._rev
     };
     this.updateLocalVersion = function(local, remote) {
-      return local._rev = remote.rev || remote._rev
+      local._rev = remote.rev || remote._rev;
+      if(typeof remote.id != "undefined" && remote.id !== local._id) {
+        local._id = remote.id
+      }
     };
     this.isDeleted = function(remote) {
       return remote._deleted
@@ -2887,8 +2899,8 @@ tent.domClone = function(obj, options) {
     }catch(err) {
       this.loadingErrors.push(err);
       this.loading = false;
-      if(callback) {
-        callback({error:err})
+      if(options.complete) {
+        options.complete({error:err})
       }
     }
   };
@@ -2965,14 +2977,15 @@ tent.domClone = function(obj, options) {
           return null
         }
         var rmt = {};
-        for(var propertyName in obj) {
-          if(obj.hasOwnProperty(propertyName) && (propertyName.substr(0, 1) !== "_" || propertyName === "_id" || propertyName === "_rev")) {
-            rmt[propertyName] = tent.pget(obj, propertyName)
+        for(var propertyName in local) {
+          if(local.hasOwnProperty(propertyName) && (propertyName.substr(0, 1) !== "_" || propertyName === "_id" || propertyName === "_rev")) {
+            rmt[propertyName] = tent.pget(local, propertyName)
           }
         }
-        if(item.__changeState__ === tent.entities.ChangeStates.DELETED) {
+        if(local.__changeState__ === tent.entities.ChangeStates.DELETED) {
           rmt._deleted = true
         }
+        return rmt
       };
       if(items instanceof Array) {
         var dataItems = [];
@@ -3036,7 +3049,7 @@ tent.domClone = function(obj, options) {
             }
           }
           if(item) {
-            var localItemFinder = options.localItemFinder || defaultOptions.localItemFinder || function(ctx, remote, op) {
+            var localChangeFinder = options.localChangeFinder || defaultOptions.localChangeFinder || function(ctx, remote, op) {
               if(ctx.hasChanges()) {
                 for(var j = 0, l = ctx.changes.items.length;j < l;j++) {
                   if(typeof remote.id != "undefined" && ctx.changes.items[j]._id === remote.id) {
@@ -3054,7 +3067,12 @@ tent.domClone = function(obj, options) {
                 }
               }
             };
-            var localChangeIndex = localItemFinder(options.context, item, options);
+            var localChangeIndex = localChangeFinder(options.context, item, options);
+            if(!(typeof localChangeIndex == "number" && localChangeIndex >= 0)) {
+              if(!(options.unorderedResults || defaultOptions.unorderedResults)) {
+                localChangeIndex = 0
+              }
+            }
             if(typeof localChangeIndex == "number" && localChangeIndex >= 0) {
               map(item, localChangeIndex, options)
             }
@@ -3098,23 +3116,24 @@ tent.domClone = function(obj, options) {
     if(!this.loadItemMapper) {
       this.loadItemMapper = tent.persisters.rest.createItemMapper()
     }
+    var persister = this;
     this.loadItemMapper(data, options, function(doc, opt) {
-      var local = this.localItemFinder(context, doc._id);
-      if(obj) {
-        if(obj.__changeState__ === tent.entities.ChangeStates.MODIFIED || obj.__changeState__ === tent.entities.ChangeStates.DELETED) {
-          if(this.versionEquals(obj, doc)) {
+      var local = persister.localItemFinder(context, doc._id);
+      if(local) {
+        if(local.__changeState__ === tent.entities.ChangeStates.MODIFIED || local.__changeState__ === tent.entities.ChangeStates.DELETED) {
+          if(persister.versionEquals(local, doc)) {
           }else {
-            obj.__loadErrors__.push({error:"conflict", reason:"document modified recently by another user"})
+            local.__loadErrors__.push({error:"conflict", reason:"document modified recently by another user"})
           }
         }else {
-          if(this.isDeleted(doc)) {
-            context.remove(obj);
-            context.detach(obj)
+          if(persister.isDeleted(doc)) {
+            context.remove(local);
+            context.detach(local)
           }else {
-            tent.pset(obj, doc, true)
+            tent.pset(local, doc, true)
           }
-          if(obj.__loadErrors__) {
-            delete obj.__loadErrors__
+          if(local.__loadErrors__) {
+            delete local.__loadErrors__
           }
         }
       }else {
@@ -3222,6 +3241,7 @@ tent.domClone = function(obj, options) {
       if(!this.changeResponseMapper) {
         this.changeResponseMapper = tent.persisters.rest.createChangeResponseMapper()
       }
+      var persister = this;
       this.changeResponseMapper(data, options, function(remote, localChangeIndex, opt) {
         var local = context.changes.items[localChangeIndex];
         if(remote.error) {
@@ -3230,7 +3250,7 @@ tent.domClone = function(obj, options) {
           }
           local.__saveErrors__.push({error:remote.error, reason:remote.reason})
         }else {
-          this.updateLocalVersion(local, remote);
+          persister.updateLocalVersion(local, remote);
           if(local.__saveErrors__) {
             delete local.__saveErrors__
           }
@@ -3239,4 +3259,11 @@ tent.domClone = function(obj, options) {
       })
     }
   }
+});tent.declare("tent.persisters.couchdb", function() {
+  tent.persisters.couchdb.CouchDBPersister = function CouchDBPersister() {
+    tent.persisters.rest.RestPersister.apply(this, arguments);
+    this.bulkSaveUri = "_bulk_docs";
+    this.loadItemMapper = tent.persisters.rest.createItemMapper({multiSelectorProperty:"rows", multiItemSelectorProperty:"doc"})
+  };
+  tent.mixin(tent.persisters.couchdb.CouchDBPersister, tent.persisters.rest.RestPersister)
 });

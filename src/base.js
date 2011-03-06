@@ -158,6 +158,22 @@ tent.declare = function(/*[parent], [path], [expander]*/){
 }
 
 /**
+ * Extends a class with another class (mixin)
+ * @param {Object} target class to extend
+ * @param {Object} mixin mixin class to use as source
+ * @return {Object} the extended class
+ */
+tent.mixin = function(target, mixin){
+	for (var name in mixin.prototype){
+		if (mixin.prototype.hasOwnProperty(name)){
+			target.prototype[name] = mixin.prototype[name];
+		}
+	}
+	return target;
+}
+
+
+/**
  * @param {Object} obj an object to test
  * @return {Boolean} is obj a DOM object?
  */

@@ -1,1 +1,1 @@
-java -jar jstestdriver/JsTestDriver.jar --port 4224 --browser %appdata%\..\Local\Google\Chrome\Application\chrome.exe --captureConsole
+java -jar jstestdriver/JsTestDriver.jar --port 4224 --browser %appdata%/../Local/Google/Chrome/Application/chrome.exe --captureConsole
