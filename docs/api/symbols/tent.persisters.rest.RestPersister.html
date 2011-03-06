@@ -1,0 +1,831 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+		<meta charset="utf-8"></meta>
+		<meta name="generator" content="JsDoc Toolkit"></meta>
+		<title>tent.persisters.rest.RestPersister | Tent Framework API</title>
+
+		<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;"></meta>
+		<meta name="mobileoptimized" content="0"></meta>
+	
+		<link rel="stylesheet" href="../css/all.css" media="all"></link>
+		<link rel="stylesheet" href="../css/handheld.css" media="only screen and (max-width: 660px)"></link>
+		<link rel="stylesheet" href="../css/handheld.css" media="handheld"></link>
+		<link rel="stylesheet" href="../css/screen.css" media="screen and (min-width: 661px)"></link>
+
+		<!-- Syntax Highlighting -->
+		<link rel="stylesheet" href="../css/shCore.css" media="all"></link>
+		<link rel="stylesheet" href="../css/shThemeDefault.css" media="all"></link>
+		<script src="../javascript/shCore.js"></script>
+		<script src="../javascript/shBrushJScript.js"></script>
+
+		<script src="../javascript/all.js"></script>
+		<!--[if lt IE 9]>
+			<script src="../javascript/html5.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+<div class="index">
+	<div class="menu">
+		<div class="indexLinks">
+			<a href="../index.html">Classes</a>
+			<a href="../files.html">Files</a>
+		</div>
+	
+		<h2 class="heading1">Classes</h2>
+		
+		<input type="text" name="classFilter" class="classFilter" id="ClassFilter" placeholder="Filter"></input>
+		
+		<nav>
+			<ul class="classList" id="ClassList">
+				
+					<li><a href="../symbols/_global_.html">_global_</a></li>
+				
+					<li><a href="../symbols/tent.html">tent</a></li>
+				
+					<li><a href="../symbols/tent.arrays.html">tent<span class='break'> </span>.<span class='break'> </span>arrays</a></li>
+				
+					<li><a href="../symbols/tent.arrays.functions.html">tent<span class='break'> </span>.<span class='break'> </span>arrays<span class='break'> </span>.<span class='break'> </span>functions</a></li>
+				
+					<li><a href="../symbols/tent.changes.html">tent<span class='break'> </span>.<span class='break'> </span>changes</a></li>
+				
+					<li><a href="../symbols/tent.changes.Change.html">tent<span class='break'> </span>.<span class='break'> </span>changes<span class='break'> </span>.<span class='break'> </span>Change</a></li>
+				
+					<li><a href="../symbols/tent.changes.LogHandler.html">tent<span class='break'> </span>.<span class='break'> </span>changes<span class='break'> </span>.<span class='break'> </span>LogHandler</a></li>
+				
+					<li><a href="../symbols/tent.changes.Observable.html">tent<span class='break'> </span>.<span class='break'> </span>changes<span class='break'> </span>.<span class='break'> </span>Observable</a></li>
+				
+					<li><a href="../symbols/tent.changes.reverseProperties.html">tent<span class='break'> </span>.<span class='break'> </span>changes<span class='break'> </span>.<span class='break'> </span>reverseProperties</a></li>
+				
+					<li><a href="../symbols/tent.changes.reverseProperties.Set.html">tent<span class='break'> </span>.<span class='break'> </span>changes<span class='break'> </span>.<span class='break'> </span>reverseProperties<span class='break'> </span>.<span class='break'> </span>Set</a></li>
+				
+					<li><a href="../symbols/tent.coreTypes.html">tent<span class='break'> </span>.<span class='break'> </span>coreTypes</a></li>
+				
+					<li><a href="../symbols/tent.coreTypes.Enum.html">tent<span class='break'> </span>.<span class='break'> </span>coreTypes<span class='break'> </span>.<span class='break'> </span>Enum</a></li>
+				
+					<li><a href="../symbols/tent.coreTypes.NameCounter.html">tent<span class='break'> </span>.<span class='break'> </span>coreTypes<span class='break'> </span>.<span class='break'> </span>NameCounter</a></li>
+				
+					<li><a href="../symbols/tent.databinding.html">tent<span class='break'> </span>.<span class='break'> </span>databinding</a></li>
+				
+					<li><a href="../symbols/tent.entities.html">tent<span class='break'> </span>.<span class='break'> </span>entities</a></li>
+				
+					<li><a href="../symbols/tent.entities.Collection.html">tent<span class='break'> </span>.<span class='break'> </span>entities<span class='break'> </span>.<span class='break'> </span>Collection</a></li>
+				
+					<li><a href="../symbols/tent.entities.Context.html">tent<span class='break'> </span>.<span class='break'> </span>entities<span class='break'> </span>.<span class='break'> </span>Context</a></li>
+				
+					<li><a href="../symbols/tent.entities.ContextChangeHandler.html">tent<span class='break'> </span>.<span class='break'> </span>entities<span class='break'> </span>.<span class='break'> </span>ContextChangeHandler</a></li>
+				
+					<li><a href="../symbols/tent.entities.ContextChanges.html">tent<span class='break'> </span>.<span class='break'> </span>entities<span class='break'> </span>.<span class='break'> </span>ContextChanges</a></li>
+				
+					<li><a href="../symbols/tent.entities.EntityLink.html">tent<span class='break'> </span>.<span class='break'> </span>entities<span class='break'> </span>.<span class='break'> </span>EntityLink</a></li>
+				
+					<li><a href="../symbols/tent.entities.Type.html">tent<span class='break'> </span>.<span class='break'> </span>entities<span class='break'> </span>.<span class='break'> </span>Type</a></li>
+				
+					<li><a href="../symbols/tent.logging.html">tent<span class='break'> </span>.<span class='break'> </span>logging</a></li>
+				
+					<li><a href="../symbols/tent.logging.Log.html">tent<span class='break'> </span>.<span class='break'> </span>logging<span class='break'> </span>.<span class='break'> </span>Log</a></li>
+				
+					<li><a href="../symbols/tent.Namespace.html">tent<span class='break'> </span>.<span class='break'> </span>Namespace</a></li>
+				
+					<li><a href="../symbols/tent.persisters.html">tent<span class='break'> </span>.<span class='break'> </span>persisters</a></li>
+				
+					<li><a href="../symbols/tent.persisters.rest.html">tent<span class='break'> </span>.<span class='break'> </span>persisters<span class='break'> </span>.<span class='break'> </span>rest</a></li>
+				
+					<li><a href="../symbols/tent.persisters.rest.RestPersister.html">tent<span class='break'> </span>.<span class='break'> </span>persisters<span class='break'> </span>.<span class='break'> </span>rest<span class='break'> </span>.<span class='break'> </span>RestPersister</a></li>
+				
+			</ul>
+		</nav>
+	</div>
+	<div class="fineprint" style="clear:both">
+		&copy;2011<br />
+		Documentation generator: <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0<br />
+		Template: <a href="http://www.thebrightlines.com/2010/05/06/new-template-for-jsdoctoolkit-codeview/" target="_blank">Codeview</a> 1.2<br />
+		Generated on: 2011-2-6 17:05
+	</div>
+</div>
+
+<div class="index indexStatic"></div>
+
+<div class="content">
+	<div class="innerContent">
+		<h1 class="classTitle">
+			
+			Class <span>tent.persisters.rest.RestPersister</span>
+		</h1>
+		
+		<div class="intro">
+			<p class="description summary">
+				a REST persister
+			</p>
+				
+			
+				<ul class="summary">
+					
+					
+					
+						<li>Defined in: <a href="../symbols/src/src_persisters__rest.js.html">rest.js</a></li>
+					
+						
+				</ul>
+			
+		</div>
+		
+		
+			<div class="props">
+				<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class tent.persisters.rest.RestPersister.">
+					<caption class="sectionTitle">Class Summary</caption>
+					<thead>
+						<tr>
+							<th scope="col">Constructor Attributes</th>
+							<th scope="col">Constructor Name and Description</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription" >
+								<div class="fixedFont">
+									<b><a href="../symbols/tent.persisters.rest.RestPersister.html#constructor">tent.persisters.rest.RestPersister</a></b>()
+								</div>
+								<div class="description">Creates a new REST persister</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		
+		
+		
+			
+			
+				<div class="props">
+					<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class tent.persisters.rest.RestPersister.">
+						<caption class="sectionTitle">Field Summary</caption>
+						
+						<thead>
+							<tr>
+								<th scope="col">Field Attributes</th>
+								<th scope="col">Field Name and Description</th>
+							</tr>
+						</thead>
+						
+						<tbody>
+							
+								<tr>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										<b><a href="../symbols/tent.persisters.rest.RestPersister.html#baseUri">baseUri</a></b>
+										</div>
+										<div class="description">Absolute base URI for this persister</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										<b><a href="../symbols/tent.persisters.rest.RestPersister.html#bulkSaveUri">bulkSaveUri</a></b>
+										</div>
+										<div class="description">URI for bulk save operations (or null to use individual save requests)</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										<b><a href="../symbols/tent.persisters.rest.RestPersister.html#changeResponseMapper">changeResponseMapper</a></b>
+										</div>
+										<div class="description">function that maps change responses to local changes</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										<b><a href="../symbols/tent.persisters.rest.RestPersister.html#changeSerializer">changeSerializer</a></b>
+										</div>
+										<div class="description">function that serializes a change item</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										<b><a href="../symbols/tent.persisters.rest.RestPersister.html#isDeleted">isDeleted</a></b>
+										</div>
+										<div class="description">function that indicates if a loaded item is deleted</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										<b><a href="../symbols/tent.persisters.rest.RestPersister.html#loadingErrors">loadingErrors</a></b>
+										</div>
+										<div class="description">Errors ocurred while loading</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										<b><a href="../symbols/tent.persisters.rest.RestPersister.html#loadItemMapper">loadItemMapper</a></b>
+										</div>
+										<div class="description">function that maps items from data obtained on load</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										<b><a href="../symbols/tent.persisters.rest.RestPersister.html#localItemFinder">localItemFinder</a></b>
+										</div>
+										<div class="description">function that finds the local version of a loaded item</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										<b><a href="../symbols/tent.persisters.rest.RestPersister.html#saving">saving</a></b>
+										</div>
+										<div class="description">Indicates if this persister is saving changes</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										<b><a href="../symbols/tent.persisters.rest.RestPersister.html#savingErrors">savingErrors</a></b>
+										</div>
+										<div class="description">Errors ocurred while saving</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										<b><a href="../symbols/tent.persisters.rest.RestPersister.html#updateLocalVersion">updateLocalVersion</a></b>
+										</div>
+										<div class="description">function that updates local version field from a save response</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										<b><a href="../symbols/tent.persisters.rest.RestPersister.html#versionEquals">versionEquals</a></b>
+										</div>
+										<div class="description">function that compares a local item version with a loaded item</div>
+									</td>
+								</tr>
+							
+						</tbody>
+					</table>
+				</div>
+			
+			
+			
+		
+<!--
+#### METHODS SUMMARY
+-->
+		
+			
+			
+			<div class="props">
+				<h2 class="sectionTitle">Method Summary</h2>
+				
+				
+					<table class="summaryTable" id="MethodsList" cellspacing="0" summary="A summary of the methods documented in the class tent.persisters.rest.RestPersister.">
+						<thead>
+							<tr>
+								<th scope="col">Method Attributes</th>
+								<th scope="col">Method Name and Description</th>
+							</tr>
+						</thead>
+						
+						<tbody>
+							
+							
+								<tr
+									 class='item0'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/tent.persisters.rest.RestPersister.html#load">load</a></b>(context, url, options)
+										</div>
+										<div class="description">Load entities from an URL into a <a href="../symbols/tent.entities.Context.html">tent.entities.Context</a></div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item1'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/tent.persisters.rest.RestPersister.html#saveChanges">saveChanges</a></b>(context, options)
+										</div>
+										<div class="description">Persists all changes in a <a href="../symbols/tent.entities.Context.html">tent.entities.Context</a></div>
+									</td>
+								</tr>
+							
+						</tbody>
+					</table>
+				
+			
+				
+			</div>
+		
+		
+<!--
+#### EVENTS SUMMARY
+-->
+		
+<!--
+#### CONSTRUCTOR DETAILS
+-->
+		
+			<div class="details props">
+				<div class="innerProps">
+					<h2 class="sectionTitle" id="constructor">
+						Class Detail
+					</h2>
+					
+					<div class="fixedFont">
+						<b>tent.persisters.rest.RestPersister</b>()
+					</div>
+					
+					<div class="description">
+						Creates a new REST persister
+						
+					</div>
+					
+					
+				
+					
+					
+					
+				</div>
+			</div>
+		
+<!--
+#### FIELD DETAILS
+-->
+		
+			<div class="details props">
+				<div class="innerProps">
+					<h2 class="sectionTitle">
+						Field Detail
+					</h2>
+					
+					
+						<div class="fixedFont heading" id="baseUri">
+							<span class='lighter'>
+							
+							</span>
+							
+							<span class="light">{String}</span>
+							
+							<b>baseUri</b>							
+						</div>
+						
+						<div class="description">
+							Absolute base URI for this persister
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id="bulkSaveUri">
+							<span class='lighter'>
+							
+							</span>
+							
+							<span class="light">{String}</span>
+							
+							<b>bulkSaveUri</b>							
+						</div>
+						
+						<div class="description">
+							URI for bulk save operations (or null to use individual save requests)
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id="changeResponseMapper">
+							<span class='lighter'>
+							
+							</span>
+							
+							<span class="light">{function()}</span>
+							
+							<b>changeResponseMapper</b>							
+						</div>
+						
+						<div class="description">
+							function that maps change responses to local changes
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id="changeSerializer">
+							<span class='lighter'>
+							
+							</span>
+							
+							<span class="light">{function()}</span>
+							
+							<b>changeSerializer</b>							
+						</div>
+						
+						<div class="description">
+							function that serializes a change item
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id="isDeleted">
+							<span class='lighter'>
+							
+							</span>
+							
+							<span class="light">{function()}</span>
+							
+							<b>isDeleted</b>							
+						</div>
+						
+						<div class="description">
+							function that indicates if a loaded item is deleted
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id="loadingErrors">
+							<span class='lighter'>
+							
+							</span>
+							
+							<span class="light">{Array}</span>
+							
+							<b>loadingErrors</b>							
+						</div>
+						
+						<div class="description">
+							Errors ocurred while loading
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id="loadItemMapper">
+							<span class='lighter'>
+							
+							</span>
+							
+							<span class="light">{function()}</span>
+							
+							<b>loadItemMapper</b>							
+						</div>
+						
+						<div class="description">
+							function that maps items from data obtained on load
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id="localItemFinder">
+							<span class='lighter'>
+							
+							</span>
+							
+							<span class="light">{function()}</span>
+							
+							<b>localItemFinder</b>							
+						</div>
+						
+						<div class="description">
+							function that finds the local version of a loaded item
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id="saving">
+							<span class='lighter'>
+							
+							</span>
+							
+							<span class="light">{Boolean}</span>
+							
+							<b>saving</b>							
+						</div>
+						
+						<div class="description">
+							Indicates if this persister is saving changes
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id="savingErrors">
+							<span class='lighter'>
+							
+							</span>
+							
+							<span class="light">{Array}</span>
+							
+							<b>savingErrors</b>							
+						</div>
+						
+						<div class="description">
+							Errors ocurred while saving
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id="updateLocalVersion">
+							<span class='lighter'>
+							
+							</span>
+							
+							<span class="light">{function()}</span>
+							
+							<b>updateLocalVersion</b>							
+						</div>
+						
+						<div class="description">
+							function that updates local version field from a save response
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id="versionEquals">
+							<span class='lighter'>
+							
+							</span>
+							
+							<span class="light">{function()}</span>
+							
+							<b>versionEquals</b>							
+						</div>
+						
+						<div class="description">
+							function that compares a local item version with a loaded item
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						
+					
+				</div>
+			</div>
+		
+<!--
+#### METHOD DETAILS
+-->		
+		
+			<div class="details props">
+				<div class="innerProps">
+					<h2 class="sectionTitle">
+						Method Detail
+					</h2>
+					
+					<ul class="methodDetail" id="MethodDetail">
+						
+						
+							<li 
+								 class='item0'
+							>
+								<div class="fixedFont heading" id="load">
+									<span class='lighter'>
+									
+									</span>
+									
+									
+									
+									<b>load</b>(context, url, options)
+								</div>
+								
+								<div class="description">
+									Load entities from an URL into a <a href="../symbols/tent.entities.Context.html">tent.entities.Context</a>
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+									<dl class="detailList params">
+										<dt class="heading">Parameters:</dt>
+										
+											<dt>
+												<span class="light fixedFont">{<a href="../symbols/tent.entities.Context.html">tent.entities.Context</a>}</span> <b>context</b>
+												
+											</dt>
+											<dd></dd>
+										
+											<dt>
+												<span class="light fixedFont">{String}</span> <b>url</b>
+												
+											</dt>
+											<dd>that returns a JSON representation of entities</dd>
+										
+											<dt>
+												<span class="light fixedFont">{Object}</span> <b>options</b>
+												<i>Optional</i>
+											</dt>
+											<dd>loading options</dd>
+										
+											<dt>
+												<span class="light fixedFont">{Boolean}</span> <b>options.multi</b>
+												<i>Optional</i>
+											</dt>
+											<dd>indicates if the url will return a collection of entities</dd>
+										
+											<dt>
+												<span class="light fixedFont">{String}</span> <b>options.credentials</b>
+												<i>Optional</i>
+											</dt>
+											<dd>http basic auth credentials in the form 'username:password' and base64 encoded</dd>
+										
+											<dt>
+												<span class="light fixedFont">{Object}</span> <b>options.method</b>
+												<i>Optional</i>
+											</dt>
+											<dd>http method, default 'GET'</dd>
+										
+											<dt>
+												<span class="light fixedFont">{function()}</span> <b>options.complete</b>
+												<i>Optional</i>
+											</dt>
+											<dd>function to call when operation is complete</dd>
+										
+									</dl>
+								
+								
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item1'
+							>
+								<div class="fixedFont heading" id="saveChanges">
+									<span class='lighter'>
+									
+									</span>
+									
+									
+									
+									<b>saveChanges</b>(context, options)
+								</div>
+								
+								<div class="description">
+									Persists all changes in a <a href="../symbols/tent.entities.Context.html">tent.entities.Context</a>
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+									<dl class="detailList params">
+										<dt class="heading">Parameters:</dt>
+										
+											<dt>
+												<span class="light fixedFont">{<a href="../symbols/tent.entities.Context.html">tent.entities.Context</a>}</span> <b>context</b>
+												
+											</dt>
+											<dd></dd>
+										
+											<dt>
+												<span class="light fixedFont">{Object}</span> <b>options</b>
+												<i>Optional</i>
+											</dt>
+											<dd>saving options</dd>
+										
+											<dt>
+												<span class="light fixedFont">{String}</span> <b>options.credentials</b>
+												<i>Optional</i>
+											</dt>
+											<dd>http basic auth credentials in the form 'username:password' and base64 encoded</dd>
+										
+											<dt>
+												<span class="light fixedFont">{function()}</span> <b>options.complete</b>
+												<i>Optional</i>
+											</dt>
+											<dd>function to call when operation is complete</dd>
+										
+									</dl>
+								
+								
+								
+								
+							</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+		
+<!--
+#### EVENT DETAILS
+-->		
+		
+	</div>
+</div>
+		<script type="text/javascript">
+			wbos.CssTools.MediaQueryFallBack.LoadCss('../css/screen.css', '../css/handheld.css', 660);
+			codeview.classFilter.Init();
+			
+			// Syntax Highlighting
+			SyntaxHighlighter.all();
+		</script>
+	</body>
+</html>
+

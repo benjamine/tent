@@ -869,9 +869,19 @@ tent.declare('tent.entities', function(){
 	/**
 	 * Clears all detected changes, marking all entities as unchanged.
 	 */
+    tent.entities.Context.prototype.acceptAllChanges = function(){
+        if (this.changeHandler) {
+            this.changeHandler.acceptAllChanges();
+        }
+    }
+
+	/**
+	 * Clears detected changes, marking entities as unchanged. 
+	 * @param {Object|Number} [change] a changed object or an index in the {@link tent.entities.ContextChanges#items} array on {@link #changes} (you can use one or more of this parameters)
+	 */	    
     tent.entities.Context.prototype.acceptChanges = function(){
         if (this.changeHandler) {
-            this.changeHandler.acceptChanges();
+            this.changeHandler.acceptChanges.apply(this.changeHandler, arguments);
         }
     }
     
@@ -1435,7 +1445,7 @@ tent.declare('tent.entities', function(){
 	/**
 	 * Clears all changes detected, and marks all entities as unchanged.
 	 */
-    tent.entities.ContextChangeHandler.prototype.acceptChanges = function(){
+    tent.entities.ContextChangeHandler.prototype.acceptAllChanges = function(){
         if (this.context.hasChanges()) {
             if (this.context.log) {
                 tent.log.debug("Context: accepting changes, " + this.context.changes);
@@ -1450,6 +1460,39 @@ tent.declare('tent.entities', function(){
                 tent.log.debug("Context: all changes accepted");
             }
         }
+    }
+	
+	/**
+	 * Clears detected changes, marking entities as unchanged. 
+	 * @param {Object|Number} [change] a changed object or an index in the {@link tent.entities.ContextChanges#items} array on {@link tent.entities.Context#changes} (you can use one or more of this parameters)
+	 */	    
+	tent.entities.ContextChangeHandler.prototype.acceptChanges = function(){
+		for (var i=0,l=arguments.length; i<l; i++){
+			var change = arguments[i];
+			var changeIndex ;
+			 if (typeof change=='number'){
+			 	changeIndex = change;
+			 	if (changeIndex < 0 || this.context.changes.items.length < changeIndex - 1) {
+					change = null;
+					changeIndex=-1;
+				}
+				else {
+					change = this.context.changes.items[changeIndex];
+				}
+			 }else{
+			 	changeIndex = this.context.changes.items.lastIndexOf(change);
+			 }
+			 if (changeIndex >= 0 && change){
+			 	this.context.changes.items.splice(changeIndex,1);
+				if (change.__changeState__ == tent.entities.ChangeStates.ADDED){
+					change.__changeState__ = tent.entities.ChangeStates.UNCHANGED;
+				}else if (change.__changeState__ == tent.entities.ChangeStates.MODIFIED){
+					change.__changeState__ = tent.entities.ChangeStates.UNCHANGED;
+				}else if (change.__changeState__ == tent.entities.ChangeStates.DELETED){
+					change.__changeState__ = tent.entities.ChangeStates.DETACHED;
+				}
+			 }
+		}
     }
     
 });

@@ -60,7 +60,7 @@ TestCase("ContextRela1NTest", {
 
         assertUndefined(painting2.artist);
 
-        ctx.acceptChanges();
+        ctx.acceptAllChanges();
 
         // add children
         artist1.paintings.push(painting1, painting2);
@@ -140,7 +140,7 @@ TestCase("ContextRela1NTest", {
         
         artist1.paintings.push(painting1, painting2);
         
-        ctx.acceptChanges();
+        ctx.acceptAllChanges();
         
         // remove paintings
         artist1.paintings.splice(0, 1);
@@ -280,7 +280,7 @@ TestCase("ContextRela1NTest", {
         
         artist1.paintings.push(painting1, painting2);
         
-        ctx.acceptChanges();
+        ctx.acceptAllChanges();
         
         ctx.remove(artist1);
         

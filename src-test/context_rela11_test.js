@@ -43,7 +43,7 @@ TestCase("ContextRela11Test", {
         assertNull(data.artist1.spouse);
         assertUndefined(data.artist2.spouse);
         
-        ctx.acceptChanges();
+        ctx.acceptAllChanges();
 
         // marry
         data.artist1.spouse = data.artist2;
@@ -108,7 +108,7 @@ TestCase("ContextRela11Test", {
         // marry
         data.artist1.spouse = data.artist2;
         
-        ctx.acceptChanges();
+        ctx.acceptAllChanges();
         
         // divorce
         data.artist2.spouse = null;
@@ -216,7 +216,7 @@ TestCase("ContextRela11Test", {
         
         data.artist2.spouse = data.artist1;
         
-        ctx.acceptChanges();
+        ctx.acceptAllChanges();
         ctx.remove(data.artist1);
         
         // 2 person removed

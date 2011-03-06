@@ -90,6 +90,12 @@
 				
 					<li><a href="../symbols/tent.Namespace.html">tent<span class='break'> </span>.<span class='break'> </span>Namespace</a></li>
 				
+					<li><a href="../symbols/tent.persisters.html">tent<span class='break'> </span>.<span class='break'> </span>persisters</a></li>
+				
+					<li><a href="../symbols/tent.persisters.rest.html">tent<span class='break'> </span>.<span class='break'> </span>persisters<span class='break'> </span>.<span class='break'> </span>rest</a></li>
+				
+					<li><a href="../symbols/tent.persisters.rest.RestPersister.html">tent<span class='break'> </span>.<span class='break'> </span>persisters<span class='break'> </span>.<span class='break'> </span>rest<span class='break'> </span>.<span class='break'> </span>RestPersister</a></li>
+				
 			</ul>
 		</nav>
 	</div>
@@ -97,7 +103,7 @@
 		&copy;2011<br />
 		Documentation generator: <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0<br />
 		Template: <a href="http://www.thebrightlines.com/2010/05/06/new-template-for-jsdoctoolkit-codeview/" target="_blank">Codeview</a> 1.2<br />
-		Generated on: 2011-1-16 21:45
+		Generated on: 2011-2-6 17:05
 	</div>
 </div>
 
@@ -286,7 +292,7 @@
 								>
 									<td class="attributes">&lt;static&gt; &nbsp;</td>
 									<td class="nameDescription">
-										<div class="fixedFont">tent.<b><a href="../symbols/tent.html#.pset">pset</a></b>(subject, propertyName, value)
+										<div class="fixedFont">tent.<b><a href="../symbols/tent.html#.pset">pset</a></b>(subject, propertyName, value, skipInterceptors)
 										</div>
 										<div class="description">Sets an object property value.</div>
 									</td>
@@ -781,11 +787,11 @@
 									
 									
 									
-									<span class="light">tent.</span><b>pset</b>(subject, propertyName, value)
+									<span class="light">tent.</span><b>pset</b>(subject, propertyName, value, skipInterceptors)
 								</div>
 								
 								<div class="description">
-									Sets an object property value. If subject is an observed object, it ensures that its <a href="../symbols/tent.changes.Observable.html">tent.changes.Observable</a> is notified.Its useful when no property intercept mode is supported {link tent.changes.PropertyInterceptModes}.  Equivalent to:		subject[propertyName] = value;
+									Sets an object property value. If subject is an observed object, it ensures that its <a href="../symbols/tent.changes.Observable.html">tent.changes.Observable</a> is notified.Its useful when no property intercept mode is supported {link tent.changes.PropertyInterceptModes}.
 									
 									
 										<br />
@@ -795,6 +801,10 @@
 									
 								</div>
 								
+								
+									
+										<pre class="code brush: js"">		tent.pset(subject, propertyName, value); // is equivalent to...		subject[propertyName] = value; 		tent.pset(subject, source); // is equivalent to...		subject[property1] = source[property1]; 		subject[property2] = source[property2];		// etc. (every property in source is copied)</pre>
+									
 								
 								
 								
@@ -808,16 +818,22 @@
 											<dd>the modified object</dd>
 										
 											<dt>
-												<span class="light fixedFont">{String}</span> <b>propertyName</b>
+												<span class="light fixedFont">{String|Object}</span> <b>propertyName</b>
 												
 											</dt>
-											<dd>the property to set</dd>
+											<dd>the property to set, or an object to copy properties from</dd>
 										
 											<dt>
 												<b>value</b>
-												
+												<i>Optional</i>
 											</dt>
 											<dd>the value to set on property</dd>
+										
+											<dt>
+												<span class="light fixedFont">{Boolean}</span> <b>skipInterceptors</b>
+												<i>Optional</i>
+											</dt>
+											<dd>if true values are set without calling interceptors</dd>
 										
 									</dl>
 								

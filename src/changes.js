@@ -268,24 +268,51 @@ tent.declare('tent.changes', function(){
 	/**
 	 * Sets an object property value. If subject is an observed object, it ensures that its {@link tent.changes.Observable} is notified.
 	 * 
-	 * Its useful when no property intercept mode is supported {link tent.changes.PropertyInterceptModes}.  
-	 * Equivalent to:
+	 * Its useful when no property intercept mode is supported {link tent.changes.PropertyInterceptModes}.
+	 * 
+	 * @example
+	 * 
+	 * 		tent.pset(subject, propertyName, value); // is equivalent to...
 	 * 		subject[propertyName] = value; 
 	 * 
+	 * 		tent.pset(subject, source); // is equivalent to...
+	 * 		subject[property1] = source[property1]; 
+	 * 		subject[property2] = source[property2];
+	 * 		// etc. (every property in source is copied)
+	 * 
 	 * @param {Object} subject the modified object
-	 * @param {String} propertyName the property to set
-	 * @param value the value to set on property
+	 * @param {String|Object} propertyName the property to set, or an object to copy properties from
+	 * @param [value] the value to set on property
+	 * @param {Boolean} [skipInterceptors] if true values are set without calling interceptors
 	 * @return the set value
 	 */
-    tent.pset = function(subject, propertyName, value){
-        if (subject.__observable__ && subject.__observable__.interceptors &&
-        subject.__observable__.interceptors[propertyName]) {
-            subject.__observable__.interceptors[propertyName].newsetter.call(subject, value);
-        }
-        else {
-            subject[propertyName] = value;
-        }
-		return value;
+    tent.pset = function(subject, propertyName, value, skipInterceptors){
+		
+		if (typeof propertyName == 'object') {
+			for (var prop in propertyName) {
+				if (propertyName.hasOwnProperty(prop)) {
+					tent.pset(subject, prop, propertyName[prop], value);
+				}
+			}
+			return subject;
+		}
+		else {
+		
+			if (subject.__observable__ && subject.__observable__.interceptors &&
+			subject.__observable__.interceptors[propertyName]) {
+				if (skipInterceptors) {
+					var storeProp = subject.__observable__.interceptors[propertyName]._name || propertyName;
+					subject[storeProp] = value;
+				}
+				else {
+					subject.__observable__.interceptors[propertyName].newsetter.call(subject, value);
+				}
+			}
+			else {
+				subject[propertyName] = value;
+			}
+			return value;
+		}
     }
     
 	/**

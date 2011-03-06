@@ -27,7 +27,37 @@ tent.declare('tent.arrays', function(){
      * @namespace Common Array functions
      */
     tent.arrays.functions = {
-    
+
+		/**
+		 * finds an item by a property 
+		 * @param {String} propertyName
+		 * @param value
+		 * @return the first item with the specified value on the specified property, or null if no item is found
+		 */
+        findByProperty: function(propertyName, value){
+            for (var i = 0, l = this.length; i < l; i++) {
+                if (this[i][propertyName] === value) {
+                    return this[i];
+                }
+            }
+            return null;
+        },        
+    	
+		/**
+		 * finds an item by a property 
+		 * @param {String} propertyName
+		 * @param value
+		 * @return {Number} the index of the first item with the specified value on the specified property, or -1 if no item is found
+		 */
+        indexByProperty: function(propertyName, value){
+            for (var i = 0, l = this.length; i < l; i++) {
+                if (this[i][propertyName] === value) {
+                    return i;
+                }
+            }
+            return -1;
+        },  
+		
 		/**
 		 * @param {Object} item an item to search for
 		 * @return {Number} the first index where item is found, or -1 if item is not found

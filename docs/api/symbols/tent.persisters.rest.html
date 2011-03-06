@@ -4,7 +4,7 @@
 	<head>
 		<meta charset="utf-8"></meta>
 		<meta name="generator" content="JsDoc Toolkit"></meta>
-		<title>tent.logging | Tent Framework API</title>
+		<title>tent.persisters.rest | Tent Framework API</title>
 
 		<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;"></meta>
 		<meta name="mobileoptimized" content="0"></meta>
@@ -113,12 +113,12 @@
 	<div class="innerContent">
 		<h1 class="classTitle">
 			
-			Namespace <span>tent.logging</span>
+			Namespace <span>tent.persisters.rest</span>
 		</h1>
 		
 		<div class="intro">
 			<p class="description summary">
-				Logging
+				HTTP RESTful Persister using jQuery.ajax
 			</p>
 				
 			
@@ -126,7 +126,7 @@
 					
 					
 					
-						<li>Defined in: <a href="../symbols/src/src__logging.js.html">logging.js</a></li>
+						<li>Defined in: <a href="../symbols/src/src_persisters__rest.js.html">rest.js</a></li>
 					
 						
 				</ul>
@@ -135,7 +135,7 @@
 		
 		
 			<div class="props">
-				<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class tent.logging.">
+				<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class tent.persisters.rest.">
 					<caption class="sectionTitle">Namespace Summary</caption>
 					<thead>
 						<tr>
@@ -148,7 +148,7 @@
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription" >
 								<div class="fixedFont">
-									<b><a href="../symbols/tent.logging.html#constructor">tent.logging</a></b>
+									<b><a href="../symbols/tent.persisters.rest.html#constructor">tent.persisters.rest</a></b>
 								</div>
 								<div class="description"></div>
 							</td>
@@ -159,41 +159,44 @@
 		
 		
 		
+<!--
+#### METHODS SUMMARY
+-->
+		
 			
 			
-				<div class="props">
-					<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class tent.logging.">
-						<caption class="sectionTitle">Field Summary</caption>
-						
+			<div class="props">
+				<h2 class="sectionTitle">Method Summary</h2>
+				
+				
+					<table class="summaryTable" id="MethodsList" cellspacing="0" summary="A summary of the methods documented in the class tent.persisters.rest.">
 						<thead>
 							<tr>
-								<th scope="col">Field Attributes</th>
-								<th scope="col">Field Name and Description</th>
+								<th scope="col">Method Attributes</th>
+								<th scope="col">Method Name and Description</th>
 							</tr>
 						</thead>
 						
 						<tbody>
 							
-								<tr>
+							
+								<tr
+									 class='item0'
+								>
 									<td class="attributes">&lt;static&gt; &nbsp;</td>
 									<td class="nameDescription">
-										<div class="fixedFont">
-										tent.logging.<b><a href="../symbols/tent.logging.html#.Levels">Levels</a></b>
+										<div class="fixedFont">tent.persisters.rest.<b><a href="../symbols/tent.persisters.rest.html#.uriCombine">uriCombine</a></b>()
 										</div>
-										<div class="description">Event severity levels</div>
+										<div class="description">Combines URIs (only combines for paths, query and hash combining not supported)</div>
 									</td>
 								</tr>
 							
 						</tbody>
 					</table>
-				</div>
+				
 			
-			
-			
-		
-<!--
-#### METHODS SUMMARY
--->
+				
+			</div>
 		
 		
 <!--
@@ -211,7 +214,7 @@
 					</h2>
 					
 					<div class="fixedFont">
-						<b>tent.logging</b>
+						<b>tent.persisters.rest</b>
 					</div>
 					
 					<div class="description">
@@ -236,11 +239,9 @@
 							
 								<dt class="heading">Requires:</dt>
 								
-									<dd>tent</dd>
+									<dd>tent.persisters</dd>
 								
-									<dd>tent.arrays</dd>
-								
-									<dd>tent.coreTypes</dd>
+									<dd>jQuery</dd>
 								
 							
 							
@@ -254,41 +255,72 @@
 #### FIELD DETAILS
 -->
 		
-			<div class="details props">
-				<div class="innerProps">
-					<h2 class="sectionTitle">
-						Field Detail
-					</h2>
-					
-					
-						<div class="fixedFont heading" id=".Levels">
-							<span class='lighter'>
-							&lt;static&gt; 
-							</span>
-							
-							<span class="light">{<a href="../symbols/tent.coreTypes.Enum.html">tent.coreTypes.Enum</a>}</span>
-							
-							<span class="light">tent.logging.</span><b>Levels</b>							
-						</div>
-						
-						<div class="description">
-							Event severity levels
-							
-							
-							
-						</div>
-						
-						
-							
-						
-						
-					
-				</div>
-			</div>
-		
 <!--
 #### METHOD DETAILS
 -->		
+		
+			<div class="details props">
+				<div class="innerProps">
+					<h2 class="sectionTitle">
+						Method Detail
+					</h2>
+					
+					<ul class="methodDetail" id="MethodDetail">
+						
+						
+							<li 
+								 class='item0'
+							>
+								<div class="fixedFont heading" id=".uriCombine">
+									<span class='lighter'>
+									&lt;static&gt; 
+									</span>
+									
+									<span class="light">{String}</span>
+									
+									<span class="light">tent.persisters.rest.</span><b>uriCombine</b>()
+								</div>
+								
+								<div class="description">
+									Combines URIs (only combines for paths, query and hash combining not supported)
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{String}</span> the URI that combines all arguments</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
+								
+								
+							</li>
+						
+					</ul>
+				</div>
+			</div>
 		
 		
 <!--

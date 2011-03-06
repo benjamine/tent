@@ -46,7 +46,7 @@ TestCase("ContextRelaNMTest", {
         assertEquals(0, artist1.friends.length);
         assertUndefined(artist2.friends);
 
-        ctx.acceptChanges();
+        ctx.acceptAllChanges();
 
         // add relations
         artist1.friends.push(artist2);
@@ -152,7 +152,7 @@ TestCase("ContextRelaNMTest", {
         ctx.Artist.push(artist1);
         artist1.friends.push(artist2, artist3);
 
-        ctx.acceptChanges();
+        ctx.acceptAllChanges();
 
         // remove friends
         artist1.friends.splice(0, 1);
@@ -293,7 +293,7 @@ TestCase("ContextRelaNMTest", {
 
         artist1.friends.push(artist2, artist3);
 
-        ctx.acceptChanges();
+        ctx.acceptAllChanges();
 
         ctx.remove(artist1);
 
