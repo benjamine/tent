@@ -16,7 +16,8 @@ TestCase("ContextRela11Test", {
             nationality: 'Mexican'
         }
         
-        data = tent.domClone(data, {
+        data = tent.clone(data, {
+			dom: true,
             deep: true,
             onlyForTracking: true
         });
@@ -82,7 +83,8 @@ TestCase("ContextRela11Test", {
             nationality: 'Mexican'
         }
         
-        data = tent.domClone(data, {
+        data = tent.clone(data, {
+			dom: true,
             deep: true,
             onlyForTracking: true
         });
@@ -142,7 +144,8 @@ TestCase("ContextRela11Test", {
             nationality: 'Mexican'
         }
         
-        data = tent.domClone(data, {
+        data = tent.clone(data, {
+			dom: true,
             deep: true,
             onlyForTracking: true
         });
@@ -190,7 +193,8 @@ TestCase("ContextRela11Test", {
             nationality: 'Mexican'
         }
         
-        data = tent.domClone(data, {
+        data = tent.clone(data, {
+			dom: true,
             deep: true,
             onlyForTracking: true
         });

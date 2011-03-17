@@ -37,7 +37,8 @@ var buildTestData = function(){
         name: 'chiche'
     };
     
-    d.data = tent.domClone(d.data, {
+    d.data = tent.clone(d.data, {
+		dom: true,
         deep: true,
         onlyForTracking: true
     });

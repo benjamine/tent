@@ -172,7 +172,6 @@ tent.mixin = function(target, mixin){
 	return target;
 }
 
-
 /**
  * @param {Object} obj an object to test
  * @return {Boolean} is obj a DOM object?
@@ -212,16 +211,22 @@ tent.isDOMProperty = function(name){
 }
 
 /**
- * Clones objects using DOM object instances (eg: span elements).
+ * Clones objects
  *
  * This is useful in browsers that only support property change tracking on DOM objects (eg: IE8)
- * @param {Object} object or array to clone
+ * @param {Object} obj object or array to clone
  * @param {Object} [options] cloning options
+ * @param {Boolean} [options.onlyOwnProperties] clone only own properties (see Object.hasOwnProperty)
+ * @param {Boolean} [options.dom] clone as DOM objects (eg: span elements)
  * @param {Boolean} [options.deep] clone deeply, traverse through object properties?
- * @param {Boolean} [options.onlyForTracking] only clone if the current browser support tracking on DOM objects only (eg: IE8), otherwise original obj is returned
+ * @param {Boolean} [options.clonePrivates] clone private members (properties starting with _)
+ * @param {Boolean} [options.skipPrivates] skip (don't copy) private members (properties starting with _)
+ * @param {Boolean} [options.attachedObjects] if true objects attached to a {@link tent.entities.Context} are cloned too, by default is true (if false deep cloning stops at attached objects)
+ * @param {Boolean} [options.ignoreCircularReferences] if cloning deeply, ignore circular references (otherwise error is thrown)
+ * @param {Boolean} [options.onlyForTracking] only clone if the current browser only support tracking on DOM objects (eg: IE8), otherwise original obj is returned
  * @return {Object} a clone of obj (or obj if no cloning was performed)
  */
-tent.domClone = function(obj, options){
+tent.clone = function(obj, options){
     if (obj === null) {
         return null;
     }
@@ -248,12 +253,15 @@ tent.domClone = function(obj, options){
                 if (obj instanceof Array) {
                     var cloneObj = [];
                     for (var i = 0; i < obj.length; i++) {
-                        if (options.deep) {
+                        if (typeof obj[i]=='object' && options.deep) {
                             options.deepStack.push(obj);
-                            if (options.deepStack.lastIndexOf(obj[i]) < 0) {
-                            
-                                cloneObj.push(tent.domClone(obj[i], options));
-                            }
+                            if (options.deepStack.lastIndexOf(obj[i]) < 0) { 
+				                if ((options.attachedObjects !== false) || !obj[i].__collection__) {
+									cloneObj.push(tent.clone(obj[i], options));
+								}
+                            } else if (!options.ignoreCircularReferences) {
+								throw 'Circular reference when cloning array';
+							}
                             options.deepStack.pop();
                         }
                         else {
@@ -263,22 +271,39 @@ tent.domClone = function(obj, options){
                     return cloneObj;
                 }
                 else {
-                    var cloneObj = document.createElement('span');
+                    var cloneObj = options.dom ? document.createElement('span') : {};
                     for (var pname in obj) {
-                        if ((!options.clonePrivates) && pname.substr(0, 1) == '_') {
+						if (options.onlyOwnProperties && !obj.hasOwnProperty(pname)){
+							continue;
+						}						
+						
+						var isPrivate =  pname.substr(0, 1) == '_';
+                        if (options.skipPrivates && isPrivate) {
+                            continue;
+                        }else if ((!options.clonePrivates) && isPrivate) {
+			                if (typeof obj[pname]=='object' && (options.attachedObjects === false) && obj[pname].__collection__) {
+								continue;
+							}
                             cloneObj[pname] = obj[pname];
                         }
                         else {
                         
-                            if (options.deep && typeof obj[pname] == 'object') {
+							var value = obj.__observable__ ? tent.pget(obj,pname): obj[pname];
+						
+                            if (options.deep && typeof value == 'object') {
+				                if ((options.attachedObjects === false) && value.__collection__) {
+									continue;
+								}
                                 options.deepStack.push(obj);
-                                if (options.deepStack.indexOf(obj[i]) < 0) {
-                                    cloneObj[pname] = tent.domClone(obj[pname], options);
-                                }
+                                if (options.deepStack.indexOf(value) < 0) {
+                                    cloneObj[pname] = tent.clone(value, options);
+                            	} else if (!options.ignoreCircularReferences) {
+									throw 'Circular reference when cloning object';
+								}
                                 options.deepStack.pop();
                             }
                             else {
-                                cloneObj[pname] = obj[pname];
+                                cloneObj[pname] = value;
                             }
                         }
                         

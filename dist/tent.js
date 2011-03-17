@@ -129,7 +129,7 @@ tent.isDOMProperty = function(name) {
   }
   return tent.DOMPropertyNames.indexOf(name) >= 0
 };
-tent.domClone = function(obj, options) {
+tent.clone = function(obj, options) {
   if(obj === null) {
     return null
   }else {
@@ -150,10 +150,16 @@ tent.domClone = function(obj, options) {
         if(obj instanceof Array) {
           var cloneObj = [];
           for(var i = 0;i < obj.length;i++) {
-            if(options.deep) {
+            if(typeof obj[i] == "object" && options.deep) {
               options.deepStack.push(obj);
               if(options.deepStack.lastIndexOf(obj[i]) < 0) {
-                cloneObj.push(tent.domClone(obj[i], options))
+                if(options.attachedObjects !== false || !obj[i].__collection__) {
+                  cloneObj.push(tent.clone(obj[i], options))
+                }
+              }else {
+                if(!options.ignoreCircularReferences) {
+                  throw"Circular reference when cloning array";
+                }
               }
               options.deepStack.pop()
             }else {
@@ -162,19 +168,38 @@ tent.domClone = function(obj, options) {
           }
           return cloneObj
         }else {
-          var cloneObj = document.createElement("span");
+          var cloneObj = options.dom ? document.createElement("span") : {};
           for(var pname in obj) {
-            if(!options.clonePrivates && pname.substr(0, 1) == "_") {
-              cloneObj[pname] = obj[pname]
+            if(options.onlyOwnProperties && !obj.hasOwnProperty(pname)) {
+              continue
+            }
+            var isPrivate = pname.substr(0, 1) == "_";
+            if(options.skipPrivates && isPrivate) {
+              continue
             }else {
-              if(options.deep && typeof obj[pname] == "object") {
-                options.deepStack.push(obj);
-                if(options.deepStack.indexOf(obj[i]) < 0) {
-                  cloneObj[pname] = tent.domClone(obj[pname], options)
+              if(!options.clonePrivates && isPrivate) {
+                if(typeof obj[pname] == "object" && options.attachedObjects === false && obj[pname].__collection__) {
+                  continue
                 }
-                options.deepStack.pop()
-              }else {
                 cloneObj[pname] = obj[pname]
+              }else {
+                var value = obj.__observable__ ? tent.pget(obj, pname) : obj[pname];
+                if(options.deep && typeof value == "object") {
+                  if(options.attachedObjects === false && value.__collection__) {
+                    continue
+                  }
+                  options.deepStack.push(obj);
+                  if(options.deepStack.indexOf(value) < 0) {
+                    cloneObj[pname] = tent.clone(value, options)
+                  }else {
+                    if(!options.ignoreCircularReferences) {
+                      throw"Circular reference when cloning object";
+                    }
+                  }
+                  options.deepStack.pop()
+                }else {
+                  cloneObj[pname] = value
+                }
               }
             }
           }
@@ -980,13 +1005,31 @@ tent.domClone = function(obj, options) {
     }
     return intercept
   };
+  tent.changes.Observable.prototype.shouldNotifyParent = function() {
+    return!!(this.parentObject && this.parentObject !== this && this.parentObjectPropertyName && this.parentObject.__observable__ && this.parentObject.__observable__.interceptors && this.parentObject.__observable__.interceptors[this.parentObjectPropertyName])
+  };
+  tent.changes.Observable.prototype.notifyParentChanging = function(data) {
+    data.subject = this.subject;
+    this.parentObject.__observable__.notifyChange(tent.changes.EventTypes.CHANGING, {propertyName:this.parentObjectPropertyName, innerChange:data})
+  };
+  tent.changes.Observable.prototype.notifyParentChanged = function(data) {
+    data.subject = this.subject;
+    this.parentObject.__observable__.notifyChange(tent.changes.EventTypes.CHANGED, {propertyName:this.parentObjectPropertyName, innerChange:data})
+  };
   var buildPropertySetter = function(propName, _propName) {
     return function(value) {
       var current = this[_propName];
       if(current != value) {
         this.__observable__.notifyChange(tent.changes.EventTypes.CHANGING, {propertyName:propName, current:current, newValue:value});
+        var notifyParent = this.__observable__.shouldNotifyParent();
+        if(notifyParent) {
+          this.__observable__.notifyParentChanging({propertyName:propName, current:current, newValue:value})
+        }
         this[_propName] = value;
-        this.__observable__.notifyChange(tent.changes.EventTypes.CHANGED, {propertyName:propName, current:value, oldValue:current})
+        this.__observable__.notifyChange(tent.changes.EventTypes.CHANGED, {propertyName:propName, current:value, oldValue:current});
+        if(notifyParent) {
+          this.__observable__.notifyParentChanged({propertyName:propName, current:value, oldValue:current})
+        }
       }
     }
   };
@@ -1043,36 +1086,71 @@ tent.domClone = function(obj, options) {
       var index = this.length;
       var itemsToAdd = itemsToAdd = Array.prototype.slice.call(arguments);
       this.__observable__.notifyChange(tent.changes.EventTypes.ADDING, {items:itemsToAdd, index:index, propertyName:this.__propertyName__});
+      var notifyParent = this.__observable__.shouldNotifyParent();
+      if(notifyParent) {
+        this.__observable__.notifyParentChanging({type:tent.changes.EventTypes.ADDING, data:{items:itemsToAdd, index:index, propertyName:this.__propertyName__}})
+      }
       this._push.apply(this, arguments);
-      this.__observable__.notifyChange(tent.changes.EventTypes.ADDED, {items:itemsToAdd, index:index, propertyName:this.__propertyName__})
+      this.__observable__.notifyChange(tent.changes.EventTypes.ADDED, {items:itemsToAdd, index:index, propertyName:this.__propertyName__});
+      if(notifyParent) {
+        this.__observable__.notifyParentChanged({type:tent.changes.EventTypes.ADDED, data:{items:itemsToAdd, index:index, propertyName:this.__propertyName__}})
+      }
     });
     this.interceptFunction("unshift", function() {
       var itemsToAdd = itemsToAdd = Array.prototype.slice.call(arguments);
       this.__observable__.notifyChange(tent.changes.EventTypes.ADDING, {items:itemsToAdd, index:0, propertyName:this.__propertyName__});
+      var notifyParent = this.__observable__.shouldNotifyParent();
+      if(notifyParent) {
+        this.__observable__.notifyParentChanging({type:tent.changes.EventTypes.ADDING, data:{items:itemsToAdd, index:0, propertyName:this.__propertyName__}})
+      }
       this._unshift.apply(this, arguments);
-      this.__observable__.notifyChange(tent.changes.EventTypes.ADDED, {items:itemsToAdd, index:0, propertyName:this.__propertyName__})
+      this.__observable__.notifyChange(tent.changes.EventTypes.ADDED, {items:itemsToAdd, index:0, propertyName:this.__propertyName__});
+      if(notifyParent) {
+        this.__observable__.notifyParentChanged({type:tent.changes.EventTypes.ADDED, data:{items:itemsToAdd, index:0, propertyName:this.__propertyName__}})
+      }
     });
     this.interceptFunction("pop", function() {
       var index = this.length - 1;
       this.__observable__.notifyChange(tent.changes.EventTypes.REMOVING, {items:[this[index]], index:index, propertyName:this.__propertyName__});
+      var notifyParent = this.__observable__.shouldNotifyParent();
+      if(notifyParent) {
+        this.__observable__.notifyParentChanging({type:tent.changes.EventTypes.REMOVING, data:{items:[this[index]], index:index, propertyName:this.__propertyName__}})
+      }
       var item = this._pop();
       this.__observable__.notifyChange(tent.changes.EventTypes.REMOVED, {items:[item], index:index, propertyName:this.__propertyName__});
+      if(notifyParent) {
+        this.__observable__.notifyParentChanged({type:tent.changes.EventTypes.REMOVED, data:{items:[item], index:index, propertyName:this.__propertyName__}})
+      }
       return item
     });
     this.interceptFunction("shift", function() {
       this.__observable__.notifyChange(tent.changes.EventTypes.REMOVING, {items:[this[0]], index:0, propertyName:this.__propertyName__});
+      var notifyParent = this.__observable__.shouldNotifyParent();
+      if(notifyParent) {
+        this.__observable__.notifyParentChanging({type:tent.changes.EventTypes.REMOVING, data:{items:[this[0]], index:0, propertyName:this.__propertyName__}})
+      }
       var item = this._shift();
       this.__observable__.notifyChange(tent.changes.EventTypes.REMOVED, {items:[item], index:0, propertyName:this.__propertyName__});
+      if(notifyParent) {
+        this.__observable__.notifyParentChanged({type:tent.changes.EventTypes.REMOVED, data:{items:[item], index:0, propertyName:this.__propertyName__}})
+      }
       return item
     });
     this.interceptFunction("splice", function(start, deleteCnt) {
       var itemsToAdd;
+      var notifyParent = this.__observable__.shouldNotifyParent();
       if(deleteCnt && deleteCnt > 0) {
-        this.__observable__.notifyChange(tent.changes.EventTypes.REMOVING, {items:this.slice(start, start + deleteCnt), index:start, propertyName:this.__propertyName__})
+        this.__observable__.notifyChange(tent.changes.EventTypes.REMOVING, {items:this.slice(start, start + deleteCnt), index:start, propertyName:this.__propertyName__});
+        if(notifyParent) {
+          this.__observable__.notifyParentChanging({type:tent.changes.EventTypes.REMOVING, data:{items:this.slice(start, start + deleteCnt), index:start, propertyName:this.__propertyName__}})
+        }
       }
       if(arguments.length > 2) {
         itemsToAdd = Array.prototype.slice.call(arguments, 2);
-        this.__observable__.notifyChange(tent.changes.EventTypes.ADDING, {items:itemsToAdd, index:start, propertyName:this.__propertyName__})
+        this.__observable__.notifyChange(tent.changes.EventTypes.ADDING, {items:itemsToAdd, index:start, propertyName:this.__propertyName__});
+        if(notifyParent) {
+          this.__observable__.notifyParentChanging({type:tent.changes.EventTypes.ADDING, data:{items:itemsToAdd, index:start, propertyName:this.__propertyName__}})
+        }
       }
       if(itemsToAdd && itemsToAdd.length > 0) {
         var spliceArgs = itemsToAdd.slice(0);
@@ -1082,10 +1160,16 @@ tent.domClone = function(obj, options) {
         var removedItems = this._splice(start, deleteCnt)
       }
       if(removedItems && removedItems.length > 0) {
-        this.__observable__.notifyChange(tent.changes.EventTypes.REMOVED, {items:removedItems, index:start, propertyName:this.__propertyName__})
+        this.__observable__.notifyChange(tent.changes.EventTypes.REMOVED, {items:removedItems, index:start, propertyName:this.__propertyName__});
+        if(notifyParent) {
+          this.__observable__.notifyParentChanged({type:tent.changes.EventTypes.REMOVED, data:{items:removedItems, index:start, propertyName:this.__propertyName__}})
+        }
       }
       if(arguments.length > 2) {
-        this.__observable__.notifyChange(tent.changes.EventTypes.ADDED, {items:itemsToAdd, index:start, propertyName:this.__propertyName__})
+        this.__observable__.notifyChange(tent.changes.EventTypes.ADDED, {items:itemsToAdd, index:start, propertyName:this.__propertyName__});
+        if(notifyParent) {
+          this.__observable__.notifyParentChanged({type:tent.changes.EventTypes.ADDED, data:{items:itemsToAdd, index:start, propertyName:this.__propertyName__}})
+        }
       }
       return removedItems
     });
@@ -1409,6 +1493,9 @@ tent.domClone = function(obj, options) {
         return false
       }
     }
+    if(options.attachedObjects === false && obj.__collection__) {
+      return false
+    }
     var isArray = obj instanceof Array;
     var changed = false;
     if(!options.remove && !options.removeAll && !obj.__observable__) {
@@ -1426,6 +1513,27 @@ tent.domClone = function(obj, options) {
         obj.__observable__.interceptArrayModifiers(options.interceptOptions)
       }else {
         obj.__observable__.interceptProperties(options.interceptOptions)
+      }
+    }
+    if(options.parentObject && typeof options.parentObjectPropertyName) {
+      if(obj.__observable__.parentObject !== options.parentObject) {
+        obj.__observable__.parentObject = options.parentObject;
+        changed = true
+      }
+      if(obj.__observable__.parentObjectPropertyName !== options.parentObjectPropertyName) {
+        obj.__observable__.parentObjectPropertyName = options.parentObjectPropertyName;
+        changed = true
+      }
+    }else {
+      if(options.parentObject === false) {
+        if(typeof obj.__observable__.parentObject != "undefined") {
+          delete obj.__observable__.parentObject;
+          changed = true
+        }
+        if(obj.__observable__.parentObjectPropertyName != "undefined") {
+          delete obj.__observable__.parentObjectPropertyName;
+          changed = true
+        }
       }
     }
     if(options.bindings) {
@@ -1507,7 +1615,7 @@ tent.domClone = function(obj, options) {
           var valueType;
           if((valueType = typeof obj[propName]) != "function" && filter(obj, propName)) {
             var subObj = obj[propName];
-            if(options.deepOverDOM || !tent.isDOMObject(subject)) {
+            if(options.deepOverDOM || !tent.isDOMObject(subObj)) {
               if(typeof subObj == "object" && options.deepStack.lastIndexOf(subObj) < 0) {
                 if(tent.changes.track(subObj, options)) {
                   changed = true
@@ -2488,6 +2596,26 @@ tent.domClone = function(obj, options) {
       }
     }
   };
+  tent.entities.ContextChangeHandler.prototype.trackComplexProperties = function(item) {
+    if(item.__entityType__) {
+      for(var n in item.__entityType__.properties) {
+        var prop = item.__entityType__.properties[n];
+        if(prop.complex) {
+          if(typeof item[n] == "object") {
+            tent.changes.track(item[n], {deep:true, attachedObjects:false, parentObject:item, parentObjectPropertyName:n})
+          }
+        }
+      }
+    }else {
+      for(var n in item) {
+        if(n.substr(0, 1) !== "_" && item.hasOwnProperty(n)) {
+          if(typeof item[n] == "object") {
+            tent.changes.track(item[n], {deep:true, attachedObjects:false, parentObject:item, parentObjectPropertyName:n})
+          }
+        }
+      }
+    }
+  };
   tent.entities.ContextChangeHandler.prototype.setAdded = function(item) {
     if(item.__changeState__ == tent.entities.ChangeStates.ADDED) {
       return
@@ -2559,7 +2687,8 @@ tent.domClone = function(obj, options) {
     }
     if(item.__changeState__ != tent.entities.ChangeStates.DELETED) {
       tent.changes.bind(item, this);
-      this.bindArrayProperties(item)
+      this.bindArrayProperties(item);
+      this.trackComplexProperties(item)
     }
   };
   tent.entities.ContextChangeHandler.prototype.itemAttached = function(item) {
@@ -2839,71 +2968,6 @@ tent.domClone = function(obj, options) {
     }
     return uri
   };
-  tent.persisters.rest.RestPersister = function RestPersister() {
-    this.baseUri = "http://127.0.0.1:5984/mydb";
-    this.saving = false;
-    this.savingErrors = [];
-    this.loadingErrors = [];
-    this.loadItemMapper = null;
-    this.localItemFinder = function(context, remote) {
-      return context.filter(function(item) {
-        if(typeof remote._id != "undefined" && item._id === remote._id || typeof remote.id != "undefined" && item.id === remote.id) {
-          return true
-        }
-        return false
-      })[0]
-    };
-    this.versionEquals = function(local, remote) {
-      return local._rev === remote._rev
-    };
-    this.updateLocalVersion = function(local, remote) {
-      local._rev = remote.rev || remote._rev;
-      if(typeof remote.id != "undefined" && remote.id !== local._id) {
-        local._id = remote.id
-      }
-    };
-    this.isDeleted = function(remote) {
-      return remote._deleted
-    };
-    this.changeSerializer = null;
-    this.changeResponseMapper = null;
-    this.bulkSaveUri = null
-  };
-  tent.persisters.rest.RestPersister.prototype.load = function(context, url, options) {
-    try {
-      if(!context) {
-        throw"a context is required for loading entities";
-      }
-      if(!url) {
-        throw"an url must be specified to load";
-      }
-      if(this.loading) {
-        throw"already loading entities";
-      }
-      this.loading = true;
-      var persister = this;
-      if(!options) {
-        options = {}
-      }
-      var comp = options.complete;
-      options.complete = function(r) {
-        persister.loading = false;
-        if(r.error) {
-          persister.loadingErrors.push(r.error)
-        }
-        if(comp) {
-          comp(r)
-        }
-      };
-      this.__load__(context, url, options)
-    }catch(err) {
-      this.loadingErrors.push(err);
-      this.loading = false;
-      if(options.complete) {
-        options.complete({error:err})
-      }
-    }
-  };
   tent.persisters.rest.createItemMapper = function(defaultOptions) {
     if(!defaultOptions) {
       defaultOptions = {}
@@ -2976,11 +3040,12 @@ tent.domClone = function(obj, options) {
         if(local instanceof tent.entities.EntityLink) {
           return null
         }
-        var rmt = {};
-        for(var propertyName in local) {
-          if(local.hasOwnProperty(propertyName) && (propertyName.substr(0, 1) !== "_" || propertyName === "_id" || propertyName === "_rev")) {
-            rmt[propertyName] = tent.pget(local, propertyName)
-          }
+        var rmt = tent.clone(local, {deep:true, onlyOwnProperties:true, attachedObjects:false, skipPrivates:true});
+        if(local._id) {
+          rmt._id = tent.pget(local, "_id")
+        }
+        if(local._rev) {
+          rmt._rev = tent.pget(local, "_rev")
         }
         if(local.__changeState__ === tent.entities.ChangeStates.DELETED) {
           rmt._deleted = true
@@ -3081,6 +3146,71 @@ tent.domClone = function(obj, options) {
       }
     }
   };
+  tent.persisters.rest.RestPersister = function RestPersister() {
+    this.baseUri = "http://127.0.0.1:5984/mydb";
+    this.saving = false;
+    this.savingErrors = [];
+    this.loadingErrors = [];
+    this.loadItemMapper = null;
+    this.localItemFinder = function(context, remote) {
+      return context.filter(function(item) {
+        if(typeof remote._id != "undefined" && item._id === remote._id || typeof remote.id != "undefined" && item.id === remote.id) {
+          return true
+        }
+        return false
+      })[0]
+    };
+    this.versionEquals = function(local, remote) {
+      return local._rev === remote._rev
+    };
+    this.updateLocalVersion = function(local, remote) {
+      local._rev = remote.rev || remote._rev;
+      if(typeof remote.id != "undefined" && remote.id !== local._id) {
+        local._id = remote.id
+      }
+    };
+    this.isDeleted = function(remote) {
+      return remote._deleted
+    };
+    this.changeSerializer = null;
+    this.changeResponseMapper = null;
+    this.bulkSaveUri = null
+  };
+  tent.persisters.rest.RestPersister.prototype.load = function(context, url, options) {
+    try {
+      if(!context) {
+        throw"a context is required for loading entities";
+      }
+      if(!url) {
+        throw"an url must be specified to load";
+      }
+      if(this.loading) {
+        throw"already loading entities";
+      }
+      this.loading = true;
+      var persister = this;
+      if(!options) {
+        options = {}
+      }
+      var comp = options.complete;
+      options.complete = function(r) {
+        persister.loading = false;
+        if(r.error) {
+          persister.loadingErrors.push(r.error)
+        }
+        if(comp) {
+          comp(r)
+        }
+      };
+      this.__load__(context, url, options)
+    }catch(err) {
+      this.loadingErrors.push(err);
+      this.loading = false;
+      if(options.complete) {
+        options.complete({error:err})
+      }
+    }
+  };
   tent.persisters.rest.RestPersister.prototype.__load__ = function(context, url, options) {
     if(typeof jQuery == "undefined" || typeof jQuery.ajax == "undefined") {
       throw"jQuery.ajax is required in order to load entities";
@@ -3118,7 +3248,7 @@ tent.domClone = function(obj, options) {
     }
     var persister = this;
     this.loadItemMapper(data, options, function(doc, opt) {
-      var local = persister.localItemFinder(context, doc._id);
+      var local = persister.localItemFinder(context, doc);
       if(local) {
         if(local.__changeState__ === tent.entities.ChangeStates.MODIFIED || local.__changeState__ === tent.entities.ChangeStates.DELETED) {
           if(persister.versionEquals(local, doc)) {
@@ -3130,7 +3260,10 @@ tent.domClone = function(obj, options) {
             context.remove(local);
             context.detach(local)
           }else {
-            tent.pset(local, doc, true)
+            tent.pset(local, doc, true);
+            if(context.changeHandler) {
+              context.changeHandler.trackComplexProperties(local)
+            }
           }
           if(local.__loadErrors__) {
             delete local.__loadErrors__

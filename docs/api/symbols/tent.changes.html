@@ -107,7 +107,7 @@
 		&copy;2011<br />
 		Documentation generator: <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0<br />
 		Template: <a href="http://www.thebrightlines.com/2010/05/06/new-template-for-jsdoctoolkit-codeview/" target="_blank">Codeview</a> 1.2<br />
-		Generated on: 2011-2-6 19:59
+		Generated on: 2011-2-17 18:34
 	</div>
 </div>
 
@@ -814,6 +814,24 @@
 												<i>Optional</i>
 											</dt>
 											<dd>if true recursively traverse Object properties and Array items</dd>
+										
+											<dt>
+												<span class="light fixedFont">{Boolean}</span> <b>options.attachedObjects</b>
+												<i>Optional</i>
+											</dt>
+											<dd>if true objects attached to a <a href="../symbols/tent.entities.Context.html">tent.entities.Context</a> are tracked too, by default is true (if false deep tracking stops at attached objects)</dd>
+										
+											<dt>
+												<span class="light fixedFont">{Object}</span> <b>options.parentObject</b>
+												<i>Optional</i>
+											</dt>
+											<dd>the object that is modified when this object changes (allows change tracking on complex properties)</dd>
+										
+											<dt>
+												<span class="light fixedFont">{String}</span> <b>options.parentObjectPropertyName</b>
+												<i>Optional</i>
+											</dt>
+											<dd>name of the property in parentObject that contains this observed object (allows change tracking on complex properties)</dd>
 										
 											<dt>
 												<span class="light fixedFont">{Boolean}</span> <b>options.live</b>

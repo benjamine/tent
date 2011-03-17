@@ -107,7 +107,7 @@
 		&copy;2011<br />
 		Documentation generator: <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0<br />
 		Template: <a href="http://www.thebrightlines.com/2010/05/06/new-template-for-jsdoctoolkit-codeview/" target="_blank">Codeview</a> 1.2<br />
-		Generated on: 2011-2-6 19:59
+		Generated on: 2011-2-17 19:46
 	</div>
 </div>
 
@@ -241,9 +241,9 @@
 								>
 									<td class="attributes">&lt;static&gt; &nbsp;</td>
 									<td class="nameDescription">
-										<div class="fixedFont">tent.<b><a href="../symbols/tent.html#.declare">declare</a></b>(parent, path, expander)
+										<div class="fixedFont">tent.<b><a href="../symbols/tent.html#.clone">clone</a></b>(obj, options)
 										</div>
-										<div class="description">Declares Namespaces and add members to them  (Namespace paths are unique, ie: the same Namespace object is returned for the same path)<p>Parameters can be any sequence of:	  <ul>   <li><a href="../symbols/tent.Namespace.html">tent.Namespace</a>: changes the current Namespace</li>   <li>{string} path: changes current Namespace to a subnamespace of the current Namespace (creating Namespaces if needed)</li>   <li>{function()|Object} expander: a function that adds members to the current Namespace or an Object wich properties are copied to the current Namespace</li>   </ul>	</p></div>
+										<div class="description">Clones objectsThis is useful in browsers that only support property change tracking on DOM objects (eg: IE8)</div>
 									</td>
 								</tr>
 							
@@ -252,9 +252,9 @@
 								>
 									<td class="attributes">&lt;static&gt; &nbsp;</td>
 									<td class="nameDescription">
-										<div class="fixedFont">tent.<b><a href="../symbols/tent.html#.domClone">domClone</a></b>(object, options)
+										<div class="fixedFont">tent.<b><a href="../symbols/tent.html#.declare">declare</a></b>(parent, path, expander)
 										</div>
-										<div class="description">Clones objects using DOM object instances (eg: span elements).</div>
+										<div class="description">Declares Namespaces and add members to them  (Namespace paths are unique, ie: the same Namespace object is returned for the same path)<p>Parameters can be any sequence of:	  <ul>   <li><a href="../symbols/tent.Namespace.html">tent.Namespace</a>: changes the current Namespace</li>   <li>{string} path: changes current Namespace to a subnamespace of the current Namespace (creating Namespaces if needed)</li>   <li>{function()|Object} expander: a function that adds members to the current Namespace or an Object wich properties are copied to the current Namespace</li>   </ul>	</p></div>
 									</td>
 								</tr>
 							
@@ -451,6 +451,121 @@
 							<li 
 								 class='item0'
 							>
+								<div class="fixedFont heading" id=".clone">
+									<span class='lighter'>
+									&lt;static&gt; 
+									</span>
+									
+									<span class="light">{Object}</span>
+									
+									<span class="light">tent.</span><b>clone</b>(obj, options)
+								</div>
+								
+								<div class="description">
+									Clones objectsThis is useful in browsers that only support property change tracking on DOM objects (eg: IE8)
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+									<dl class="detailList params">
+										<dt class="heading">Parameters:</dt>
+										
+											<dt>
+												<span class="light fixedFont">{Object}</span> <b>obj</b>
+												
+											</dt>
+											<dd>object or array to clone</dd>
+										
+											<dt>
+												<span class="light fixedFont">{Object}</span> <b>options</b>
+												<i>Optional</i>
+											</dt>
+											<dd>cloning options</dd>
+										
+											<dt>
+												<span class="light fixedFont">{Boolean}</span> <b>options.onlyOwnProperties</b>
+												<i>Optional</i>
+											</dt>
+											<dd>clone only own properties (see Object.hasOwnProperty)</dd>
+										
+											<dt>
+												<span class="light fixedFont">{Boolean}</span> <b>options.dom</b>
+												<i>Optional</i>
+											</dt>
+											<dd>clone as DOM objects (eg: span elements)</dd>
+										
+											<dt>
+												<span class="light fixedFont">{Boolean}</span> <b>options.deep</b>
+												<i>Optional</i>
+											</dt>
+											<dd>clone deeply, traverse through object properties?</dd>
+										
+											<dt>
+												<span class="light fixedFont">{Boolean}</span> <b>options.clonePrivates</b>
+												<i>Optional</i>
+											</dt>
+											<dd>clone private members (properties starting with _)</dd>
+										
+											<dt>
+												<span class="light fixedFont">{Boolean}</span> <b>options.skipPrivates</b>
+												<i>Optional</i>
+											</dt>
+											<dd>skip (don't copy) private members (properties starting with _)</dd>
+										
+											<dt>
+												<span class="light fixedFont">{Boolean}</span> <b>options.attachedObjects</b>
+												<i>Optional</i>
+											</dt>
+											<dd>if true objects attached to a <a href="../symbols/tent.entities.Context.html">tent.entities.Context</a> are cloned too, by default is true (if false deep cloning stops at attached objects)</dd>
+										
+											<dt>
+												<span class="light fixedFont">{Boolean}</span> <b>options.ignoreCircularReferences</b>
+												<i>Optional</i>
+											</dt>
+											<dd>if cloning deeply, ignore circular references (otherwise error is thrown)</dd>
+										
+											<dt>
+												<span class="light fixedFont">{Boolean}</span> <b>options.onlyForTracking</b>
+												<i>Optional</i>
+											</dt>
+											<dd>only clone if the current browser only support tracking on DOM objects (eg: IE8), otherwise original obj is returned</dd>
+										
+									</dl>
+								
+								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{Object}</span> a clone of obj (or obj if no cloning was performed)</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item1'
+							>
 								<div class="fixedFont heading" id=".declare">
 									<span class='lighter'>
 									&lt;static&gt; 
@@ -509,85 +624,6 @@
 											<dt class="heading">Returns:</dt>
 											
 												<dd><span class="light fixedFont">{<a href="../symbols/tent.Namespace.html">tent.Namespace</a>}</span> the last current Namespace</dd>
-											
-										
-										
-										
-										
-										
-									
-									</dl>
-								
-								<div class="hr"></div>
-							</li>
-						
-							<li 
-								 class='item1'
-							>
-								<div class="fixedFont heading" id=".domClone">
-									<span class='lighter'>
-									&lt;static&gt; 
-									</span>
-									
-									<span class="light">{Object}</span>
-									
-									<span class="light">tent.</span><b>domClone</b>(object, options)
-								</div>
-								
-								<div class="description">
-									Clones objects using DOM object instances (eg: span elements).This is useful in browsers that only support property change tracking on DOM objects (eg: IE8)
-									
-									
-									
-									
-								</div>
-								
-								
-								
-								
-									<dl class="detailList params">
-										<dt class="heading">Parameters:</dt>
-										
-											<dt>
-												<span class="light fixedFont">{Object}</span> <b>object</b>
-												
-											</dt>
-											<dd>or array to clone</dd>
-										
-											<dt>
-												<span class="light fixedFont">{Object}</span> <b>options</b>
-												<i>Optional</i>
-											</dt>
-											<dd>cloning options</dd>
-										
-											<dt>
-												<span class="light fixedFont">{Boolean}</span> <b>options.deep</b>
-												<i>Optional</i>
-											</dt>
-											<dd>clone deeply, traverse through object properties?</dd>
-										
-											<dt>
-												<span class="light fixedFont">{Boolean}</span> <b>options.onlyForTracking</b>
-												<i>Optional</i>
-											</dt>
-											<dd>only clone if the current browser support tracking on DOM objects only (eg: IE8), otherwise original obj is returned</dd>
-										
-									</dl>
-								
-								
-								
-									<dl class="detailList nomargin">
-									
-										
-										
-										
-										
-										
-										
-										
-											<dt class="heading">Returns:</dt>
-											
-												<dd><span class="light fixedFont">{Object}</span> a clone of obj (or obj if no cloning was performed)</dd>
 											
 										
 										

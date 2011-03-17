@@ -334,7 +334,7 @@ tent.declare('tent.entities', function(){
         this.items.length = 0;
         return true;
     }
-    
+    	
 	/**
 	 * Creates a new entity Context
 	 * @class a Context that contains collections ({@link tent.entities.Collection}) of entities. Tracks changes on its entities.
@@ -1006,6 +1006,44 @@ tent.declare('tent.entities', function(){
     }
     
 	/**
+	 * Activates tracking on item complex properties
+	 * @private
+	 * @param {Object} item
+	 */
+    tent.entities.ContextChangeHandler.prototype.trackComplexProperties = function(item){
+        
+        if (item.__entityType__) {
+            for (var n in item.__entityType__.properties) {
+                var prop = item.__entityType__.properties[n];
+                if (prop.complex) {
+					if (typeof item[n] == 'object') {
+						tent.changes.track(item[n], {
+							deep: true,
+							attachedObjects:false,
+							parentObject: item,
+							parentObjectPropertyName: n
+						});
+					}
+				}
+            }
+        }else {
+			// by default all properties in untyped objects are complex
+            for (var n in item) {
+				if ((n.substr(0,1)!=='_') && item.hasOwnProperty(n)) {
+					if (typeof item[n] == 'object') {
+						tent.changes.track(item[n], {
+							deep: true,
+							attachedObjects:false,
+							parentObject: item,
+							parentObjectPropertyName: n
+						});
+					}
+				}			
+			}
+		}
+    }
+	
+	/**
 	 * Marks an entity as added
 	 * @param {Object} item
 	 */
@@ -1108,6 +1146,8 @@ tent.declare('tent.entities', function(){
             tent.changes.bind(item, this);
             // listen for changes in item array properties, to detect childrens added/removed
             this.bindArrayProperties(item);
+			
+			this.trackComplexProperties(item);
         }
     }
     

@@ -50,7 +50,243 @@ tent.declare('tent.persisters.rest', function(){
         }
 		return uri;
     }
+    	    
+    /**
+     * 	@private
+     */
+    tent.persisters.rest.createItemMapper = function(defaultOptions){
     
+        if (!defaultOptions) {
+            defaultOptions = {};
+        }
+        return function(data, options, map){
+            var items;
+            if (data instanceof Array) {
+                items = data;
+            }
+            else {
+                if (options.multi) {
+                    var multiSelector = options.multiSelector || defaultOptions.multiSelector ||
+                    function(d, opt){
+                        var propName = opt.multiSelectorProperty || defaultOptions.multiSelectorProperty;
+                        if (propName) {
+                            return d[propName];
+                        }
+                        else {
+                            for (var prop in d) {
+                                if (d[prop] instanceof Array) {
+                                    return d[prop];
+                                }
+                            }
+                        }
+                    };
+                    items = multiSelector(data, options);
+                }
+                else {
+                    var singleSelector = options.singleSelector || defaultOptions.singleSelector ||
+                    function(d, opt){
+                        var propName = opt.singleSelectorProperty || defaultOptions.singleSelectorProperty;
+                        if (propName) {
+                            return [d[propName]];
+                        }
+                        else {
+                            return [d];
+                        }
+                    };
+                    items = singleSelector(data, options);
+                }
+            }
+            
+            if (items) {
+                for (var i = 0, l = items.length; i < l; i++) {
+                    var item = items[i];
+                    if (options.multi) {
+                        var itemSelector = options.multiItemSelector || defaultOptions.multiItemSelector ||
+                        function(d, opt){
+                            var propName = opt.multiItemSelectorProperty || defaultOptions.multiItemSelectorProperty;
+                            if (propName) {
+                                return d[propName];
+                            }
+                            else {
+                                return d;
+                            }
+                        };
+                        item = itemSelector(item, options);
+                    }
+                    
+                    if (item) {
+                        var itemTransformer = options.itemTransformer || defaultOptions.itemTransformer;
+                        if (itemTransformer) {
+                            item = itemTransformer(item, options);
+                        }
+                    }
+                    if (item) {
+                        map(item, options);
+                    }
+                }
+            }
+        }
+    }
+    
+    /**
+     * 	@private
+     */
+    tent.persisters.rest.createChangeSerializer = function(defaultOptions){
+    
+        if (!defaultOptions) {
+            defaultOptions = {};
+        }
+        return function(items, options){
+            var data, chg;
+            
+            var serializer = options.itemSerializer || defaultOptions.itemSerializer ||
+            function(local, op){
+                if (local instanceof tent.entities.EntityLink) {
+                    // EntityLinks not supported
+                    return null;
+                }
+                var rmt = tent.clone(local,{
+					deep:true,
+					onlyOwnProperties:true,
+					attachedObjects: false,
+					skipPrivates:true
+				});
+				
+				if (local._id) {
+					rmt._id = tent.pget(local, '_id');
+				}
+				if (local._rev) {
+					rmt._rev = tent.pget(local, '_rev');
+				}
+
+                if (local.__changeState__ === tent.entities.ChangeStates.DELETED) {
+                    rmt._deleted = true;
+                }
+				return rmt;
+            };
+            
+            
+            if (items instanceof Array) {
+            
+                var dataItems = [];
+                
+                for (var i = 0, l = items.length; i < l; i++) {
+                    dataItems.push(serializer(items[i], options));
+                }
+                
+                var wrapperProp = options.saveWrapperProperty || defaultOptions.saveWrapperProperty || 'docs';
+                var wrapper = options.itemsSaveWrapper || defaultOptions.itemsSaveWrapper ||
+                function(ditems, op){
+                    var d = {};
+                    d[wrapperProp] = ditems;
+                    return d;
+                };
+                
+                return wrapper(dataItems, options);
+                
+            }
+            else 
+                if (typeof items == 'object') {
+                    return serializer(items, options);
+                }
+        }
+    }
+    
+    /**
+     * 	@private
+     */
+    tent.persisters.rest.createChangeResponseMapper = function(defaultOptions){
+    
+        if (!defaultOptions) {
+            defaultOptions = {};
+        }
+        return function(data, options, map){
+            var items;
+            if (data instanceof Array) {
+                items = data;
+            }
+            else {
+                var resultSelector = options.resultSelector || defaultOptions.resultSelector ||
+                function(d, opt){
+                    var propName = opt.resultSelectorProperty || defaultOptions.resultSelectorProperty;
+                    if (propName) {
+                        return d[propName];
+                    }
+                    else {
+                        items = d;
+                        for (var prop in d) {
+                            if (d[prop] instanceof Array) {
+                                return d[prop];
+                            }
+                        }
+                    }
+                };
+                items = resultSelector(data, options);
+            }
+            
+            if (items) {
+                for (var i = 0, l = items.length; i < l; i++) {
+                    var item = items[i];
+                    
+                    var itemSelector = options.resultItemSelector || defaultOptions.resultItemSelector ||
+                    function(d, opt){
+                        var propName = opt.resultItemSelectorProperty || defaultOptions.resultItemSelectorProperty;
+                        if (propName) {
+                            return d[propName];
+                        }
+                        else {
+                            return d;
+                        }
+                    };
+                    item = itemSelector(item, options);
+                    
+                    if (item) {
+                        var itemTransformer = options.resultItemTransformer || defaultOptions.resultItemTransformer;
+                        if (itemTransformer) {
+                            item = itemTransformer(item, options);
+                        }
+                    }
+                    if (item) {
+                    
+                    
+                        var localChangeFinder = options.localChangeFinder || defaultOptions.localChangeFinder ||
+                        function(ctx, remote, op){
+                            if (ctx.hasChanges()) {
+                                for (var j = 0, l = ctx.changes.items.length; j < l; j++) {
+                                    if (typeof remote.id != 'undefined' && ctx.changes.items[j]._id === remote.id) {
+                                        return j;
+                                    }
+                                    if (typeof remote.id != 'undefined' && ctx.changes.items[j].id === remote.id) {
+                                        return j;
+                                    }
+                                    if (typeof remote._id != 'undefined' && ctx.changes.items[j]._id === remote._id) {
+                                        return j;
+                                    }
+                                    if (typeof remote._id != 'undefined' && ctx.changes.items[j].id === remote._id) {
+                                        return j;
+                                    }
+                                }
+                            }
+                        };
+                        
+                        var localChangeIndex = localChangeFinder(options.context, item, options);
+                        
+                        if (!(typeof localChangeIndex == 'number' && localChangeIndex >= 0)) {
+							if (!(options.unorderedResults || defaultOptions.unorderedResults)) {
+								// if results are in order, the first change in the list, is next
+								localChangeIndex = 0;
+							}
+						}
+						
+                        if (typeof localChangeIndex == 'number' && localChangeIndex >= 0) {
+                            map(item, localChangeIndex, options);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    	
     /**
      * Creates a new REST persister
      * @class a REST persister
@@ -210,241 +446,10 @@ tent.declare('tent.persisters.rest', function(){
                 options.complete({
                     error: err
                 });
-            }
-        }
+            }			
+		}
     }
-    
-    /**
-     * 	@private
-     */
-    tent.persisters.rest.createItemMapper = function(defaultOptions){
-    
-        if (!defaultOptions) {
-            defaultOptions = {};
-        }
-        return function(data, options, map){
-            var items;
-            if (data instanceof Array) {
-                items = data;
-            }
-            else {
-                if (options.multi) {
-                    var multiSelector = options.multiSelector || defaultOptions.multiSelector ||
-                    function(d, opt){
-                        var propName = opt.multiSelectorProperty || defaultOptions.multiSelectorProperty;
-                        if (propName) {
-                            return d[propName];
-                        }
-                        else {
-                            for (var prop in d) {
-                                if (d[prop] instanceof Array) {
-                                    return d[prop];
-                                }
-                            }
-                        }
-                    };
-                    items = multiSelector(data, options);
-                }
-                else {
-                    var singleSelector = options.singleSelector || defaultOptions.singleSelector ||
-                    function(d, opt){
-                        var propName = opt.singleSelectorProperty || defaultOptions.singleSelectorProperty;
-                        if (propName) {
-                            return [d[propName]];
-                        }
-                        else {
-                            return [d];
-                        }
-                    };
-                    items = singleSelector(data, options);
-                }
-            }
-            
-            if (items) {
-                for (var i = 0, l = items.length; i < l; i++) {
-                    var item = items[i];
-                    if (options.multi) {
-                        var itemSelector = options.multiItemSelector || defaultOptions.multiItemSelector ||
-                        function(d, opt){
-                            var propName = opt.multiItemSelectorProperty || defaultOptions.multiItemSelectorProperty;
-                            if (propName) {
-                                return d[propName];
-                            }
-                            else {
-                                return d;
-                            }
-                        };
-                        item = itemSelector(item, options);
-                    }
-                    
-                    if (item) {
-                        var itemTransformer = options.itemTransformer || defaultOptions.itemTransformer;
-                        if (itemTransformer) {
-                            item = itemTransformer(item, options);
-                        }
-                    }
-                    if (item) {
-                        map(item, options);
-                    }
-                }
-            }
-        }
-    }
-    
-    /**
-     * 	@private
-     */
-    tent.persisters.rest.createChangeSerializer = function(defaultOptions){
-    
-        if (!defaultOptions) {
-            defaultOptions = {};
-        }
-        return function(items, options){
-            var data, chg;
-            
-            var serializer = options.itemSerializer || defaultOptions.itemSerializer ||
-            function(local, op){
-                if (local instanceof tent.entities.EntityLink) {
-                    // EntityLinks not supported
-                    return null;
-                }
-                var rmt = {};
-                for (var propertyName in local) {
-                    if (local.hasOwnProperty(propertyName) &&
-                    (propertyName.substr(0, 1) !== '_' ||
-                    propertyName === '_id' ||
-                    propertyName === '_rev')) {
-                        rmt[propertyName] = tent.pget(local, propertyName);
-                    }
-                }
-                if (local.__changeState__ === tent.entities.ChangeStates.DELETED) {
-                    rmt._deleted = true;
-                }
-				return rmt;
-            };
-            
-            
-            if (items instanceof Array) {
-            
-                var dataItems = [];
-                
-                for (var i = 0, l = items.length; i < l; i++) {
-                    dataItems.push(serializer(items[i], options));
-                }
-                
-                var wrapperProp = options.saveWrapperProperty || defaultOptions.saveWrapperProperty || 'docs';
-                var wrapper = options.itemsSaveWrapper || defaultOptions.itemsSaveWrapper ||
-                function(ditems, op){
-                    var d = {};
-                    d[wrapperProp] = ditems;
-                    return d;
-                };
-                
-                return wrapper(dataItems, options);
-                
-            }
-            else 
-                if (typeof items == 'object') {
-                    return serializer(items, options);
-                }
-        }
-    }
-    
-    /**
-     * 	@private
-     */
-    tent.persisters.rest.createChangeResponseMapper = function(defaultOptions){
-    
-        if (!defaultOptions) {
-            defaultOptions = {};
-        }
-        return function(data, options, map){
-            var items;
-            if (data instanceof Array) {
-                items = data;
-            }
-            else {
-                var resultSelector = options.resultSelector || defaultOptions.resultSelector ||
-                function(d, opt){
-                    var propName = opt.resultSelectorProperty || defaultOptions.resultSelectorProperty;
-                    if (propName) {
-                        return d[propName];
-                    }
-                    else {
-                        items = d;
-                        for (var prop in d) {
-                            if (d[prop] instanceof Array) {
-                                return d[prop];
-                            }
-                        }
-                    }
-                };
-                items = resultSelector(data, options);
-            }
-            
-            if (items) {
-                for (var i = 0, l = items.length; i < l; i++) {
-                    var item = items[i];
-                    
-                    var itemSelector = options.resultItemSelector || defaultOptions.resultItemSelector ||
-                    function(d, opt){
-                        var propName = opt.resultItemSelectorProperty || defaultOptions.resultItemSelectorProperty;
-                        if (propName) {
-                            return d[propName];
-                        }
-                        else {
-                            return d;
-                        }
-                    };
-                    item = itemSelector(item, options);
-                    
-                    if (item) {
-                        var itemTransformer = options.resultItemTransformer || defaultOptions.resultItemTransformer;
-                        if (itemTransformer) {
-                            item = itemTransformer(item, options);
-                        }
-                    }
-                    if (item) {
-                    
-                    
-                        var localChangeFinder = options.localChangeFinder || defaultOptions.localChangeFinder ||
-                        function(ctx, remote, op){
-                            if (ctx.hasChanges()) {
-                                for (var j = 0, l = ctx.changes.items.length; j < l; j++) {
-                                    if (typeof remote.id != 'undefined' && ctx.changes.items[j]._id === remote.id) {
-                                        return j;
-                                    }
-                                    if (typeof remote.id != 'undefined' && ctx.changes.items[j].id === remote.id) {
-                                        return j;
-                                    }
-                                    if (typeof remote._id != 'undefined' && ctx.changes.items[j]._id === remote._id) {
-                                        return j;
-                                    }
-                                    if (typeof remote._id != 'undefined' && ctx.changes.items[j].id === remote._id) {
-                                        return j;
-                                    }
-                                }
-                            }
-                        };
-                        
-                        var localChangeIndex = localChangeFinder(options.context, item, options);
-                        
-                        if (!(typeof localChangeIndex == 'number' && localChangeIndex >= 0)) {
-							if (!(options.unorderedResults || defaultOptions.unorderedResults)) {
-								// if results are in order, the first change in the list, is next
-								localChangeIndex = 0;
-							}
-						}
-						
-                        if (typeof localChangeIndex == 'number' && localChangeIndex >= 0) {
-                            map(item, localChangeIndex, options);
-                        }
-                    }
-                }
-            }
-        }
-    }
-    
+
     /**
      * 	@private
      */
@@ -520,7 +525,7 @@ tent.declare('tent.persisters.rest', function(){
 		var persister = this;
         this.loadItemMapper(data, options, function(doc, opt){
         
-            var local = persister.localItemFinder(context, doc._id);
+            var local = persister.localItemFinder(context, doc);
             
             if (local) {
                 if (local.__changeState__ === tent.entities.ChangeStates.MODIFIED ||
@@ -545,6 +550,11 @@ tent.declare('tent.persisters.rest', function(){
                     else {
                         // update local item with remote version
                         tent.pset(local, doc, true);
+						
+						// track changes in complex properties
+						if (context.changeHandler){
+							context.changeHandler.trackComplexProperties(local);							
+						}
                     }
                     if (local.__loadErrors__) {
                         delete local.__loadErrors__;

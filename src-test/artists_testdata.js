@@ -232,9 +232,10 @@ function getArtistData(){
         creationDate: new Date(1954, 5, 12)
     })
     
-        
+    
     // clone all objects as DOM objects, for browsers that only support tracking DOM objects
-    data = tent.domClone(data, {
+    data = tent.clone(data, {
+        dom: true,
         deep: true,
         onlyForTracking: true
     

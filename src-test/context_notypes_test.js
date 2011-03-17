@@ -7,7 +7,8 @@ function getPainting1(){
         width_: 91,
         height_: 73.4
     }
-    painting1 = tent.domClone(painting1, {
+    painting1 = tent.clone(painting1, {
+		dom: true,
         deep: true,
         onlyForTracking: true
     });

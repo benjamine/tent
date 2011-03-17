@@ -437,7 +437,50 @@ tent.declare('tent.changes', function(){
         }
 		return intercept;
     }
-    
+
+	/**
+	 * Indicates if this Observable should notify a parent
+	 * @private
+	 * @return {Boolean} true if this Observable should notify a parent
+	 */	
+    tent.changes.Observable.prototype.shouldNotifyParent = function(){
+		return !!(this.parentObject && 
+			this.parentObject !== this &&
+			this.parentObjectPropertyName &&
+			this.parentObject.__observable__ &&
+			this.parentObject.__observable__.interceptors &&
+			this.parentObject.__observable__.interceptors[this.parentObjectPropertyName]
+		); 
+	}
+	
+	/**
+	 * Notifies that the Observable parent property is changing
+	 * @private
+	 * @param {Object} data inner change data
+	 */	
+    tent.changes.Observable.prototype.notifyParentChanging = function(data){
+		// notify parent object (change tracking on complex properties)
+		data.subject = this.subject;
+        this.parentObject.__observable__.notifyChange(tent.changes.EventTypes.CHANGING, {
+            propertyName: this.parentObjectPropertyName,
+		    innerChange: data
+        });
+	}
+
+	/**
+	 * Notifies that the Observable parent property has changed
+	 * @private
+	 * @param {Object} data inner change data
+	 */	
+    tent.changes.Observable.prototype.notifyParentChanged = function(data){
+		// notify parent object (change tracking on complex properties)
+		data.subject = this.subject;
+        this.parentObject.__observable__.notifyChange(tent.changes.EventTypes.CHANGED, {
+            propertyName: this.parentObjectPropertyName,
+		    innerChange: data
+        });
+	}
+	
 	/**
 	 * Creates a setter for a property that notifies the {@link tent.changes.Observable}
 	 * @private
@@ -456,6 +499,17 @@ tent.declare('tent.changes', function(){
                     current: current,
                     newValue: value
                 });
+				
+				var notifyParent = this.__observable__.shouldNotifyParent();
+
+				if (notifyParent) {
+					// notify parent object (change tracking on complex properties)
+	                this.__observable__.notifyParentChanging({
+						propertyName: propName,
+	                    current: current,
+	                    newValue: value
+					});
+				}
                 
                 this[_propName] = value;
                 
@@ -464,7 +518,15 @@ tent.declare('tent.changes', function(){
                     current: value,
                     oldValue: current
                 });
-                
+				
+				if (notifyParent) {
+					// notify parent object (change tracking on complex properties)
+	                this.__observable__.notifyParentChanged({
+						propertyName: propName,
+	                    current: value,
+	                    oldValue: current
+					});
+				}
             }
         }
     };
@@ -583,12 +645,39 @@ tent.declare('tent.changes', function(){
                 index: index,
                 propertyName: this.__propertyName__
             });
+			
+			var notifyParent = this.__observable__.shouldNotifyParent();
+
+			if (notifyParent) {
+				// notify parent object (change tracking on complex properties)
+                this.__observable__.notifyParentChanging({
+					type: tent.changes.EventTypes.ADDING,
+                    data: {
+		                items: itemsToAdd,
+		                index: index,
+		                propertyName: this.__propertyName__
+		            }
+				});
+			}
+			
             this._push.apply(this, arguments);
             this.__observable__.notifyChange(tent.changes.EventTypes.ADDED, {
                 items: itemsToAdd,
                 index: index,
                 propertyName: this.__propertyName__
             });
+			
+			if (notifyParent) {
+				// notify parent object (change tracking on complex properties)
+                this.__observable__.notifyParentChanged({
+					type: tent.changes.EventTypes.ADDED,
+                    data: {
+		                items: itemsToAdd,
+		                index: index,
+		                propertyName: this.__propertyName__
+		            }
+				});
+			}
         });
         
         this.interceptFunction('unshift', function(){
@@ -598,12 +687,39 @@ tent.declare('tent.changes', function(){
                 index: 0,
                 propertyName: this.__propertyName__
             });
+									
+			var notifyParent = this.__observable__.shouldNotifyParent();
+
+			if (notifyParent) {
+				// notify parent object (change tracking on complex properties)
+                this.__observable__.notifyParentChanging({
+					type: tent.changes.EventTypes.ADDING,
+                    data: {
+		                items: itemsToAdd,
+		                index: 0,
+		                propertyName: this.__propertyName__
+		            }
+				});
+			}
+			
             this._unshift.apply(this, arguments);
             this.__observable__.notifyChange(tent.changes.EventTypes.ADDED, {
                 items: itemsToAdd,
                 index: 0,
                 propertyName: this.__propertyName__
             });
+			
+			if (notifyParent) {
+				// notify parent object (change tracking on complex properties)
+                this.__observable__.notifyParentChanged({
+					type: tent.changes.EventTypes.ADDED,
+                    data: {
+		                items: itemsToAdd,
+		                index: 0,
+		                propertyName: this.__propertyName__
+		            }
+				});
+			}
         });
         
         this.interceptFunction('pop', function(){
@@ -613,12 +729,40 @@ tent.declare('tent.changes', function(){
                 index: index,
                 propertyName: this.__propertyName__
             });
+						
+			var notifyParent = this.__observable__.shouldNotifyParent();
+
+			if (notifyParent) {
+				// notify parent object (change tracking on complex properties)
+                this.__observable__.notifyParentChanging({
+					type: tent.changes.EventTypes.REMOVING,
+                    data: {
+				        items: [this[index]],
+				        index: index,
+				        propertyName: this.__propertyName__
+		            }
+				});
+			}
+						
             var item = this._pop();
             this.__observable__.notifyChange(tent.changes.EventTypes.REMOVED, {
                 items: [item],
                 index: index,
                 propertyName: this.__propertyName__
             });
+			
+			if (notifyParent) {
+				// notify parent object (change tracking on complex properties)
+                this.__observable__.notifyParentChanged({
+					type: tent.changes.EventTypes.REMOVED,
+                    data: {
+		                items: [item],
+		                index: index,
+		                propertyName: this.__propertyName__
+		            }
+				});
+			}
+			
             return item;
         });
         
@@ -628,24 +772,66 @@ tent.declare('tent.changes', function(){
                 index: 0,
                 propertyName: this.__propertyName__
             });
+			
+			var notifyParent = this.__observable__.shouldNotifyParent();
+
+			if (notifyParent) {
+				// notify parent object (change tracking on complex properties)
+                this.__observable__.notifyParentChanging({
+					type: tent.changes.EventTypes.REMOVING,
+                    data: {
+		                items: [this[0]],
+		                index: 0,
+		                propertyName: this.__propertyName__
+		            }
+				});
+			}
+			
             var item = this._shift();
             this.__observable__.notifyChange(tent.changes.EventTypes.REMOVED, {
                 items: [item],
                 index: 0,
                 propertyName: this.__propertyName__
             });
+			
+						
+			if (notifyParent) {
+				// notify parent object (change tracking on complex properties)
+                this.__observable__.notifyParentChanged({
+					type: tent.changes.EventTypes.REMOVED,
+                    data: {
+		                items: [item],
+		                index: 0,
+		                propertyName: this.__propertyName__
+		            }
+				});
+			}
+			
             return item;
         });
         
         this.interceptFunction('splice', function(start, deleteCnt){
         
             var itemsToAdd;
+			var notifyParent = this.__observable__.shouldNotifyParent();
             if (deleteCnt && deleteCnt > 0) {
                 this.__observable__.notifyChange(tent.changes.EventTypes.REMOVING, {
                     items: this.slice(start, start + deleteCnt),
                     index: start,
                     propertyName: this.__propertyName__
                 });
+
+				if (notifyParent) {
+					// notify parent object (change tracking on complex properties)
+	                this.__observable__.notifyParentChanging({
+						type: tent.changes.EventTypes.REMOVING,
+	                    data: {
+			                items: this.slice(start, start + deleteCnt),
+			                index: start,
+			                propertyName: this.__propertyName__
+			            }
+					});
+				}
             }
             if (arguments.length > 2) {
                 itemsToAdd = Array.prototype.slice.call(arguments, 2);
@@ -654,6 +840,18 @@ tent.declare('tent.changes', function(){
                     index: start,
                     propertyName: this.__propertyName__
                 });
+				
+				if (notifyParent) {
+					// notify parent object (change tracking on complex properties)
+	                this.__observable__.notifyParentChanging({
+						type: tent.changes.EventTypes.ADDING,
+	                    data: {
+		                    items: itemsToAdd,
+		                    index: start,
+		                    propertyName: this.__propertyName__
+			            }
+					});
+				}
             }
             
             if (itemsToAdd && itemsToAdd.length > 0) {
@@ -671,6 +869,18 @@ tent.declare('tent.changes', function(){
                     index: start,
                     propertyName: this.__propertyName__
                 });
+				
+				if (notifyParent) {
+					// notify parent object (change tracking on complex properties)
+	                this.__observable__.notifyParentChanged({
+						type: tent.changes.EventTypes.REMOVED,
+	                    data: {
+		                    items: removedItems,
+		                    index: start,
+		                    propertyName: this.__propertyName__
+			            }
+					});
+				}				
             }
             if (arguments.length > 2) {
                 this.__observable__.notifyChange(tent.changes.EventTypes.ADDED, {
@@ -678,6 +888,18 @@ tent.declare('tent.changes', function(){
                     index: start,
                     propertyName: this.__propertyName__
                 });
+								
+				if (notifyParent) {
+					// notify parent object (change tracking on complex properties)
+	                this.__observable__.notifyParentChanged({
+						type: tent.changes.EventTypes.ADDED,
+	                    data: {
+		                    items: itemsToAdd,
+		                    index: start,
+		                    propertyName: this.__propertyName__
+			            }
+					});
+				}	
             }
             
             return removedItems;
@@ -1138,6 +1360,7 @@ tent.declare('tent.changes', function(){
 	 * <p>
 	 * 		The attached {@link tent.changes.Observable} is stored on the obj.__observable__ property.
 	 * </p>
+	 * 
 	 * @param {Object|Array} obj an Object or Array to track. 
 	 * @param {Object} [options] tracking options
 	 * @param {tent.changes.Observable} [options.observable] an {@link tent.changes.Observable} to attach (otherwise a new one is created)
@@ -1148,6 +1371,9 @@ tent.declare('tent.changes', function(){
 	 * @param {Boolean} [options.log] if true log handlier is included, see {@link tent.changes.LogHandler}
 	 * @param {Boolean} [options.reverseProperties] if true reverse properties handling is included, see {@link tent.changes.reverseProperties.getHandler}
 	 * @param {Boolean} [options.deep] if true recursively traverse Object properties and Array items
+	 * @param {Boolean} [options.attachedObjects] if true objects attached to a {@link tent.entities.Context} are tracked too, by default is true (if false deep tracking stops at attached objects)
+	 * @param {Object} [options.parentObject] the object that is modified when this object changes (allows change tracking on complex properties)
+	 * @param {String} [options.parentObjectPropertyName] name of the property in parentObject that contains this observed object (allows change tracking on complex properties)
 	 * @param {Boolean} [options.live] if true combined with options.deep, when new Objects or Arrays are added/linked to tracked ones they get tracked too 
 	 * @param {function()} [options.propertyFilter] if true combined with options.deep, when traversing Object properties, properties that doesn't satisfy this condition are ignored
 	 * @return {Boolean} false if no action has been performed (ie: the object was already tracked)
@@ -1171,6 +1397,11 @@ tent.declare('tent.changes', function(){
                 }
                 return false;
             }
+			
+		if ((options.attachedObjects === false) && (obj.__collection__)){
+			// object is attached to a context
+			return false;
+		}
         
         var isArray = (obj instanceof Array);
         
@@ -1186,7 +1417,7 @@ tent.declare('tent.changes', function(){
             else {
                 obj.__observable__ = new tent.changes.Observable(obj);
             }
-            
+			
             changed = true;
               
             if (!options.interceptOptions) {
@@ -1201,6 +1432,30 @@ tent.declare('tent.changes', function(){
                 obj.__observable__.interceptProperties(options.interceptOptions);
             }
         }
+		
+		if (options.parentObject && typeof options.parentObjectPropertyName){
+			// register Observable parentObject and property, 
+			// any change will be reported as a change on this parent object property
+			// this allows complex properties change tracking
+			if (obj.__observable__.parentObject !== options.parentObject){				
+	            obj.__observable__.parentObject = options.parentObject;
+				changed = true;
+			}
+			if (obj.__observable__.parentObjectPropertyName !== options.parentObjectPropertyName){
+	            obj.__observable__.parentObjectPropertyName = options.parentObjectPropertyName;
+				changed = true;
+			}
+		}else if (options.parentObject === false){
+			if (typeof obj.__observable__.parentObject != 'undefined'){				
+	            delete obj.__observable__.parentObject;
+				changed = true;
+			}
+			if (obj.__observable__.parentObjectPropertyName != 'undefined'){
+	            delete obj.__observable__.parentObjectPropertyName;
+				changed = true;
+			}
+		}
+		
         
         // bind event handlers
         if (options.bindings) {
@@ -1299,7 +1554,7 @@ tent.declare('tent.changes', function(){
                     var valueType;
                     if (((valueType = typeof obj[propName]) != 'function') && filter(obj, propName)) {
                         var subObj = obj[propName];
-                        if (options.deepOverDOM || !tent.isDOMObject(subject)) {
+                        if (options.deepOverDOM || !tent.isDOMObject(subObj)) {
                             if (typeof subObj == "object" && options.deepStack.lastIndexOf(subObj) < 0) {
                                 if (tent.changes.track(subObj, options)) {
                                     changed = true;
