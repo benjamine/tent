@@ -4,7 +4,7 @@
 	<head>
 		<meta charset="utf-8"></meta>
 		<meta name="generator" content="JsDoc Toolkit"></meta>
-		<title>tent.logging | Tent Framework API</title>
+		<title>tent.persisters.couchdb.CouchDBPersister | Tent Framework API</title>
 
 		<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;"></meta>
 		<meta name="mobileoptimized" content="0"></meta>
@@ -117,12 +117,12 @@
 	<div class="innerContent">
 		<h1 class="classTitle">
 			
-			Namespace <span>tent.logging</span>
+			Class <span>tent.persisters.couchdb.CouchDBPersister</span>
 		</h1>
 		
 		<div class="intro">
 			<p class="description summary">
-				Logging
+				a CouchDB RESTful persister
 			</p>
 				
 			
@@ -130,17 +130,19 @@
 					
 					
 					
-						<li>Defined in: <a href="../symbols/src/src__logging.js.html">logging.js</a></li>
+						<li>Defined in: <a href="../symbols/src/src_persisters__couchdb.js.html">couchdb.js</a></li>
 					
-						
+						<li>Extends <span class="fixedFont">
+						<a href="../symbols/tent.persisters.rest.RestPersister.html">tent.persisters.rest.RestPersister</a></span></li>
+					
 				</ul>
 			
 		</div>
 		
 		
 			<div class="props">
-				<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class tent.logging.">
-					<caption class="sectionTitle">Namespace Summary</caption>
+				<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class tent.persisters.couchdb.CouchDBPersister.">
+					<caption class="sectionTitle">Class Summary</caption>
 					<thead>
 						<tr>
 							<th scope="col">Constructor Attributes</th>
@@ -152,9 +154,9 @@
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription" >
 								<div class="fixedFont">
-									<b><a href="../symbols/tent.logging.html#constructor">tent.logging</a></b>
+									<b><a href="../symbols/tent.persisters.couchdb.CouchDBPersister.html#constructor">tent.persisters.couchdb.CouchDBPersister</a></b>()
 								</div>
-								<div class="description"></div>
+								<div class="description">Creates a new CouchDB RESTful persister</div>
 							</td>
 						</tr>
 					</tbody>
@@ -166,7 +168,7 @@
 			
 			
 				<div class="props">
-					<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class tent.logging.">
+					<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class tent.persisters.couchdb.CouchDBPersister.">
 						<caption class="sectionTitle">Field Summary</caption>
 						
 						<thead>
@@ -179,12 +181,12 @@
 						<tbody>
 							
 								<tr>
-									<td class="attributes">&lt;static&gt; &nbsp;</td>
+									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
 										<div class="fixedFont">
-										tent.logging.<b><a href="../symbols/tent.logging.html#.Levels">Levels</a></b>
+										<b><a href="../symbols/tent.persisters.couchdb.CouchDBPersister.html#bulkSaveUri">bulkSaveUri</a></b>
 										</div>
-										<div class="description">Event severity levels</div>
+										<div class="description">URI for bulk save operations (or null to use individual save requests)</div>
 									</td>
 								</tr>
 							
@@ -194,10 +196,28 @@
 			
 			
 			
+				<dl class="inheritsList">
+				<dt>Fields borrowed from class <a href="../symbols/tent.persisters.rest.RestPersister.html">tent.persisters.rest.RestPersister</a>: </dt><dd><a href="../symbols/tent.persisters.rest.RestPersister.html#baseUri">baseUri</a>, <a href="../symbols/tent.persisters.rest.RestPersister.html#changeResponseMapper">changeResponseMapper</a>, <a href="../symbols/tent.persisters.rest.RestPersister.html#changeSerializer">changeSerializer</a>, <a href="../symbols/tent.persisters.rest.RestPersister.html#isDeleted">isDeleted</a>, <a href="../symbols/tent.persisters.rest.RestPersister.html#loadingErrors">loadingErrors</a>, <a href="../symbols/tent.persisters.rest.RestPersister.html#loadItemMapper">loadItemMapper</a>, <a href="../symbols/tent.persisters.rest.RestPersister.html#localItemFinder">localItemFinder</a>, <a href="../symbols/tent.persisters.rest.RestPersister.html#saving">saving</a>, <a href="../symbols/tent.persisters.rest.RestPersister.html#savingErrors">savingErrors</a>, <a href="../symbols/tent.persisters.rest.RestPersister.html#updateLocalVersion">updateLocalVersion</a>, <a href="../symbols/tent.persisters.rest.RestPersister.html#versionEquals">versionEquals</a></dd>
+				</dl>
+			
 		
 <!--
 #### METHODS SUMMARY
 -->
+		
+			
+			
+			<div class="props">
+				<h2 class="sectionTitle">Method Summary</h2>
+				
+				
+			
+				
+					<dl class="inheritsList" id="MethodsListInherited">
+					<dt>Methods borrowed from class <span class='fixedFont'><a href="../symbols/tent.persisters.rest.RestPersister.html">tent.persisters.rest.RestPersister</a></span>: </dt><dd><span class='fixedFont'><a href="../symbols/tent.persisters.rest.RestPersister.html#load">load</a></span></dd> <dd><span class='fixedFont'><a href="../symbols/tent.persisters.rest.RestPersister.html#saveChanges">saveChanges</a></span></dd>
+					</dl>
+				
+			</div>
 		
 		
 <!--
@@ -211,15 +231,15 @@
 			<div class="details props">
 				<div class="innerProps">
 					<h2 class="sectionTitle" id="constructor">
-						Namespace Detail
+						Class Detail
 					</h2>
 					
 					<div class="fixedFont">
-						<b>tent.logging</b>
+						<b>tent.persisters.couchdb.CouchDBPersister</b>()
 					</div>
 					
 					<div class="description">
-						
+						Creates a new CouchDB RESTful persister
 						
 					</div>
 					
@@ -227,29 +247,6 @@
 				
 					
 					
-					
-						<dl class="detailList nomargin">
-							
-							
-							
-							
-							
-							
-							
-							
-							
-								<dt class="heading">Requires:</dt>
-								
-									<dd>tent</dd>
-								
-									<dd>tent.arrays</dd>
-								
-									<dd>tent.coreTypes</dd>
-								
-							
-							
-							
-						</dl>
 					
 				</div>
 			</div>
@@ -265,18 +262,18 @@
 					</h2>
 					
 					
-						<div class="fixedFont heading" id=".Levels">
+						<div class="fixedFont heading" id="bulkSaveUri">
 							<span class='lighter'>
-							&lt;static&gt; 
+							
 							</span>
 							
-							<span class="light">{<a href="../symbols/tent.coreTypes.Enum.html">tent.coreTypes.Enum</a>}</span>
+							<span class="light">{String}</span>
 							
-							<span class="light">tent.logging.</span><b>Levels</b>							
+							<b>bulkSaveUri</b>							
 						</div>
 						
 						<div class="description">
-							Event severity levels
+							URI for bulk save operations (or null to use individual save requests)
 							
 							
 							

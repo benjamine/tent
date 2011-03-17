@@ -4,7 +4,7 @@
 	<head>
 		<meta charset="utf-8"></meta>
 		<meta name="generator" content="JsDoc Toolkit"></meta>
-		<title>tent.entities.Collection | Tent Framework API</title>
+		<title>tent.persisters.rest.RestPersister | Tent Framework API</title>
 
 		<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;"></meta>
 		<meta name="mobileoptimized" content="0"></meta>
@@ -117,12 +117,12 @@
 	<div class="innerContent">
 		<h1 class="classTitle">
 			
-			Class <span>tent.entities.Collection</span>
+			Class <span>tent.persisters.rest.RestPersister</span>
 		</h1>
 		
 		<div class="intro">
 			<p class="description summary">
-				a collection of entities of a <a href="../symbols/tent.entities.Type.html">tent.entities.Type</a> attached to a <a href="../symbols/tent.entities.Context.html">tent.entities.Context</a>
+				a REST persister
 			</p>
 				
 			
@@ -130,7 +130,7 @@
 					
 					
 					
-						<li>Defined in: <a href="../symbols/src/src__entities.js.html">entities.js</a></li>
+						<li>Defined in: <a href="../symbols/src/src_persisters__rest.js.html">rest.js</a></li>
 					
 						
 				</ul>
@@ -139,7 +139,7 @@
 		
 		
 			<div class="props">
-				<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class tent.entities.Collection.">
+				<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class tent.persisters.rest.RestPersister.">
 					<caption class="sectionTitle">Class Summary</caption>
 					<thead>
 						<tr>
@@ -152,9 +152,9 @@
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription" >
 								<div class="fixedFont">
-									<b><a href="../symbols/tent.entities.Collection.html#constructor">tent.entities.Collection</a></b>(context, type, name)
+									<b><a href="../symbols/tent.persisters.rest.RestPersister.html#constructor">tent.persisters.rest.RestPersister</a></b>()
 								</div>
-								<div class="description">Creates a new entity Collection.</div>
+								<div class="description">Creates a new REST persister</div>
 							</td>
 						</tr>
 					</tbody>
@@ -166,7 +166,7 @@
 			
 			
 				<div class="props">
-					<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class tent.entities.Collection.">
+					<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class tent.persisters.rest.RestPersister.">
 						<caption class="sectionTitle">Field Summary</caption>
 						
 						<thead>
@@ -182,9 +182,9 @@
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
 										<div class="fixedFont">
-										<b><a href="../symbols/tent.entities.Collection.html#context">context</a></b>
+										<b><a href="../symbols/tent.persisters.rest.RestPersister.html#baseUri">baseUri</a></b>
 										</div>
-										<div class="description">the <a href="../symbols/tent.entities.Context.html">tent.entities.Context</a> that owns this collection</div>
+										<div class="description">Absolute base URI for this persister</div>
 									</td>
 								</tr>
 							
@@ -192,9 +192,9 @@
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
 										<div class="fixedFont">
-										<b><a href="../symbols/tent.entities.Collection.html#items">items</a></b>
+										<b><a href="../symbols/tent.persisters.rest.RestPersister.html#bulkSaveUri">bulkSaveUri</a></b>
 										</div>
-										<div class="description">Objects in this collection</div>
+										<div class="description">URI for bulk save operations (or null to use individual save requests)</div>
 									</td>
 								</tr>
 							
@@ -202,9 +202,9 @@
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
 										<div class="fixedFont">
-										<b><a href="../symbols/tent.entities.Collection.html#name">name</a></b>
+										<b><a href="../symbols/tent.persisters.rest.RestPersister.html#changeResponseMapper">changeResponseMapper</a></b>
 										</div>
-										<div class="description">Collection name</div>
+										<div class="description">function that maps change responses to local changes</div>
 									</td>
 								</tr>
 							
@@ -212,9 +212,89 @@
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
 										<div class="fixedFont">
-										<b><a href="../symbols/tent.entities.Collection.html#type">type</a></b>
+										<b><a href="../symbols/tent.persisters.rest.RestPersister.html#changeSerializer">changeSerializer</a></b>
 										</div>
-										<div class="description">the <a href="../symbols/tent.entities.Type.html">tent.entities.Type</a> of objects on this collection</div>
+										<div class="description">function that serializes a change item</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										<b><a href="../symbols/tent.persisters.rest.RestPersister.html#isDeleted">isDeleted</a></b>
+										</div>
+										<div class="description">function that indicates if a loaded item is deleted</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										<b><a href="../symbols/tent.persisters.rest.RestPersister.html#loadingErrors">loadingErrors</a></b>
+										</div>
+										<div class="description">Errors ocurred while loading</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										<b><a href="../symbols/tent.persisters.rest.RestPersister.html#loadItemMapper">loadItemMapper</a></b>
+										</div>
+										<div class="description">function that maps items from data obtained on load</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										<b><a href="../symbols/tent.persisters.rest.RestPersister.html#localItemFinder">localItemFinder</a></b>
+										</div>
+										<div class="description">function that finds the local version of a loaded item</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										<b><a href="../symbols/tent.persisters.rest.RestPersister.html#saving">saving</a></b>
+										</div>
+										<div class="description">Indicates if this persister is saving changes</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										<b><a href="../symbols/tent.persisters.rest.RestPersister.html#savingErrors">savingErrors</a></b>
+										</div>
+										<div class="description">Errors ocurred while saving</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										<b><a href="../symbols/tent.persisters.rest.RestPersister.html#updateLocalVersion">updateLocalVersion</a></b>
+										</div>
+										<div class="description">function that updates local version field from a save response</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										<b><a href="../symbols/tent.persisters.rest.RestPersister.html#versionEquals">versionEquals</a></b>
+										</div>
+										<div class="description">function that compares a local item version with a loaded item</div>
 									</td>
 								</tr>
 							
@@ -235,7 +315,7 @@
 				<h2 class="sectionTitle">Method Summary</h2>
 				
 				
-					<table class="summaryTable" id="MethodsList" cellspacing="0" summary="A summary of the methods documented in the class tent.entities.Collection.">
+					<table class="summaryTable" id="MethodsList" cellspacing="0" summary="A summary of the methods documented in the class tent.persisters.rest.RestPersister.">
 						<thead>
 							<tr>
 								<th scope="col">Method Attributes</th>
@@ -251,9 +331,9 @@
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
-										<div class="fixedFont"><b><a href="../symbols/tent.entities.Collection.html#attach">attach</a></b>()
+										<div class="fixedFont"><b><a href="../symbols/tent.persisters.rest.RestPersister.html#load">load</a></b>(context, url, options)
 										</div>
-										<div class="description">Attachs all arguments to this collection.</div>
+										<div class="description">Load entities from an URL into a <a href="../symbols/tent.entities.Context.html">tent.entities.Context</a></div>
 									</td>
 								</tr>
 							
@@ -262,42 +342,9 @@
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
-										<div class="fixedFont"><b><a href="../symbols/tent.entities.Collection.html#detach">detach</a></b>()
+										<div class="fixedFont"><b><a href="../symbols/tent.persisters.rest.RestPersister.html#saveChanges">saveChanges</a></b>(context, options)
 										</div>
-										<div class="description">Detaches all arguments from this collection (and its #context)</div>
-									</td>
-								</tr>
-							
-								<tr
-									 class='item2'
-								>
-									<td class="attributes">&nbsp;</td>
-									<td class="nameDescription">
-										<div class="fixedFont"><b><a href="../symbols/tent.entities.Collection.html#detachAll">detachAll</a></b>()
-										</div>
-										<div class="description">Detaches (#detach) all entities in this collection (#items)</div>
-									</td>
-								</tr>
-							
-								<tr
-									 class='item3'
-								>
-									<td class="attributes">&nbsp;</td>
-									<td class="nameDescription">
-										<div class="fixedFont"><b><a href="../symbols/tent.entities.Collection.html#push">push</a></b>()
-										</div>
-										<div class="description">Adds all arguments to this collection</div>
-									</td>
-								</tr>
-							
-								<tr
-									 class='item4'
-								>
-									<td class="attributes">&nbsp;</td>
-									<td class="nameDescription">
-										<div class="fixedFont"><b><a href="../symbols/tent.entities.Collection.html#remove">remove</a></b>()
-										</div>
-										<div class="description">Removes all arguments from this collection.</div>
+										<div class="description">Persists all changes in a <a href="../symbols/tent.entities.Context.html">tent.entities.Context</a></div>
 									</td>
 								</tr>
 							
@@ -324,39 +371,16 @@
 					</h2>
 					
 					<div class="fixedFont">
-						<b>tent.entities.Collection</b>(context, type, name)
+						<b>tent.persisters.rest.RestPersister</b>()
 					</div>
 					
 					<div class="description">
-						Creates a new entity Collection.This is intended for internal use, to add collections to a context use <a href="../symbols/tent.entities.Context.html#createCollection">tent.entities.Context#createCollection</a>
+						Creates a new REST persister
 						
 					</div>
 					
 					
 				
-					
-						<dl class="detailList params">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{<a href="../symbols/tent.entities.Context.html">tent.entities.Context</a>}</span>  <b>context</b>
-									
-								</dt>
-								<dd></dd>
-							
-								<dt>
-									<span class="light fixedFont">{<a href="../symbols/tent.entities.Type.html">tent.entities.Type</a>}</span>  <b>type</b>
-									
-								</dt>
-								<dd></dd>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span>  <b>name</b>
-									
-								</dt>
-								<dd>name for this collection, if not specified the type name is used</dd>
-							
-						</dl>
 					
 					
 					
@@ -374,62 +398,18 @@
 					</h2>
 					
 					
-						<div class="fixedFont heading" id="context">
-							<span class='lighter'>
-							
-							</span>
-							
-							<span class="light">{<a href="../symbols/tent.entities.Context.html">tent.entities.Context</a>}</span>
-							
-							<b>context</b>							
-						</div>
-						
-						<div class="description">
-							the <a href="../symbols/tent.entities.Context.html">tent.entities.Context</a> that owns this collection
-							
-							
-							
-						</div>
-						
-						
-							
-						
-						<div class="hr"></div>
-					
-						<div class="fixedFont heading" id="items">
-							<span class='lighter'>
-							
-							</span>
-							
-							<span class="light">{Array}</span>
-							
-							<b>items</b>							
-						</div>
-						
-						<div class="description">
-							Objects in this collection
-							
-							
-							
-						</div>
-						
-						
-							
-						
-						<div class="hr"></div>
-					
-						<div class="fixedFont heading" id="name">
+						<div class="fixedFont heading" id="baseUri">
 							<span class='lighter'>
 							
 							</span>
 							
 							<span class="light">{String}</span>
 							
-							<b>name</b>							
+							<b>baseUri</b>							
 						</div>
 						
 						<div class="description">
-							Collection name
+							Absolute base URI for this persister
 							
 							
 							
@@ -440,18 +420,238 @@
 						
 						<div class="hr"></div>
 					
-						<div class="fixedFont heading" id="type">
+						<div class="fixedFont heading" id="bulkSaveUri">
 							<span class='lighter'>
 							
 							</span>
 							
-							<span class="light">{<a href="../symbols/tent.entities.Type.html">tent.entities.Type</a>}</span>
+							<span class="light">{String}</span>
 							
-							<b>type</b>							
+							<b>bulkSaveUri</b>							
 						</div>
 						
 						<div class="description">
-							the <a href="../symbols/tent.entities.Type.html">tent.entities.Type</a> of objects on this collection
+							URI for bulk save operations (or null to use individual save requests)
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id="changeResponseMapper">
+							<span class='lighter'>
+							
+							</span>
+							
+							<span class="light">{function()}</span>
+							
+							<b>changeResponseMapper</b>							
+						</div>
+						
+						<div class="description">
+							function that maps change responses to local changes
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id="changeSerializer">
+							<span class='lighter'>
+							
+							</span>
+							
+							<span class="light">{function()}</span>
+							
+							<b>changeSerializer</b>							
+						</div>
+						
+						<div class="description">
+							function that serializes a change item
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id="isDeleted">
+							<span class='lighter'>
+							
+							</span>
+							
+							<span class="light">{function()}</span>
+							
+							<b>isDeleted</b>							
+						</div>
+						
+						<div class="description">
+							function that indicates if a loaded item is deleted
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id="loadingErrors">
+							<span class='lighter'>
+							
+							</span>
+							
+							<span class="light">{Array}</span>
+							
+							<b>loadingErrors</b>							
+						</div>
+						
+						<div class="description">
+							Errors ocurred while loading
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id="loadItemMapper">
+							<span class='lighter'>
+							
+							</span>
+							
+							<span class="light">{function()}</span>
+							
+							<b>loadItemMapper</b>							
+						</div>
+						
+						<div class="description">
+							function that maps items from data obtained on load
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id="localItemFinder">
+							<span class='lighter'>
+							
+							</span>
+							
+							<span class="light">{function()}</span>
+							
+							<b>localItemFinder</b>							
+						</div>
+						
+						<div class="description">
+							function that finds the local version of a loaded item
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id="saving">
+							<span class='lighter'>
+							
+							</span>
+							
+							<span class="light">{Boolean}</span>
+							
+							<b>saving</b>							
+						</div>
+						
+						<div class="description">
+							Indicates if this persister is saving changes
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id="savingErrors">
+							<span class='lighter'>
+							
+							</span>
+							
+							<span class="light">{Array}</span>
+							
+							<b>savingErrors</b>							
+						</div>
+						
+						<div class="description">
+							Errors ocurred while saving
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id="updateLocalVersion">
+							<span class='lighter'>
+							
+							</span>
+							
+							<span class="light">{function()}</span>
+							
+							<b>updateLocalVersion</b>							
+						</div>
+						
+						<div class="description">
+							function that updates local version field from a save response
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id="versionEquals">
+							<span class='lighter'>
+							
+							</span>
+							
+							<span class="light">{function()}</span>
+							
+							<b>versionEquals</b>							
+						</div>
+						
+						<div class="description">
+							function that compares a local item version with a loaded item
 							
 							
 							
@@ -481,18 +681,18 @@
 							<li 
 								 class='item0'
 							>
-								<div class="fixedFont heading" id="attach">
+								<div class="fixedFont heading" id="load">
 									<span class='lighter'>
 									
 									</span>
 									
-									<span class="light">{Number}</span>
 									
-									<b>attach</b>()
+									
+									<b>load</b>(context, url, options)
 								</div>
 								
 								<div class="description">
-									Attachs all arguments to this collection. Each object change state is preserved. If no change state is found, object are added as unchanged.
+									Load entities from an URL into a <a href="../symbols/tent.entities.Context.html">tent.entities.Context</a>
 									
 									
 									
@@ -502,41 +702,54 @@
 								
 								
 								
-								
-								
-									<dl class="detailList nomargin">
-									
+									<dl class="detailList params">
+										<dt class="heading">Parameters:</dt>
 										
+											<dt>
+												<span class="light fixedFont">{<a href="../symbols/tent.entities.Context.html">tent.entities.Context</a>}</span> <b>context</b>
+												
+											</dt>
+											<dd></dd>
 										
+											<dt>
+												<span class="light fixedFont">{String}</span> <b>url</b>
+												
+											</dt>
+											<dd>that returns a JSON representation of entities</dd>
 										
+											<dt>
+												<span class="light fixedFont">{Object}</span> <b>options</b>
+												<i>Optional</i>
+											</dt>
+											<dd>loading options</dd>
 										
+											<dt>
+												<span class="light fixedFont">{Boolean}</span> <b>options.multi</b>
+												<i>Optional</i>
+											</dt>
+											<dd>indicates if the url will return a collection of entities</dd>
 										
-											<dt class="heading">Throws:</dt>
-											
-												<dt>
-													 <b></b>
-												</dt>
-												<dd>if an argument already belongs to another collection</dd>
-											
-												<dt>
-													 <b></b>
-												</dt>
-												<dd>if an argument has a <a href="../symbols/tent.entities.Type.html">tent.entities.Type</a> different from this collection #type</dd>
-											
+											<dt>
+												<span class="light fixedFont">{String}</span> <b>options.credentials</b>
+												<i>Optional</i>
+											</dt>
+											<dd>http basic auth credentials in the form 'username:password' and base64 encoded</dd>
 										
+											<dt>
+												<span class="light fixedFont">{Object}</span> <b>options.method</b>
+												<i>Optional</i>
+											</dt>
+											<dd>http method, default 'GET'</dd>
 										
+											<dt>
+												<span class="light fixedFont">{function()}</span> <b>options.complete</b>
+												<i>Optional</i>
+											</dt>
+											<dd>function to call when operation is complete</dd>
 										
-											<dt class="heading">Returns:</dt>
-											
-												<dd><span class="light fixedFont">{Number}</span> the number of entities in this collection</dd>
-											
-										
-										
-										
-										
-										
-									
 									</dl>
+								
+								
 								
 								<div class="hr"></div>
 							</li>
@@ -544,18 +757,18 @@
 							<li 
 								 class='item1'
 							>
-								<div class="fixedFont heading" id="detach">
+								<div class="fixedFont heading" id="saveChanges">
 									<span class='lighter'>
 									
 									</span>
 									
-									<span class="light">{Boolean}</span>
 									
-									<b>detach</b>()
+									
+									<b>saveChanges</b>(context, options)
 								</div>
 								
 								<div class="description">
-									Detaches all arguments from this collection (and its #context)
+									Persists all changes in a <a href="../symbols/tent.entities.Context.html">tent.entities.Context</a>
 									
 									
 									
@@ -565,191 +778,36 @@
 								
 								
 								
-								
-								
-									<dl class="detailList nomargin">
-									
+									<dl class="detailList params">
+										<dt class="heading">Parameters:</dt>
 										
+											<dt>
+												<span class="light fixedFont">{<a href="../symbols/tent.entities.Context.html">tent.entities.Context</a>}</span> <b>context</b>
+												
+											</dt>
+											<dd></dd>
 										
+											<dt>
+												<span class="light fixedFont">{Object}</span> <b>options</b>
+												<i>Optional</i>
+											</dt>
+											<dd>saving options</dd>
 										
+											<dt>
+												<span class="light fixedFont">{String}</span> <b>options.credentials</b>
+												<i>Optional</i>
+											</dt>
+											<dd>http basic auth credentials in the form 'username:password' and base64 encoded</dd>
 										
+											<dt>
+												<span class="light fixedFont">{function()}</span> <b>options.complete</b>
+												<i>Optional</i>
+											</dt>
+											<dd>function to call when operation is complete</dd>
 										
-										
-										
-											<dt class="heading">Returns:</dt>
-											
-												<dd><span class="light fixedFont">{Boolean}</span> true if any element has been detached (ie: a change has been made)</dd>
-											
-										
-										
-										
-										
-										
-									
 									</dl>
 								
-								<div class="hr"></div>
-							</li>
-						
-							<li 
-								 class='item2'
-							>
-								<div class="fixedFont heading" id="detachAll">
-									<span class='lighter'>
-									
-									</span>
-									
-									<span class="light">{Boolean}</span>
-									
-									<b>detachAll</b>()
-								</div>
 								
-								<div class="description">
-									Detaches (#detach) all entities in this collection (#items)
-									
-									
-									
-									
-								</div>
-								
-								
-								
-								
-								
-								
-									<dl class="detailList nomargin">
-									
-										
-										
-										
-										
-										
-										
-										
-											<dt class="heading">Returns:</dt>
-											
-												<dd><span class="light fixedFont">{Boolean}</span> true if any element has been detached (ie: a change has been made)</dd>
-											
-										
-										
-										
-										
-										
-									
-									</dl>
-								
-								<div class="hr"></div>
-							</li>
-						
-							<li 
-								 class='item3'
-							>
-								<div class="fixedFont heading" id="push">
-									<span class='lighter'>
-									
-									</span>
-									
-									<span class="light">{Number}</span>
-									
-									<b>push</b>()
-								</div>
-								
-								<div class="description">
-									Adds all arguments to this collection
-									
-									
-									
-									
-								</div>
-								
-								
-								
-								
-								
-								
-									<dl class="detailList nomargin">
-									
-										
-										
-										
-										
-										
-											<dt class="heading">Throws:</dt>
-											
-												<dt>
-													 <b></b>
-												</dt>
-												<dd>if an argument already belongs to another collection</dd>
-											
-												<dt>
-													 <b></b>
-												</dt>
-												<dd>if an argument has a <a href="../symbols/tent.entities.Type.html">tent.entities.Type</a> different from this collection #type</dd>
-											
-										
-										
-										
-											<dt class="heading">Returns:</dt>
-											
-												<dd><span class="light fixedFont">{Number}</span> the number of entities in this collection</dd>
-											
-										
-										
-										
-										
-										
-									
-									</dl>
-								
-								<div class="hr"></div>
-							</li>
-						
-							<li 
-								 class='item4'
-							>
-								<div class="fixedFont heading" id="remove">
-									<span class='lighter'>
-									
-									</span>
-									
-									<span class="light">{Boolean}</span>
-									
-									<b>remove</b>()
-								</div>
-								
-								<div class="description">
-									Removes all arguments from this collection.
-									
-									
-									
-									
-								</div>
-								
-								
-								
-								
-								
-								
-									<dl class="detailList nomargin">
-									
-										
-										
-										
-										
-										
-										
-										
-											<dt class="heading">Returns:</dt>
-											
-												<dd><span class="light fixedFont">{Boolean}</span> true if any element has been removed (ie: a change has been made)</dd>
-											
-										
-										
-										
-										
-										
-									
-									</dl>
 								
 								
 							</li>
