@@ -145,13 +145,24 @@ tent.declare('tent.persisters.rest', function(){
                     // EntityLinks not supported
                     return null;
                 }
-                var rmt = tent.clone(local,{
-					deep:true,
-					onlyOwnProperties:true,
-					attachedObjects: false,
-					skipPrivates:true
-				});
-				
+                var rmt;
+				if (local.__changeState__ === tent.entities.ChangeStates.DELETED) {
+					rmt = {};
+					if (local.id) {
+						rmt._id = tent.pget(local, 'id');
+					}
+					if (local.rev) {
+						rmt.rev = tent.pget(local, 'rev');
+					}
+				}
+				else {
+					rmt = tent.clone(local, {
+						deep: true,
+						onlyOwnProperties: true,
+						attachedObjects: false,
+						skipPrivates: true
+					});
+				}
 				if (local._id) {
 					rmt._id = tent.pget(local, '_id');
 				}
@@ -168,22 +179,33 @@ tent.declare('tent.persisters.rest', function(){
             
             if (items instanceof Array) {
             
-                var dataItems = [];
+				if (options.bulk){					
+	                var dataItems = [];
+	                var batch = options.batch || defaultOptions.batch || 0;
+					var batchSize = batch;
+					if ((!batch) || (batch < 1)){
+						batchSize = items.length;
+					}
+					var limit = (options.offset || 0)+ batchSize;
+					if (options.limit && options.limit < limit){
+						limit = options.limit;
+					}
+	                for (var i = (options.offset || 0), l = limit; i < l; i++) {
+	                    dataItems.push(serializer(items[i], options));
+	                }
                 
-                for (var i = 0, l = items.length; i < l; i++) {
-                    dataItems.push(serializer(items[i], options));
-                }
-                
-                var wrapperProp = options.saveWrapperProperty || defaultOptions.saveWrapperProperty || 'docs';
-                var wrapper = options.itemsSaveWrapper || defaultOptions.itemsSaveWrapper ||
-                function(ditems, op){
-                    var d = {};
-                    d[wrapperProp] = ditems;
-                    return d;
-                };
-                
-                return wrapper(dataItems, options);
-                
+	                var wrapperProp = options.saveWrapperProperty || defaultOptions.saveWrapperProperty || 'docs';
+	                var wrapper = options.itemsSaveWrapper || defaultOptions.itemsSaveWrapper ||
+	                function(ditems, op){
+	                    var d = {};
+	                    d[wrapperProp] = ditems;
+	                    return d;
+	                };
+	                return wrapper(dataItems, options);
+				}else{
+                    return serializer(items[options.offset || 0], options);
+				}
+
             }
             else 
                 if (typeof items == 'object') {
@@ -201,27 +223,32 @@ tent.declare('tent.persisters.rest', function(){
             defaultOptions = {};
         }
         return function(data, options, map){
+
+				
             var items;
             if (data instanceof Array) {
                 items = data;
             }
             else {
-                var resultSelector = options.resultSelector || defaultOptions.resultSelector ||
-                function(d, opt){
-                    var propName = opt.resultSelectorProperty || defaultOptions.resultSelectorProperty;
-                    if (propName) {
-                        return d[propName];
-                    }
-                    else {
-                        items = d;
-                        for (var prop in d) {
-                            if (d[prop] instanceof Array) {
-                                return d[prop];
-                            }
-                        }
-                    }
-                };
-                items = resultSelector(data, options);
+			
+				var resultSelector = options.resultSelector || defaultOptions.resultSelector ||
+				function(d, opt){
+					if (!options.bulk){
+						return [d];
+					}
+					var propName = opt.resultSelectorProperty || defaultOptions.resultSelectorProperty;
+					if (propName) {
+						return d[propName];
+					}
+					else {
+						for (var prop in d) {
+							if (d[prop] instanceof Array) {
+								return d[prop];
+							}
+						}
+					}
+				};
+				items = resultSelector(data, options);
             }
             
             if (items) {
@@ -230,6 +257,9 @@ tent.declare('tent.persisters.rest', function(){
                     
                     var itemSelector = options.resultItemSelector || defaultOptions.resultItemSelector ||
                     function(d, opt){
+						if (!opt.bulk){
+							return d;
+						}
                         var propName = opt.resultItemSelectorProperty || defaultOptions.resultItemSelectorProperty;
                         if (propName) {
                             return d[propName];
@@ -274,7 +304,7 @@ tent.declare('tent.persisters.rest', function(){
                         if (!(typeof localChangeIndex == 'number' && localChangeIndex >= 0)) {
 							if (!(options.unorderedResults || defaultOptions.unorderedResults)) {
 								// if results are in order, the first change in the list, is next
-								localChangeIndex = 0;
+								localChangeIndex = options.offset || 0;
 							}
 						}
 						
@@ -394,6 +424,48 @@ tent.declare('tent.persisters.rest', function(){
          * @type String
          */
         this.bulkSaveUri = null;
+		
+		/**
+		 * Returns the URI to persist an item change
+         * @field
+         * @type function()
+		 */
+		this.getChangeItemUri = function(change){
+			if (change instanceof tent.entities.EntityLink){
+				// entity link not supported
+				return null;
+			}
+			var uri = change._id || change.id || '/';
+			if (change.__changeState__ == tent.entities.ChangeStates.DELETED){
+				var hasQuery=false;				
+				if (change._rev){
+					uri+=(hasQuery ? '&':'?')+ 'rev='+change._rev;
+					hasQuery = true;
+				}else if (change.rev){
+					uri+=(hasQuery ? '&':'?')+ 'rev='+change.rev;
+					hasQuery = true;
+				}
+			} 
+			return uri;
+		}
+				
+		/**
+		 * Returns the http method to persist an item change
+         * @field
+         * @type function()
+		 */
+		this.getChangeItemMethod = function(change){
+			if (change.__changeState__ === tent.entities.ChangeStates.DELETED){
+				return 'DELETE';
+			}
+			if (change.__changeState__ === tent.entities.ChangeStates.MODIFIED){
+				return 'PUT';
+			}	
+			if (change._id || change.id){
+				return 'PUT';
+			}	
+			return 'POST';
+		}
     }
     
     /**
@@ -572,10 +644,15 @@ tent.declare('tent.persisters.rest', function(){
      * Persists all changes in a {@link tent.entities.Context}
 	 * @param {tent.entities.Context} context
 	 * @param {Object} [options] saving options
-     *  @param {String} [options.credentials] http basic auth credentials in the form 'username:password' and base64 encoded
-     *  @param {function()} [options.complete] function to call when operation is complete
+	 * @param {Boolean} [options.bulk] save in bulk mode (multiple changes in one request)
+	 * @param {Number} [options.batch] batch size in bulk mode, number of changes to save in one request
+	 * @param {String} [options.uri] uri to use (if none, it's use item or bulk save uri)
+     * @param {String} [options.credentials] http basic auth credentials in the form 'username:password' and base64 encoded
+     * @param {function()} [options.complete] function to call when operation is complete
+     * @param {Number} [options.maxcount] maximum count of changes to save, otherwise all changes are saved
+	 * @param {Number} [prevCount] number of saved changes on previous operation (internal use, for sequential requests)
 	 */
-    tent.persisters.rest.RestPersister.prototype.saveChanges = function(context, options){
+    tent.persisters.rest.RestPersister.prototype.saveChanges = function(context, options, prevCount){
         try {
             if (!context) {
                 throw 'a context is required for saving changes';
@@ -583,7 +660,7 @@ tent.declare('tent.persisters.rest', function(){
             if (!options) {
                 options = {};
             }
-            if (!options.context) {
+            if (options.context !== context) {
                 options.context = context;
             }
             if (context.hasChanges()) {
@@ -607,12 +684,18 @@ tent.declare('tent.persisters.rest', function(){
                         if (typeof r.ok == 'undefined') {
                             r.ok = true;
                         }
-                    if (comp) {
-                        comp(r);
-                    }
+					
+					if ((r.ok && !r.error) && options.context.hasChanges() &&
+						(!options.maxcount || (options.maxcount > r.count))) {
+						persister.saveChanges(options.context, options, r.count);
+					} else {						
+	                    if (comp) {
+	                        comp(r);
+	                    }
+					}
                 };
                 
-                this.__persist__(context, options);
+                this.__persist__(context, options, prevCount);
             }
             else {
                 if (options.complete) {
@@ -628,6 +711,8 @@ tent.declare('tent.persisters.rest', function(){
             this.saving = false;
             if (options.complete) {
                 options.complete({
+					persister: this,
+					options: options,
                     error: err
                 });
             }
@@ -637,80 +722,103 @@ tent.declare('tent.persisters.rest', function(){
     /**
      * 	@private
      */
-    tent.persisters.rest.RestPersister.prototype.__persist__ = function(context, options){
+    tent.persisters.rest.RestPersister.prototype.__persist__ = function(context, options, prevCount){
     
         if (typeof jQuery == 'undefined' || typeof jQuery.ajax == 'undefined') {
             throw 'jQuery.ajax is required in order to persist changes';
         }
+		
+		var url, method, data;
+		var change;
         
-        if (this.bulkSaveUri) {
-        
+        if (options.bulk) {        
             // bulk save
-            var url = tent.persisters.rest.uriCombine(this.baseUri, this.bulkSaveUri);
-            
-            var data = this.__getPersistData__(context, options);
-            if (data == null) {
-                var result = {
-                    persister: this,
-                    ok: true,
-                    nochanges: true
-                };
-                if (options.complete) {
-                    options.complete(result);
-                }
-            }
-            else {
-                jQuery.ajax({
-                    context: {
-                        persister: this,
-                        context: context
-                    },
-                    url: url,
-                    beforeSend: function(req){
-                        if (options.credentials) {
-                            req.setRequestHeader("Origin", document.location.protocol + "//" + document.location.host);
-                            req.setRequestHeader("Authorization", "Basic " + options.credentials);
-                        }
-                    },
-                    type: 'POST',
-                    cache: false,
-                    data: JSON.stringify(data),
-                    dataType: 'json',
-                    contentType: 'application/json',
-                    success: function(data, textStatus, req){
-                        var result = {
-                            persister: this
-                        };
-                        try {
-                            this.persister.__processPersistResponse__(this.context, data, options, result);
-                            result.ok = true;
-                        } 
-                        catch (err) {
-                            result.error = err;
-                        }
-                        if (options.complete) {
-                            options.complete(result);
-                        }
-                    },
-                    error: function(req, textStatus, error){
-                        var result = {
-                            persister: this,
-                            error: {
-                                type: textStatus,
-                                errorThrown: error
-                            }
-                        };
-                        if (options.complete) {
-                            options.complete(result);
-                        }
-                    }
-                });
+			var bulkUri = options.uri || this.bulkSaveUri;
+			if (!bulkUri){
+				throw 'no bulk save uri provided';
+			}
+            url = tent.persisters.rest.uriCombine(this.baseUri, bulkUri);            
+            data = this.__getPersistData__(context, options);
+		} else {
+			// save an individual change
+			change = context.changes.items[options.offset || 0];
+			method = this.getChangeItemMethod(change);
+			var changeUri = this.getChangeItemUri(change);
+			if (changeUri) {
+				url = tent.persisters.rest.uriCombine(this.baseUri, changeUri);
+				data = this.__getPersistData__(context, options);
+			}
+		}		
+				
+        if (data == null) {
+            var result = {
+                persister: this,
+				options: options,
+                ok: true,
+                nochanges: true
+            };
+            if (options.complete) {
+                options.complete(result);
             }
         }
         else {
-            // persist each change individually
-            throw 'individual change save not implemented';
+            jQuery.ajax({
+                context: {
+                    persister: this,
+                    context: context,
+					options: options,
+					prevCount: prevCount
+                },
+                url: url,
+                beforeSend: function(req){
+                    if (options.credentials) {
+                        req.setRequestHeader("Origin", document.location.protocol + "//" + document.location.host);
+                        req.setRequestHeader("Authorization", "Basic " + options.credentials);
+                    }
+                },
+                type: method || options.method || 'POST',
+                cache: false,
+                data: JSON.stringify(data),
+                dataType: 'json',
+                contentType: 'application/json',
+                success: function(data, textStatus, req){
+                    var result = {
+                        persister: this.persister,
+						options: this.options
+                    };
+                    try {
+                        this.persister.__processPersistResponse__(this.context, data, options, result);
+						if (this.prevCount){
+							result.count += this.prevCount;
+						}
+                        result.ok = true;
+                    } 
+                    catch (err) {
+                        result.error = err;
+                    }
+                    if (options.complete) {
+                        options.complete(result);
+                    }
+                },
+                error: function(req, textStatus, error){
+                    var result = {
+                        persister: this.persister,
+						options: this.options,
+                        error: {
+                            type: textStatus,
+                            errorThrown: error
+                        }
+                    };
+					if (this.prevCount){
+						result.count += this.prevCount;
+					}
+                    if (options.complete) {
+                        options.complete(result);
+                    }
+                }
+            });
         }
+    
     }
     
     /**
@@ -762,6 +870,7 @@ tent.declare('tent.persisters.rest', function(){
                         delete local.__saveErrors__;
                     }
                     context.acceptChanges(localChangeIndex);
+					result.count = (result.count || 0)+1;
                 }
             });
         }
