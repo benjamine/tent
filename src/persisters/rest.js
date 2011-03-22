@@ -739,16 +739,18 @@ tent.declare('tent.persisters.rest', function(){
 			}
             url = tent.persisters.rest.uriCombine(this.baseUri, bulkUri);            
             data = this.__getPersistData__(context, options);
+			context.markAsSaving(context.changes.items);
 		} else {
 			// save an individual change
 			change = context.changes.items[options.offset || 0];
+			context.markAsSaving(change);
 			method = this.getChangeItemMethod(change);
 			var changeUri = this.getChangeItemUri(change);
 			if (changeUri) {
 				url = tent.persisters.rest.uriCombine(this.baseUri, changeUri);
 				data = this.__getPersistData__(context, options);
 			}
-		}		
+		}
 				
         if (data == null) {
             var result = {

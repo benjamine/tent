@@ -639,7 +639,7 @@ tent.declare('tent.changes', function(){
         
         this.interceptFunction('push', function(){
             var index = this.length;
-            var itemsToAdd = itemsToAdd = Array.prototype.slice.call(arguments);
+            var itemsToAdd = Array.prototype.slice.call(arguments);
             this.__observable__.notifyChange(tent.changes.EventTypes.ADDING, {
                 items: itemsToAdd,
                 index: index,
@@ -681,7 +681,7 @@ tent.declare('tent.changes', function(){
         });
         
         this.interceptFunction('unshift', function(){
-            var itemsToAdd = itemsToAdd = Array.prototype.slice.call(arguments);
+            var itemsToAdd = Array.prototype.slice.call(arguments);
             this.__observable__.notifyChange(tent.changes.EventTypes.ADDING, {
                 items: itemsToAdd,
                 index: 0,

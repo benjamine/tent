@@ -1084,7 +1084,7 @@ tent.clone = function(obj, options) {
     };
     this.interceptFunction("push", function() {
       var index = this.length;
-      var itemsToAdd = itemsToAdd = Array.prototype.slice.call(arguments);
+      var itemsToAdd = Array.prototype.slice.call(arguments);
       this.__observable__.notifyChange(tent.changes.EventTypes.ADDING, {items:itemsToAdd, index:index, propertyName:this.__propertyName__});
       var notifyParent = this.__observable__.shouldNotifyParent();
       if(notifyParent) {
@@ -1097,7 +1097,7 @@ tent.clone = function(obj, options) {
       }
     });
     this.interceptFunction("unshift", function() {
-      var itemsToAdd = itemsToAdd = Array.prototype.slice.call(arguments);
+      var itemsToAdd = Array.prototype.slice.call(arguments);
       this.__observable__.notifyChange(tent.changes.EventTypes.ADDING, {items:itemsToAdd, index:0, propertyName:this.__propertyName__});
       var notifyParent = this.__observable__.shouldNotifyParent();
       if(notifyParent) {
@@ -2540,6 +2540,15 @@ tent.clone = function(obj, options) {
   tent.entities.Context.prototype.hasChanges = function() {
     return!!(this.changes && this.changes.items.length > 0)
   };
+  tent.entities.Context.prototype.markAsSaving = function() {
+    for(var i = 0;i < arguments.length;i++) {
+      var item = arguments[i];
+      if(item.__syncState__ && item.__syncState__.saving) {
+        throw"cannot start saving, item already being saved";
+      }
+      item.__syncState__ = {saving:true}
+    }
+  };
   tent.entities.Context.prototype.acceptAllChanges = function() {
     if(this.changeHandler) {
       this.changeHandler.acceptAllChanges()
@@ -2639,23 +2648,35 @@ tent.clone = function(obj, options) {
       return
     }
     if(!item.__collection__) {
-      item.__changeState__ = tent.entities.ChangeStates.DELETED
+      item.__changeState__ = tent.entities.ChangeStates.DELETED;
+      if(item.__syncState__ && item.__syncState__.saving) {
+        item.__syncState__.deletedWhileSaving = true
+      }
     }else {
       if(item.__collection__.context == this.context) {
         if(item.__changeState__ == tent.entities.ChangeStates.UNCHANGED || item.__changeState__ == tent.entities.ChangeStates.MODIFIED) {
           item.__changeState__ = tent.entities.ChangeStates.DELETED;
+          if(item.__syncState__ && item.__syncState__.saving) {
+            item.__syncState__.deletedWhileSaving = true
+          }
           if(!this.context.changes) {
             this.context.changes = new tent.entities.ContextChanges(this.context)
           }
           this.context.changes.items.pushUnique(item)
         }else {
           if(item.__changeState__ == tent.entities.ChangeStates.ADDED) {
-            item.__changeState__ = tent.entities.ChangeStates.DETACHED;
-            delete item.__collection__;
-            if(!this.context.changes) {
-              this.context.changes = new tent.entities.ContextChanges(this.context)
+            this.context.changes.items.remove(item);
+            if(item.__syncState__ && item.__syncState__.saving) {
+              item.__syncState__.deletedWhileSaving = true;
+              item.__changeState__ = tent.entities.ChangeStates.DELETED;
+              this.context.changes.items.pushUnique(item)
+            }else {
+              item.__changeState__ = tent.entities.ChangeStates.DETACHED;
+              delete item.__collection__;
+              if(!this.context.changes) {
+                this.context.changes = new tent.entities.ContextChanges(this.context)
+              }
             }
-            this.context.changes.items.remove(item)
           }
         }
       }else {
@@ -2665,12 +2686,18 @@ tent.clone = function(obj, options) {
   };
   tent.entities.ContextChangeHandler.prototype.touch = function() {
     for(var i = 0, l = arguments.length;i < l;i++) {
-      if(arguments[i] && arguments[i].__changeState__ == tent.entities.ChangeStates.UNCHANGED && arguments[i].__collection__ && arguments[i].__collection__.context == this.context) {
-        if(!this.context.changes) {
-          this.context.changes = new tent.entities.ContextChanges(this)
+      if(arguments[i].__collection__ && arguments[i].__collection__.context == this.context) {
+        if(arguments[i].__changeState__ === tent.entities.ChangeStates.UNCHANGED) {
+          if(!this.context.changes) {
+            this.context.changes = new tent.entities.ContextChanges(this)
+          }
+          arguments[i].__changeState__ = tent.entities.ChangeStates.MODIFIED;
+          this.context.changes.items.pushUnique(arguments[i])
+        }else {
+          if(arguments[i].__syncState__ && arguments[i].__syncState__.saving && (arguments[i].__changeState__ === tent.entities.ChangeStates.MODIFIED || arguments[i].__changeState__ === tent.entities.ChangeStates.ADDED)) {
+            arguments[i].__syncState__.changedWhileSaving = true
+          }
         }
-        arguments[i].__changeState__ = tent.entities.ChangeStates.MODIFIED;
-        this.context.changes.items.pushUnique(arguments[i])
       }
     }
   };
@@ -2918,18 +2945,24 @@ tent.clone = function(obj, options) {
         changeIndex = this.context.changes.items.lastIndexOf(change)
       }
       if(changeIndex >= 0 && change) {
-        this.context.changes.items.splice(changeIndex, 1);
-        if(change.__changeState__ == tent.entities.ChangeStates.ADDED) {
-          change.__changeState__ = tent.entities.ChangeStates.UNCHANGED
+        if(change.__changeState__ === tent.entities.ChangeStates.ADDED || change.__changeState__ === tent.entities.ChangeStates.MODIFIED) {
+          this.context.changes.items.splice(changeIndex, 1);
+          change.__changeState__ = tent.entities.ChangeStates.UNCHANGED;
+          if(change.__syncState__ && change.__syncState__.changedWhileSaving) {
+            delete change.__syncState__;
+            this.context.touch(change)
+          }
         }else {
-          if(change.__changeState__ == tent.entities.ChangeStates.MODIFIED) {
-            change.__changeState__ = tent.entities.ChangeStates.UNCHANGED
-          }else {
-            if(change.__changeState__ == tent.entities.ChangeStates.DELETED) {
+          if(change.__changeState__ === tent.entities.ChangeStates.DELETED) {
+            if(change.__syncState__ && change.__syncState__.deletedWhileSaving) {
+              delete change.__syncState__
+            }else {
+              this.context.changes.items.splice(changeIndex, 1);
               change.__changeState__ = tent.entities.ChangeStates.DETACHED
             }
           }
         }
+        delete change.__syncState__
       }
     }
   }
@@ -3395,9 +3428,11 @@ tent.clone = function(obj, options) {
         throw"no bulk save uri provided";
       }
       url = tent.persisters.rest.uriCombine(this.baseUri, bulkUri);
-      data = this.__getPersistData__(context, options)
+      data = this.__getPersistData__(context, options);
+      context.markAsSaving(context.changes.items)
     }else {
       change = context.changes.items[options.offset || 0];
+      context.markAsSaving(change);
       method = this.getChangeItemMethod(change);
       var changeUri = this.getChangeItemUri(change);
       if(changeUri) {

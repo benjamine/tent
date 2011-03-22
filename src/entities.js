@@ -867,6 +867,19 @@ tent.declare('tent.entities', function(){
     }
     
 	/**
+	 * Marks items being saved by a a sync operation (this prevents concurrent modification conflicts)
+	 */
+	tent.entities.Context.prototype.markAsSaving = function(){
+        for (var i = 0; i < arguments.length; i++) {			
+			var item = arguments[i];
+			if (item.__syncState__ && item.__syncState__.saving){
+				throw 'cannot start saving, item already being saved';
+			}
+			item.__syncState__ = { saving: true };
+		}
+	}	
+	
+	/**
 	 * Clears all detected changes, marking all entities as unchanged.
 	 */
     tent.entities.Context.prototype.acceptAllChanges = function(){
@@ -1078,12 +1091,18 @@ tent.declare('tent.entities', function(){
         }
         if (!item.__collection__) {
             item.__changeState__ = tent.entities.ChangeStates.DELETED;
+			if (item.__syncState__ && item.__syncState__.saving){
+				item.__syncState__.deletedWhileSaving = true; 
+			}
         }
         else {
             if (item.__collection__.context == this.context) {
                 if ((item.__changeState__ == tent.entities.ChangeStates.UNCHANGED) ||
                 (item.__changeState__ == tent.entities.ChangeStates.MODIFIED)) {
                     item.__changeState__ = tent.entities.ChangeStates.DELETED;
+					if (item.__syncState__ && item.__syncState__.saving){
+						item.__syncState__.deletedWhileSaving = true; 
+					}
                     if (!this.context.changes) {
                         this.context.changes = new tent.entities.ContextChanges(this.context);
                     }
@@ -1091,12 +1110,18 @@ tent.declare('tent.entities', function(){
                 }
                 else 
                     if (item.__changeState__ == tent.entities.ChangeStates.ADDED) {
-                        item.__changeState__ = tent.entities.ChangeStates.DETACHED;
-                        delete item.__collection__;
-                        if (!this.context.changes) {
-                            this.context.changes = new tent.entities.ContextChanges(this.context);
-                        }
                         this.context.changes.items.remove(item);
+						if (item.__syncState__ && item.__syncState__.saving){
+							item.__syncState__.deletedWhileSaving = true; 
+	                        item.__changeState__ = tent.entities.ChangeStates.DELETED;
+		                    this.context.changes.items.pushUnique(item);
+						} else {
+    	                    item.__changeState__ = tent.entities.ChangeStates.DETACHED;
+	                        delete item.__collection__;
+	                        if (!this.context.changes) {
+	                            this.context.changes = new tent.entities.ContextChanges(this.context);
+	                        }
+						}
                     }
             }
             else {
@@ -1110,15 +1135,21 @@ tent.declare('tent.entities', function(){
 	 */
     tent.entities.ContextChangeHandler.prototype.touch = function(){
         for (var i = 0, l = arguments.length; i < l; i++) {
-            if (arguments[i] && arguments[i].__changeState__ == tent.entities.ChangeStates.UNCHANGED &&
-            arguments[i].__collection__ &&
-            arguments[i].__collection__.context == this.context) {
-                // mark item as MODIFIED
-                if (!this.context.changes) {
-                    this.context.changes = new tent.entities.ContextChanges(this);
-                }
-                arguments[i].__changeState__ = tent.entities.ChangeStates.MODIFIED;
-                this.context.changes.items.pushUnique(arguments[i]);
+            if (arguments[i].__collection__ && arguments[i].__collection__.context == this.context) {
+				if (arguments[i].__changeState__ === tent.entities.ChangeStates.UNCHANGED){
+	                // mark item as MODIFIED
+	                if (!this.context.changes) {
+	                    this.context.changes = new tent.entities.ContextChanges(this);
+	                }
+	                arguments[i].__changeState__ = tent.entities.ChangeStates.MODIFIED;
+	                this.context.changes.items.pushUnique(arguments[i]);
+				} else if (arguments[i].__syncState__ && arguments[i].__syncState__.saving &&
+					(arguments[i].__changeState__ === tent.entities.ChangeStates.MODIFIED ||
+					arguments[i].__changeState__ === tent.entities.ChangeStates.ADDED)) {
+					// item is being saved
+					// remember that changes ocurred while saving, keep MODIFIED when sync is complete
+					arguments[i].__syncState__.changedWhileSaving = true;
+				}
             }
         }
     }
@@ -1523,14 +1554,24 @@ tent.declare('tent.entities', function(){
 			 	changeIndex = this.context.changes.items.lastIndexOf(change);
 			 }
 			 if (changeIndex >= 0 && change){
-			 	this.context.changes.items.splice(changeIndex,1);
-				if (change.__changeState__ == tent.entities.ChangeStates.ADDED){
+				if ((change.__changeState__ === tent.entities.ChangeStates.ADDED) ||
+					(change.__changeState__ === tent.entities.ChangeStates.MODIFIED)){
+				 	this.context.changes.items.splice(changeIndex,1);
 					change.__changeState__ = tent.entities.ChangeStates.UNCHANGED;
-				}else if (change.__changeState__ == tent.entities.ChangeStates.MODIFIED){
-					change.__changeState__ = tent.entities.ChangeStates.UNCHANGED;
-				}else if (change.__changeState__ == tent.entities.ChangeStates.DELETED){
-					change.__changeState__ = tent.entities.ChangeStates.DETACHED;
+					if (change.__syncState__ && change.__syncState__.changedWhileSaving) {
+						delete change.__syncState__;
+						this.context.touch(change);	
+					}
+				}else if (change.__changeState__ === tent.entities.ChangeStates.DELETED){
+					if (change.__syncState__ && change.__syncState__.deletedWhileSaving) {
+						delete change.__syncState__;
+					} else {
+					 	this.context.changes.items.splice(changeIndex,1);
+						change.__changeState__ = tent.entities.ChangeStates.DETACHED;
+					}
 				}
+				
+				delete change.__syncState__;
 			 }
 		}
     }
