@@ -20,6 +20,7 @@ tent.declare('tent.entities', function(){
 	 * @example
 	 * 
 	 *  var Person = new tent.entities.Type('Person',{
+	 *  	personId: { identity: true }, // identity property
 	 *  	name: {}, // scalar property
 	 *  	age: {}, // scalar property	
 	 *  	pet: {
@@ -85,7 +86,55 @@ tent.declare('tent.entities', function(){
                 throw 'cannot create a Type without properties';
             }
     }
-    
+    	    
+	/**
+	 * Gets the name of the id property of an entity
+	 * @param {Object} item
+	 * @return {String} the item id property name, or undefined if no id property could be found
+	 */
+	tent.entities.Type.prototype.getIdPropertyName = function(item){
+		if (item.__entityType__ && item.__entityType === this){
+			if (typeof this.idProperty == 'undefined') {
+				// first access, find the identity property
+				this.idProperty = null;
+				for (var prop in this.properties) {
+					if (this.properties[prop].identity){
+						if (this.idProperty){
+							console.error('Error on type "'+this.name+'": multiple identity properties');
+							break;
+						}
+						this.idProperty = prop;
+					}
+				};
+			}
+			if (this.idProperty) {
+				return this.idProperty;
+			}
+			else {
+				if (typeof item['id'] != 'undefined') {
+					return 'id';
+				}
+				if (typeof item['_id'] != 'undefined') {
+					return '_id';
+				}
+			}
+		} else {
+			return tent.entities.getIdPropertyName(item);
+		}
+	}	
+		
+	/**
+	 * Gets the id of an entity
+	 * @param {Object} item
+	 * @return the item id, or undefined if no id property could be found
+	 */
+	tent.entities.Type.prototype.getId = function(item){
+		var pname = this.getIdPropertyName(item);
+		if (pname){
+			return item[pname];
+		}
+	}	
+	
 	/**
 	 * Type identifying String
 	 */
@@ -339,14 +388,35 @@ tent.declare('tent.entities', function(){
 	 * Creates a new entity Context
 	 * @class a Context that contains collections ({@link tent.entities.Collection}) of entities. Tracks changes on its entities.
 	 * @constructor 
-	 * @param {Object} trackChanges if true change tracking is activated
+	 * @param {Boolean} [trackChanges] if true change tracking is activated
+	 * @param {Object} [options]
+	 * @param {Boolean} [options.trackChanges] if true change tracking is activated
+	 * @param {Boolean} [options.defaultIdProperty] default id property name in entities
 	 */
-    tent.entities.Context = function Context(trackChanges){
+    tent.entities.Context = function Context(trackChanges, options){
         this.__collections__ = {};
         this.__types__ = {};
-        if (trackChanges === true) {
+		if (typeof trackChanges != 'boolean'){
+			options = trackChanges;
+			trackChanges = null;
+		}
+		if (!options){
+			options = {};
+		}
+		if (trackChanges===true){
+			options.trackChanges=true;
+		}
+		
+        if (options.trackChanges === true) {
             this.trackChanges();
         }
+		
+		/**
+		 * Configuration options for this context
+		 * @type {Object}
+		 * @field
+		 */		
+		 this.options = options;
 		
 		/**
 		 * Changes detected on this context. Activate change tracking calling {@link #trackChanges}
@@ -354,13 +424,49 @@ tent.declare('tent.entities', function(){
 		 * @field
 		 */		
 		 this.changes = null;
+		 
     }
     
 	/**
 	 * A global {@link tent.entities.Context} instance.
 	 */
     tent.entities.MyContext = new tent.entities.Context();
-    
+    	
+	/**
+	 * Gets the name of the id property of an entity
+	 * @param {Object} item
+	 * @return {String} the item id property name, or undefined if no id property could be found
+	 */
+	tent.entities.Context.prototype.getIdPropertyName = function(item){
+		if (item.__entityType__){
+			return  item.__entityType__.getIdPropertyName(item);
+		} else {
+			if (this.options.defaultIdProperty) {
+				return this.options.defaultIdProperty;
+			}
+			else {
+				if (typeof item['id'] != 'undefined') {
+					return 'id';
+				}
+				if (typeof item['_id'] != 'undefined') {
+					return '_id';
+				}
+			}
+		}
+	}	
+	
+	/**
+	 * Gets the id of an entity
+	 * @param {Object} item
+	 * @return the item id, or undefined if no id property could be found
+	 */
+	tent.entities.Context.prototype.getId = function(item){
+		var pname = this.getIdPropertyName(item);
+		if (pname){
+			return item[pname];
+		}
+	}
+	
 	/**
 	 * Returns all entities in this Context
 	 * @return {Array} all entities in this Context
@@ -373,6 +479,21 @@ tent.declare('tent.entities', function(){
         return items;
     }
     
+	/**
+	 * Finds the first entity that satisfies a condition in this Context
+	 * @param {function()} [condition] a function that returns true for the item to find, if no function is provided the first element in the context is return
+	 * @return {Object} the found entity, or null if not found
+	 */
+    tent.entities.Context.prototype.first = function(condition){
+        for (var collname in this.__collections__) {
+			var item = this.__collections__[collname].items.first(condition);
+			if (item){
+				return item;
+			}
+        }
+        return null;
+    }
+	
 	/**
 	 * Filters entities in this Context
 	 * @param {function()} condition a function that returns true for items that pass the filter
@@ -1576,4 +1697,37 @@ tent.declare('tent.entities', function(){
 		}
     }
     
+	/**
+	 * Gets the name of the id property in an entity
+	 * @param {Object} item
+	 * @return the item id, or undefined if no id property could be found
+	 */
+	tent.entities.getIdPropertyName = function(item){
+		if (item.__entityType__){
+			return  item.__entityType__.getIdPropertyName(item);
+		}else {
+			if (item.__collection__){
+				return  item.__collection__.context.getIdPropertyName(item);
+			}
+			if (typeof item['id'] != 'undefined'){
+				return 'id';
+			}
+			if (typeof item['_id'] != 'undefined'){
+				return '_id';
+			}
+		}
+	}	
+	
+	/**
+	 * Gets the id of an entity
+	 * @param {Object} item
+	 * @return the item id, or undefined if no id property could be found
+	 */
+	tent.entities.getId = function(item){
+		var pname = tent.entities.getIdPropertyName(item);
+		if (pname){
+			return item[pname];
+		}
+	}	
+	
 });

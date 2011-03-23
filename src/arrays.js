@@ -44,6 +44,20 @@ tent.declare('tent.arrays', function(){
         },        
     	
 		/**
+		 * finds the first item that satisfies a condition 
+		 * @param {function()} [condition] the condition to evaluate, or null to return the first item in the array
+		 * @return the first item that satisfies the condition, or null if no item is found
+		 */
+        first: function(condition){
+            for (var i = 0, l = this.length; i < l; i++) {
+                if (condition(this[i])) {
+                    return this[i];
+                }
+            }
+            return null;
+        },        
+    	
+		/**
 		 * finds an item by a property 
 		 * @param {String} propertyName
 		 * @param value

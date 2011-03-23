@@ -153,8 +153,12 @@ tent.clone = function(obj, options) {
             if(typeof obj[i] == "object" && options.deep) {
               options.deepStack.push(obj);
               if(options.deepStack.lastIndexOf(obj[i]) < 0) {
-                if(options.attachedObjects !== false || !obj[i].__collection__) {
-                  cloneObj.push(tent.clone(obj[i], options))
+                if(options.attachedObjectsIds && obj[i].__collection__) {
+                  cloneObj.push(tent.entities.getId(obj[i]))
+                }else {
+                  if(options.attachedObjects !== false || !obj[i].__collection__) {
+                    cloneObj.push(tent.clone(obj[i], options))
+                  }
                 }
               }else {
                 if(!options.ignoreCircularReferences) {
@@ -178,13 +182,22 @@ tent.clone = function(obj, options) {
               continue
             }else {
               if(!options.clonePrivates && isPrivate) {
-                if(typeof obj[pname] == "object" && options.attachedObjects === false && obj[pname].__collection__) {
+                var value = obj.__observable__ ? tent.pget(obj, pname) : obj[pname];
+                if(typeof value == "object" && options.attachedObjectsIds && value.__collection__) {
+                  cloneObj[pname] = tent.entities.getId(value);
                   continue
                 }
-                cloneObj[pname] = obj[pname]
+                if(typeof value == "object" && options.attachedObjects === false && value.__collection__) {
+                  continue
+                }
+                cloneObj[pname] = value
               }else {
                 var value = obj.__observable__ ? tent.pget(obj, pname) : obj[pname];
                 if(options.deep && typeof value == "object") {
+                  if(options.attachedObjectsIds && value.__collection__) {
+                    cloneObj[pname] = tent.entities.getId(value);
+                    continue
+                  }
                   if(options.attachedObjects === false && value.__collection__) {
                     continue
                   }
@@ -221,6 +234,13 @@ tent.clone = function(obj, options) {
   tent.arrays.functions = {findByProperty:function(propertyName, value) {
     for(var i = 0, l = this.length;i < l;i++) {
       if(this[i][propertyName] === value) {
+        return this[i]
+      }
+    }
+    return null
+  }, first:function(condition) {
+    for(var i = 0, l = this.length;i < l;i++) {
+      if(condition(this[i])) {
         return this[i]
       }
     }
@@ -2042,6 +2062,40 @@ tent.clone = function(obj, options) {
       }
     }
   };
+  tent.entities.Type.prototype.getIdPropertyName = function(item) {
+    if(item.__entityType__ && item.__entityType === this) {
+      if(typeof this.idProperty == "undefined") {
+        this.idProperty = null;
+        for(var prop in this.properties) {
+          if(this.properties[prop].identity) {
+            if(this.idProperty) {
+              console.error('Error on type "' + this.name + '": multiple identity properties');
+              break
+            }
+            this.idProperty = prop
+          }
+        }
+      }
+      if(this.idProperty) {
+        return this.idProperty
+      }else {
+        if(typeof item["id"] != "undefined") {
+          return"id"
+        }
+        if(typeof item["_id"] != "undefined") {
+          return"_id"
+        }
+      }
+    }else {
+      return tent.entities.getIdPropertyName(item)
+    }
+  };
+  tent.entities.Type.prototype.getId = function(item) {
+    var pname = this.getIdPropertyName(item);
+    if(pname) {
+      return item[pname]
+    }
+  };
   tent.entities.Type.prototype.toString = function() {
     return"EntityType(" + this.name + ")"
   };
@@ -2193,21 +2247,63 @@ tent.clone = function(obj, options) {
     this.items.length = 0;
     return true
   };
-  tent.entities.Context = function Context(trackChanges) {
+  tent.entities.Context = function Context(trackChanges, options) {
     this.__collections__ = {};
     this.__types__ = {};
+    if(typeof trackChanges != "boolean") {
+      options = trackChanges;
+      trackChanges = null
+    }
+    if(!options) {
+      options = {}
+    }
     if(trackChanges === true) {
+      options.trackChanges = true
+    }
+    if(options.trackChanges === true) {
       this.trackChanges()
     }
+    this.options = options;
     this.changes = null
   };
   tent.entities.MyContext = new tent.entities.Context;
+  tent.entities.Context.prototype.getIdPropertyName = function(item) {
+    if(item.__entityType__) {
+      return item.__entityType__.getIdPropertyName(item)
+    }else {
+      if(this.options.defaultIdProperty) {
+        return this.options.defaultIdProperty
+      }else {
+        if(typeof item["id"] != "undefined") {
+          return"id"
+        }
+        if(typeof item["_id"] != "undefined") {
+          return"_id"
+        }
+      }
+    }
+  };
+  tent.entities.Context.prototype.getId = function(item) {
+    var pname = this.getIdPropertyName(item);
+    if(pname) {
+      return item[pname]
+    }
+  };
   tent.entities.Context.prototype.all = function() {
     var items = [];
     for(var collname in this.__collections__) {
       items.push.apply(items, this.__collections__[collname].items)
     }
     return items
+  };
+  tent.entities.Context.prototype.first = function(condition) {
+    for(var collname in this.__collections__) {
+      var item = this.__collections__[collname].items.first(condition);
+      if(item) {
+        return item
+      }
+    }
+    return null
   };
   tent.entities.Context.prototype.filter = function(condition) {
     var items = [];
@@ -2965,6 +3061,27 @@ tent.clone = function(obj, options) {
         delete change.__syncState__
       }
     }
+  };
+  tent.entities.getIdPropertyName = function(item) {
+    if(item.__entityType__) {
+      return item.__entityType__.getIdPropertyName(item)
+    }else {
+      if(item.__collection__) {
+        return item.__collection__.context.getIdPropertyName(item)
+      }
+      if(typeof item["id"] != "undefined") {
+        return"id"
+      }
+      if(typeof item["_id"] != "undefined") {
+        return"_id"
+      }
+    }
+  };
+  tent.entities.getId = function(item) {
+    var pname = tent.entities.getIdPropertyName(item);
+    if(pname) {
+      return item[pname]
+    }
   }
 });tent.declare("tent.persisters.rest", function() {
   tent.persisters.rest.uriCombine = function() {
@@ -3074,19 +3191,17 @@ tent.clone = function(obj, options) {
           return null
         }
         var rmt;
+        var idProperty = tent.entities.getIdPropertyName(local);
         if(local.__changeState__ === tent.entities.ChangeStates.DELETED) {
           rmt = {};
-          if(local.id) {
-            rmt._id = tent.pget(local, "id")
-          }
           if(local.rev) {
             rmt.rev = tent.pget(local, "rev")
           }
         }else {
-          rmt = tent.clone(local, {deep:true, onlyOwnProperties:true, attachedObjects:false, skipPrivates:true})
+          rmt = tent.clone(local, {deep:true, onlyOwnProperties:true, attachedObjectsIds:true, attachedObjects:false, skipPrivates:true})
         }
-        if(local._id) {
-          rmt._id = tent.pget(local, "_id")
+        if(idProperty && local[idProperty]) {
+          rmt[idProperty] = tent.pget(local, idProperty)
         }
         if(local._rev) {
           rmt._rev = tent.pget(local, "_rev")
@@ -3179,16 +3294,11 @@ tent.clone = function(obj, options) {
             var localChangeFinder = options.localChangeFinder || defaultOptions.localChangeFinder || function(ctx, remote, op) {
               if(ctx.hasChanges()) {
                 for(var j = 0, l = ctx.changes.items.length;j < l;j++) {
-                  if(typeof remote.id != "undefined" && ctx.changes.items[j]._id === remote.id) {
-                    return j
-                  }
-                  if(typeof remote.id != "undefined" && ctx.changes.items[j].id === remote.id) {
-                    return j
-                  }
-                  if(typeof remote._id != "undefined" && ctx.changes.items[j]._id === remote._id) {
-                    return j
-                  }
-                  if(typeof remote._id != "undefined" && ctx.changes.items[j].id === remote._id) {
+                  var local = ctx.changes.items[j];
+                  var localIdProperty = tent.entities.getIdPropertyName(local);
+                  var remoteIdProperty = tent.entities.getIdPropertyName(remote);
+                  var remoteId = remote[remoteIdProperty || localIdProperty];
+                  if(remoteId && remoteId === local[localIdProperty || remoteIdProperty]) {
                     return j
                   }
                 }
@@ -3215,20 +3325,27 @@ tent.clone = function(obj, options) {
     this.loadingErrors = [];
     this.loadItemMapper = null;
     this.localItemFinder = function(context, remote) {
-      return context.filter(function(item) {
-        if(typeof remote._id != "undefined" && item._id === remote._id || typeof remote.id != "undefined" && item.id === remote.id) {
+      return context.first(function(item) {
+        var idProperty = tent.entities.getIdPropertyName(item);
+        if(idProperty && item[idProperty === remote[idProperty]]) {
           return true
         }
-        return false
-      })[0]
+      })
     };
     this.versionEquals = function(local, remote) {
       return local._rev === remote._rev
     };
     this.updateLocalVersion = function(local, remote) {
       local._rev = remote.rev || remote._rev;
-      if(typeof remote.id != "undefined" && remote.id !== local._id) {
-        local._id = remote.id
+      var idProperty = tent.entities.getIdPropertyName(local);
+      var remoteId = tent.entities.getId(remote) || remote[idProperty];
+      if(!remoteId) {
+        if(!idProperty) {
+          idProperty = tent.entities.getIdPropertyName(remote)
+        }
+        if(local[idProperty] !== remoteId) {
+          local[idProperty] = remoteId
+        }
       }
     };
     this.isDeleted = function(remote) {
@@ -3241,7 +3358,7 @@ tent.clone = function(obj, options) {
       if(change instanceof tent.entities.EntityLink) {
         return null
       }
-      var uri = change._id || change.id || "/";
+      var uri = (tent.entities.getId(change) || "/") + "";
       if(change.__changeState__ == tent.entities.ChangeStates.DELETED) {
         var hasQuery = false;
         if(change._rev) {
@@ -3263,7 +3380,7 @@ tent.clone = function(obj, options) {
       if(change.__changeState__ === tent.entities.ChangeStates.MODIFIED) {
         return"PUT"
       }
-      if(change._id || change.id) {
+      if(tent.entities.getId(change)) {
         return"PUT"
       }
       return"POST"

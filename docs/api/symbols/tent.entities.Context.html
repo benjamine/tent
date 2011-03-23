@@ -107,7 +107,7 @@
 		&copy;2011<br />
 		Documentation generator: <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0<br />
 		Template: <a href="http://www.thebrightlines.com/2010/05/06/new-template-for-jsdoctoolkit-codeview/" target="_blank">Codeview</a> 1.2<br />
-		Generated on: 2011-2-19 18:32
+		Generated on: 2011-2-22 22:40
 	</div>
 </div>
 
@@ -152,7 +152,7 @@
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription" >
 								<div class="fixedFont">
-									<b><a href="../symbols/tent.entities.Context.html#constructor">tent.entities.Context</a></b>(trackChanges)
+									<b><a href="../symbols/tent.entities.Context.html#constructor">tent.entities.Context</a></b>(trackChanges, options)
 								</div>
 								<div class="description">Creates a new entity Context</div>
 							</td>
@@ -195,6 +195,16 @@
 										<b><a href="../symbols/tent.entities.Context.html#changes">changes</a></b>
 										</div>
 										<div class="description">Changes detected on this context.</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										<b><a href="../symbols/tent.entities.Context.html#options">options</a></b>
+										</div>
+										<div class="description">Configuration options for this context</div>
 									</td>
 								</tr>
 							
@@ -330,6 +340,39 @@
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/tent.entities.Context.html#first">first</a></b>(condition)
+										</div>
+										<div class="description">Finds the first entity that satisfies a condition in this Context</div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item10'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/tent.entities.Context.html#getId">getId</a></b>(item)
+										</div>
+										<div class="description">Gets the id of an entity</div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item11'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/tent.entities.Context.html#getIdPropertyName">getIdPropertyName</a></b>(item)
+										</div>
+										<div class="description">Gets the name of the id property of an entity</div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item12'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
 										<div class="fixedFont"><b><a href="../symbols/tent.entities.Context.html#hasChanges">hasChanges</a></b>()
 										</div>
 										<div class="description">Indicates if changes on this Context's entities has been detected</div>
@@ -337,7 +380,18 @@
 								</tr>
 							
 								<tr
-									 class='item10'
+									 class='item13'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/tent.entities.Context.html#markAsSaving">markAsSaving</a></b>()
+										</div>
+										<div class="description">Marks items being saved by a a sync operation (this prevents concurrent modification conflicts)</div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item14'
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
@@ -348,7 +402,7 @@
 								</tr>
 							
 								<tr
-									 class='item11'
+									 class='item15'
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
@@ -359,7 +413,7 @@
 								</tr>
 							
 								<tr
-									 class='item12'
+									 class='item16'
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
@@ -370,7 +424,7 @@
 								</tr>
 							
 								<tr
-									 class='item13'
+									 class='item17'
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
@@ -381,7 +435,7 @@
 								</tr>
 							
 								<tr
-									 class='item14'
+									 class='item18'
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
@@ -414,7 +468,7 @@
 					</h2>
 					
 					<div class="fixedFont">
-						<b>tent.entities.Context</b>(trackChanges)
+						<b>tent.entities.Context</b>(trackChanges, options)
 					</div>
 					
 					<div class="description">
@@ -429,10 +483,28 @@
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{Object}</span>  <b>trackChanges</b>
-									
+									<span class="light fixedFont">{Boolean}</span>  <b>trackChanges</b>
+									<i>Optional</i>
 								</dt>
 								<dd>if true change tracking is activated</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Object}</span>  <b>options</b>
+									<i>Optional</i>
+								</dt>
+								<dd></dd>
+							
+								<dt>
+									<span class="light fixedFont">{Boolean}</span>  <b>options.trackChanges</b>
+									<i>Optional</i>
+								</dt>
+								<dd>if true change tracking is activated</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Boolean}</span>  <b>options.defaultIdProperty</b>
+									<i>Optional</i>
+								</dt>
+								<dd>default id property name in entities</dd>
 							
 						</dl>
 					
@@ -486,6 +558,28 @@
 						
 						<div class="description">
 							Changes detected on this context. Activate change tracking calling #trackChanges
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id="options">
+							<span class='lighter'>
+							
+							</span>
+							
+							
+							
+							<b>options</b>							
+						</div>
+						
+						<div class="description">
+							Configuration options for this context
 							
 							
 							
@@ -936,6 +1030,189 @@
 							<li 
 								 class='item9'
 							>
+								<div class="fixedFont heading" id="first">
+									<span class='lighter'>
+									
+									</span>
+									
+									<span class="light">{Object}</span>
+									
+									<b>first</b>(condition)
+								</div>
+								
+								<div class="description">
+									Finds the first entity that satisfies a condition in this Context
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+									<dl class="detailList params">
+										<dt class="heading">Parameters:</dt>
+										
+											<dt>
+												<span class="light fixedFont">{function()}</span> <b>condition</b>
+												<i>Optional</i>
+											</dt>
+											<dd>a function that returns true for the item to find, if no function is provided the first element in the context is return</dd>
+										
+									</dl>
+								
+								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{Object}</span> the found entity, or null if not found</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item10'
+							>
+								<div class="fixedFont heading" id="getId">
+									<span class='lighter'>
+									
+									</span>
+									
+									
+									
+									<b>getId</b>(item)
+								</div>
+								
+								<div class="description">
+									Gets the id of an entity
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+									<dl class="detailList params">
+										<dt class="heading">Parameters:</dt>
+										
+											<dt>
+												<span class="light fixedFont">{Object}</span> <b>item</b>
+												
+											</dt>
+											<dd></dd>
+										
+									</dl>
+								
+								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd>the item id, or undefined if no id property could be found</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item11'
+							>
+								<div class="fixedFont heading" id="getIdPropertyName">
+									<span class='lighter'>
+									
+									</span>
+									
+									<span class="light">{String}</span>
+									
+									<b>getIdPropertyName</b>(item)
+								</div>
+								
+								<div class="description">
+									Gets the name of the id property of an entity
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+									<dl class="detailList params">
+										<dt class="heading">Parameters:</dt>
+										
+											<dt>
+												<span class="light fixedFont">{Object}</span> <b>item</b>
+												
+											</dt>
+											<dd></dd>
+										
+									</dl>
+								
+								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{String}</span> the item id property name, or undefined if no id property could be found</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item12'
+							>
 								<div class="fixedFont heading" id="hasChanges">
 									<span class='lighter'>
 									
@@ -984,7 +1261,36 @@
 							</li>
 						
 							<li 
-								 class='item10'
+								 class='item13'
+							>
+								<div class="fixedFont heading" id="markAsSaving">
+									<span class='lighter'>
+									
+									</span>
+									
+									
+									
+									<b>markAsSaving</b>()
+								</div>
+								
+								<div class="description">
+									Marks items being saved by a a sync operation (this prevents concurrent modification conflicts)
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+								
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item14'
 							>
 								<div class="fixedFont heading" id="push">
 									<span class='lighter'>
@@ -1037,7 +1343,7 @@
 							</li>
 						
 							<li 
-								 class='item11'
+								 class='item15'
 							>
 								<div class="fixedFont heading" id="pushModel">
 									<span class='lighter'>
@@ -1087,7 +1393,7 @@
 							</li>
 						
 							<li 
-								 class='item12'
+								 class='item16'
 							>
 								<div class="fixedFont heading" id="remove">
 									<span class='lighter'>
@@ -1116,7 +1422,7 @@
 							</li>
 						
 							<li 
-								 class='item13'
+								 class='item17'
 							>
 								<div class="fixedFont heading" id="touch">
 									<span class='lighter'>
@@ -1145,7 +1451,7 @@
 							</li>
 						
 							<li 
-								 class='item14'
+								 class='item18'
 							>
 								<div class="fixedFont heading" id="trackChanges">
 									<span class='lighter'>

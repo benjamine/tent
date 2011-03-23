@@ -107,7 +107,7 @@
 		&copy;2011<br />
 		Documentation generator: <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0<br />
 		Template: <a href="http://www.thebrightlines.com/2010/05/06/new-template-for-jsdoctoolkit-codeview/" target="_blank">Codeview</a> 1.2<br />
-		Generated on: 2011-2-19 18:32
+		Generated on: 2011-2-22 22:40
 	</div>
 </div>
 
@@ -252,6 +252,28 @@
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/tent.entities.Type.html#getId">getId</a></b>(item)
+										</div>
+										<div class="description">Gets the id of an entity</div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item2'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/tent.entities.Type.html#getIdPropertyName">getIdPropertyName</a></b>(item)
+										</div>
+										<div class="description">Gets the name of the id property of an entity</div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item3'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
 										<div class="fixedFont"><b><a href="../symbols/tent.entities.Type.html#toString">toString</a></b>()
 										</div>
 										<div class="description">Type identifying String</div>
@@ -291,7 +313,7 @@
 					
 					
 													
-							<pre class="code brush: js"> var Person = new tent.entities.Type('Person',{ 	name: {}, // scalar property 	age: {}, // scalar property	 	pet: { 		reverse: 'owner', // each Person is his pet''s owner 		cardinality: '11', // one Person has one pet (optional, as '11' is the default) 		collection: 'Animal', // pets belong to the 'Animal' collection (see {@link tent.entities.Collection} 	}  	descendants: {  		 reverse: 'ancestor', // name of the property in 'descendants' objects 		 cardinality: '1n', // each Person has many descendants  		 collection: 'Person', // descendants belong to the 'Person' collection (see {@link tent.entities.Collection}          cascadePush: true, // when adding a Person, add its descendants too          cascadeRemove: true, // when deleting a Person, delete its descendants too          onLinkPush: true, // when a Person is added as descendant, add it to the {@link tent.entities.Context} too          onUnlinkRemove: true // when a Person is removed descendant, delete if from the {@link tent.entities.Context} too         },  	ancestor: {  		reverse: 'descendants', 		cardinality: 'n1', // many Persons have one ancestor 		collection: 'Person' // ancestor belongs to the 'Person' collection (see {@link tent.entities.Collection} 		},  	friends: {  		reverse: 'friends', 		cardinality: 'nm' // many Persons have many Person friends 		collection: 'Person' // friends belongs to the 'Person' collection (see {@link tent.entities.Collection}     }  });</pre>
+							<pre class="code brush: js"> var Person = new tent.entities.Type('Person',{ 	personId: { identity: true }, // identity property 	name: {}, // scalar property 	age: {}, // scalar property	 	pet: { 		reverse: 'owner', // each Person is his pet''s owner 		cardinality: '11', // one Person has one pet (optional, as '11' is the default) 		collection: 'Animal', // pets belong to the 'Animal' collection (see {@link tent.entities.Collection} 	}  	descendants: {  		 reverse: 'ancestor', // name of the property in 'descendants' objects 		 cardinality: '1n', // each Person has many descendants  		 collection: 'Person', // descendants belong to the 'Person' collection (see {@link tent.entities.Collection}          cascadePush: true, // when adding a Person, add its descendants too          cascadeRemove: true, // when deleting a Person, delete its descendants too          onLinkPush: true, // when a Person is added as descendant, add it to the {@link tent.entities.Context} too          onUnlinkRemove: true // when a Person is removed descendant, delete if from the {@link tent.entities.Context} too         },  	ancestor: {  		reverse: 'descendants', 		cardinality: 'n1', // many Persons have one ancestor 		collection: 'Person' // ancestor belongs to the 'Person' collection (see {@link tent.entities.Collection} 		},  	friends: {  		reverse: 'friends', 		cardinality: 'nm' // many Persons have many Person friends 		collection: 'Person' // friends belongs to the 'Person' collection (see {@link tent.entities.Collection}     }  });</pre>
 						
 					
 				
@@ -442,6 +464,128 @@
 						
 							<li 
 								 class='item1'
+							>
+								<div class="fixedFont heading" id="getId">
+									<span class='lighter'>
+									
+									</span>
+									
+									
+									
+									<b>getId</b>(item)
+								</div>
+								
+								<div class="description">
+									Gets the id of an entity
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+									<dl class="detailList params">
+										<dt class="heading">Parameters:</dt>
+										
+											<dt>
+												<span class="light fixedFont">{Object}</span> <b>item</b>
+												
+											</dt>
+											<dd></dd>
+										
+									</dl>
+								
+								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd>the item id, or undefined if no id property could be found</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item2'
+							>
+								<div class="fixedFont heading" id="getIdPropertyName">
+									<span class='lighter'>
+									
+									</span>
+									
+									<span class="light">{String}</span>
+									
+									<b>getIdPropertyName</b>(item)
+								</div>
+								
+								<div class="description">
+									Gets the name of the id property of an entity
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+									<dl class="detailList params">
+										<dt class="heading">Parameters:</dt>
+										
+											<dt>
+												<span class="light fixedFont">{Object}</span> <b>item</b>
+												
+											</dt>
+											<dd></dd>
+										
+									</dl>
+								
+								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{String}</span> the item id property name, or undefined if no id property could be found</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item3'
 							>
 								<div class="fixedFont heading" id="toString">
 									<span class='lighter'>

@@ -221,6 +221,7 @@ tent.isDOMProperty = function(name){
  * @param {Boolean} [options.deep] clone deeply, traverse through object properties?
  * @param {Boolean} [options.clonePrivates] clone private members (properties starting with _)
  * @param {Boolean} [options.skipPrivates] skip (don't copy) private members (properties starting with _)
+ * @param {Boolean} [options.attachedObjectsIds] if true objects attached to a {@link tent.entities.Context} are replaced by their ids (useful for persistence serialization)
  * @param {Boolean} [options.attachedObjects] if true objects attached to a {@link tent.entities.Context} are cloned too, by default is true (if false deep cloning stops at attached objects)
  * @param {Boolean} [options.ignoreCircularReferences] if cloning deeply, ignore circular references (otherwise error is thrown)
  * @param {Boolean} [options.onlyForTracking] only clone if the current browser only support tracking on DOM objects (eg: IE8), otherwise original obj is returned
@@ -256,7 +257,9 @@ tent.clone = function(obj, options){
                         if (typeof obj[i]=='object' && options.deep) {
                             options.deepStack.push(obj);
                             if (options.deepStack.lastIndexOf(obj[i]) < 0) { 
-				                if ((options.attachedObjects !== false) || !obj[i].__collection__) {
+				                if ((options.attachedObjectsIds) && obj[i].__collection__) {
+									cloneObj.push(tent.entities.getId(obj[i]));
+								}else if ((options.attachedObjects !== false) || !obj[i].__collection__) {
 									cloneObj.push(tent.clone(obj[i], options));
 								}
                             } else if (!options.ignoreCircularReferences) {
@@ -281,16 +284,25 @@ tent.clone = function(obj, options){
                         if (options.skipPrivates && isPrivate) {
                             continue;
                         }else if ((!options.clonePrivates) && isPrivate) {
-			                if (typeof obj[pname]=='object' && (options.attachedObjects === false) && obj[pname].__collection__) {
+							var value = obj.__observable__ ? tent.pget(obj,pname): obj[pname];
+			                if (typeof value=='object' && options.attachedObjectsIds && value.__collection__) {
+	                            cloneObj[pname] = tent.entities.getId(value);
 								continue;
 							}
-                            cloneObj[pname] = obj[pname];
+			                if (typeof value=='object' && (options.attachedObjects === false) && value.__collection__) {
+								continue;
+							}
+                            cloneObj[pname] = value;
                         }
                         else {
                         
 							var value = obj.__observable__ ? tent.pget(obj,pname): obj[pname];
 						
                             if (options.deep && typeof value == 'object') {
+				                if ((options.attachedObjectsIds) && value.__collection__) {
+									cloneObj[pname] = tent.entities.getId(value);
+									continue;
+								}
 				                if ((options.attachedObjects === false) && value.__collection__) {
 									continue;
 								}

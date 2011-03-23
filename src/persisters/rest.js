@@ -146,11 +146,9 @@ tent.declare('tent.persisters.rest', function(){
                     return null;
                 }
                 var rmt;
+				var idProperty = tent.entities.getIdPropertyName(local);
 				if (local.__changeState__ === tent.entities.ChangeStates.DELETED) {
 					rmt = {};
-					if (local.id) {
-						rmt._id = tent.pget(local, 'id');
-					}
 					if (local.rev) {
 						rmt.rev = tent.pget(local, 'rev');
 					}
@@ -159,12 +157,13 @@ tent.declare('tent.persisters.rest', function(){
 					rmt = tent.clone(local, {
 						deep: true,
 						onlyOwnProperties: true,
+						attachedObjectsIds: true,
 						attachedObjects: false,
 						skipPrivates: true
 					});
 				}
-				if (local._id) {
-					rmt._id = tent.pget(local, '_id');
+				if (idProperty && local[idProperty]) {
+					rmt[idProperty] = tent.pget(local, idProperty);
 				}
 				if (local._rev) {
 					rmt._rev = tent.pget(local, '_rev');
@@ -283,18 +282,13 @@ tent.declare('tent.persisters.rest', function(){
                         function(ctx, remote, op){
                             if (ctx.hasChanges()) {
                                 for (var j = 0, l = ctx.changes.items.length; j < l; j++) {
-                                    if (typeof remote.id != 'undefined' && ctx.changes.items[j]._id === remote.id) {
+									var local = ctx.changes.items[j];
+									var localIdProperty = tent.entities.getIdPropertyName(local);
+									var remoteIdProperty = tent.entities.getIdPropertyName(remote);
+									var remoteId = remote[remoteIdProperty || localIdProperty];
+									if (remoteId && remoteId === local[localIdProperty || remoteIdProperty]){
                                         return j;
-                                    }
-                                    if (typeof remote.id != 'undefined' && ctx.changes.items[j].id === remote.id) {
-                                        return j;
-                                    }
-                                    if (typeof remote._id != 'undefined' && ctx.changes.items[j]._id === remote._id) {
-                                        return j;
-                                    }
-                                    if (typeof remote._id != 'undefined' && ctx.changes.items[j].id === remote._id) {
-                                        return j;
-                                    }
+									}
                                 }
                             }
                         };
@@ -365,13 +359,12 @@ tent.declare('tent.persisters.rest', function(){
          * @type function()
          */
         this.localItemFinder = function(context, remote){
-            return context.filter(function(item){
-                if ((typeof remote._id != 'undefined' && item._id === remote._id) ||
-                (typeof remote.id != 'undefined' && item.id === remote.id)) {
-                    return true;
-                }
-                return false;
-            })[0];
+            return context.first(function(item){
+				var idProperty = tent.entities.getIdPropertyName(item);
+				if (idProperty && item[idProperty === remote[idProperty]]){
+					return true;
+				}
+			});
         };
         
         /**
@@ -390,8 +383,15 @@ tent.declare('tent.persisters.rest', function(){
          */
         this.updateLocalVersion = function(local, remote){
             local._rev = remote.rev || remote._rev;
-			if (typeof remote.id != 'undefined' && remote.id !== local._id){
-				local._id = remote.id;
+			var idProperty = tent.entities.getIdPropertyName(local);
+			var remoteId  = tent.entities.getId(remote) || remote[idProperty];
+			if (!remoteId){
+				if (!idProperty){
+					idProperty = tent.entities.getIdPropertyName(remote);
+				}
+				if (local[idProperty] !== remoteId){
+					local[idProperty] = remoteId;
+				}
 			}
         };
         
@@ -435,9 +435,9 @@ tent.declare('tent.persisters.rest', function(){
 				// entity link not supported
 				return null;
 			}
-			var uri = change._id || change.id || '/';
+			var uri = (tent.entities.getId(change) || '/')+'';
 			if (change.__changeState__ == tent.entities.ChangeStates.DELETED){
-				var hasQuery=false;				
+				var hasQuery=false;
 				if (change._rev){
 					uri+=(hasQuery ? '&':'?')+ 'rev='+change._rev;
 					hasQuery = true;
@@ -461,9 +461,9 @@ tent.declare('tent.persisters.rest', function(){
 			if (change.__changeState__ === tent.entities.ChangeStates.MODIFIED){
 				return 'PUT';
 			}	
-			if (change._id || change.id){
+			if (tent.entities.getId(change)){
 				return 'PUT';
-			}	
+			}
 			return 'POST';
 		}
     }
