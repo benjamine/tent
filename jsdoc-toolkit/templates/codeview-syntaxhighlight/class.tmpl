@@ -16,7 +16,17 @@
 						classType += "Function ";
 					}
 					classType += "Namespace ";
-				} else {
+				} 
+				else if (data.isEnumeration) {
+                    classType += "Enumeration ";
+                }
+                else if (data.isGlslUniform) {
+                    classType += "glsl Uniform ";
+                }
+                else if (data.isGlslFunction) {
+                    classType += "glsl Function ";
+                }
+                else {
 					classType += "Class ";
 				}
 			!}
@@ -352,7 +362,7 @@
 							<if test="data.returns.length">
 								<dt class="heading">Returns:</dt>
 								<for each="item" in="data.returns">
-										<dd>{+((item.type)?"<span class=\"light fixedFont\">{"+(new Link().toSymbol(item.type))+"}</span> " : "")+}{+resolveLinks(item.desc)+}</dd>
+										<dd>{+((item.type)?"<span class=\"light fixedFont\">{"+(new Link().toSymbol(item.type))+"}</span> " : "")+}{+resolveLinks(item.desc)+"<br/>"+}</dd>
 								</for>
 							</if>
 							
@@ -366,7 +376,7 @@
 							<if test="data.see.length">
 								<dt class="heading">See:</dt>
 								<for each="item" in="data.see">
-									<dd>{+ new Link().toSymbol(item) +}</dd>
+									<dd>{+ new Link().toSymbol(item)+"<br/>" +}</dd>
 								</for>
 							</if>
 						</dl>
@@ -431,7 +441,7 @@
 								<if test="member.see.length">
 									<dt class="heading">See:</dt>
 									<for each="item" in="member.see">
-										<dd>{+ new Link().toSymbol(item) +}</dd>
+										<dd>{+ new Link().toSymbol(item)+"<br/>" +}</dd>
 									</for>
 								</if>
 								<if test="member.defaultValue">
@@ -534,14 +544,14 @@
 												<dt>
 													{+((item.type)?"<span class=\"light fixedFont\">{"+(new Link().toSymbol(item.type))+"}</span> " : "")+} <b>{+item.name+}</b>
 												</dt>
-												<dd>{+resolveLinks(item.desc)+}</dd>
+												<dd>{+resolveLinks(item.desc)+"<br/>" +}</dd>
 											</for>
 										</if>
 										
 										<if test="member.returns.length">
 											<dt class="heading">Returns:</dt>
 											<for each="item" in="member.returns">
-												<dd>{+((item.type)?"<span class=\"light fixedFont\">{"+(new Link().toSymbol(item.type))+"}</span> " : "")+}{+resolveLinks(item.desc)+}</dd>
+												<dd>{+((item.type)?"<span class=\"light fixedFont\">{"+(new Link().toSymbol(item.type))+"}</span> " : "")+}{+resolveLinks(item.desc)+"<br/>"+}</dd>
 											</for>
 										</if>
 										
@@ -555,7 +565,7 @@
 										<if test="member.see.length">
 											<dt class="heading">See:</dt>
 											<for each="item" in="member.see">
-												<dd>{+ new Link().toSymbol(item) +}</dd>
+												<dd>{+ new Link().toSymbol(item)+"<br/>" +}</dd>
 											</for>
 										</if>
 									
@@ -649,7 +659,7 @@
 								<if test="member.returns.length">
 									<dt class="heading">Returns:</dt>
 									<for each="item" in="member.returns">
-										<dd>{+((item.type)?"<span class=\"light fixedFont\">{"+(new Link().toSymbol(item.type))+"}</span> " : "")+}{+resolveLinks(item.desc)+}</dd>
+										<dd>{+((item.type)?"<span class=\"light fixedFont\">{"+(new Link().toSymbol(item.type))+"}</span> " : "")+}{+resolveLinks(item.desc)+"<br/>"+}</dd>
 									</for>
 								</if>
 								
@@ -663,7 +673,7 @@
 								<if test="member.see.length">
 									<dt class="heading">See:</dt>
 									<for each="item" in="member.see">
-										<dd>{+ new Link().toSymbol(item) +}</dd>
+										<dd>{+ new Link().toSymbol(item)+"<br/>" +}</dd>
 									</for>
 								</if>
 							</dl>

@@ -277,11 +277,35 @@ JSDOC.Symbol.prototype.setTags = function() {
 		this.classDesc = namespaces[0].desc;
 		this.isNamespace = true;
 	}
-	
+		
 	/*t:
 		var sym = new JSDOC.Symbol("foo", [], "OBJECT", new JSDOC.DocComment("/**@namespace This describes the namespace.*"+"/"));
 		is(sym.classDesc, "This describes the namespace.", "@namespace tag, class description is found.");
 	*/
+	
+	// @enumeration
+	var enumeration = this.comment.getTag("enumeration");
+	if (enumeration.length) {
+	    this.classDesc = enumeration[0].desc;
+	    this.isa = "CONSTRUCTOR";
+	    this.isEnumeration = true;
+	}
+	
+	// @glslUniform
+	var glslUniform = this.comment.getTag("glslUniform");
+	if (glslUniform.length) {
+        this.isa = "CONSTRUCTOR";
+        this.classDesc = glslUniform[0].desc;
+        this.isGlslUniform = true;
+    }
+	
+	// @glslFunction
+	var glslFunction = this.comment.getTag("glslFunction");
+	if (glslFunction.length) {
+	    this.isa = "CONSTRUCTOR";
+        this.classDesc = glslFunction[0].desc;
+	    this.isGlslFunction = true;
+	}
 	
 	// @param
 	var params = this.comment.getTag("param");
