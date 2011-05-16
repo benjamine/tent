@@ -307,6 +307,14 @@ JSDOC.Symbol.prototype.setTags = function() {
 	    this.isGlslFunction = true;
 	}
 	
+	// @glslConstant
+	var glslConstant = this.comment.getTag("glslConstant");
+    if (glslConstant.length) {
+        this.isa = "CONSTRUCTOR";
+        this.classDesc = glslConstant[0].desc;
+        this.isGlslConstant = true;
+    }
+	
 	// @param
 	var params = this.comment.getTag("param");
 	if (params.length) {

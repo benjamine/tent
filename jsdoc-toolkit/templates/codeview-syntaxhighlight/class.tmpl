@@ -23,6 +23,9 @@
                 else if (data.isGlslUniform) {
                     classType += "glsl Uniform ";
                 }
+                else if (data.isGlslConstant) {
+                    classType += "glsl Constant ";
+                }
                 else if (data.isGlslFunction) {
                     classType += "glsl Function ";
                 }
@@ -67,8 +70,16 @@
 					<caption class="sectionTitle">{+classType+}Summary</caption>
 					<thead>
 						<tr>
-							<th scope="col">Constructor Attributes</th>
-							<th scope="col">Constructor Name and Description</th>
+						    {!
+						      if(classType === "Class ") {
+						          constructorType = "Constructor";
+						      }
+						      else {
+						          constructorType = classType;
+						      }
+						    !}
+							<th scope="col">{+constructorType+} Attributes</th>
+							<th scope="col">{+constructorType+} Name and Description</th>
 						</tr>
 					</thead>
 					<tbody>

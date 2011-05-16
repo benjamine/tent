@@ -51,11 +51,14 @@ div.index div.indexLinks {
 div.index div.indexLinks a {
 	color: #999999;
 	text-transform: lowercase;
+	margin-right: 3px;
+    border-right: 1px solid #999999;
+    padding-right: 5px;
 }
 
-div.index div.indexLinks a:first-child {
+div.index div.indexLinks a:last-child {
 	margin-right: 3px;
-	border-right: 1px solid #999999;
+	border-right: 1px solid #F6F6F6;
 	padding-right: 5px;
 }
 

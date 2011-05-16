@@ -1,0 +1,19 @@
+{! Link.base = ""; /* all generated links will be relative to this */ !}
+{+subtemplate("subtemplates/head.tmpl", {subtitle: "Javascript Index"})+}
+{+subtemplate("subtemplates/menu.tmpl")+}
+<div class="content">
+    <div class="innerContent">
+        <h1 class="classTitle"><span>Javascript Index</span></h1>
+        
+        <ul class="fileList" id="FileList">
+            <for each="item" in="data">
+                <li>
+                    <h2 class="filename">{+new Link().toSymbol(item.alias).withText(item.name)+}</h2>
+                    
+                    <if test="item.desc">{+resolveLinks(item.desc)+}</if>
+                </li>
+            </for>
+        </ul>
+    </div>
+</div>
+{+subtemplate("subtemplates/foot.tmpl")+}

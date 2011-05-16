@@ -1,7 +1,10 @@
 <div class="index">
 	<div class="menu">
 		<div class="indexLinks">
+		    
 			{+new Link().toFile(JSDOC.opt.D.index=="files"?"allclasses.html":"index.html").withText("Classes")+}
+			{+new Link().toFile("glslIndex.html").withText("Glsl")+}
+			{+new Link().toFile("jsIndex.html").withText("JS")+}
 			{+new Link().toFile(JSDOC.opt.D.index=="files"?"index.html":"files.html").withText("Files")+}
 		</div>
 	
