@@ -47,7 +47,6 @@ function publish(symbolSet) {
 	function isGLSL($) {return ($.isGlslUniform || $.isGlslConstant || $.isGlslFunction)}
 	function isJS($) {return isaClass($) && !(isGLSL($))}
 	
-	
 	// get an array version of the symbolset, useful for filtering
 	var symbols = symbolSet.toArray();
 	
@@ -102,26 +101,26 @@ function publish(symbolSet) {
 	classesindexTemplate = classesIndex = classes = null;
 	
 	// create the GLSL index page
-	publish.glsl = symbols.filter(isGLSL).sort(makeSortby("alias"));
+	publish.classes = symbols.filter(isGLSL).sort(makeSortby("alias"));
 	try {
         var glslindexTemplate = new JSDOC.JsPlate(publish.conf.templatesDir+"glslfiles.tmpl");
     }
     catch(e) { print(e.message); quit(); }
     
-    var glslIndex = glslindexTemplate.process(publish.glsl);
+    var glslIndex = glslindexTemplate.process(publish.classes);
     IO.saveFile(publish.conf.outDir, ("glslIndex")+publish.conf.ext, glslIndex);
-    glslindexTemplate = glslIndex = null;
+    glslindexTemplate = glslIndex = classes = null;
 	
 	// create the Javscript index page
-    publish.js = symbols.filter(isJS).sort(makeSortby("alias"));
+    publish.classes = symbols.filter(isJS).sort(makeSortby("alias"));
     try {
         var jsindexTemplate = new JSDOC.JsPlate(publish.conf.templatesDir+"jsfiles.tmpl");
     }
     catch(e) { print(e.message); quit(); }
     
-    var jsIndex = jsindexTemplate.process(publish.js);
+    var jsIndex = jsindexTemplate.process(publish.classes);
     IO.saveFile(publish.conf.outDir, ("jsIndex")+publish.conf.ext, jsIndex);
-    jsindexTemplate = jsIndex = null;
+    jsindexTemplate = jsIndex = classes = null;
     
 	// create the file index page
 	try {
