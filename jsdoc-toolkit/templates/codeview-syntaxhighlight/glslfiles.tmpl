@@ -1,6 +1,6 @@
 {! Link.base = ""; /* all generated links will be relative to this */ !}
 {+subtemplate("subtemplates/head.tmpl", {subtitle: "GLSL Index"})+}
-{+subtemplate("subtemplates/menu.tmpl")+}
+{+subtemplate("subtemplates/glslmenu.tmpl")+}
 <div class="content">
     <div class="innerContent">
         <h1 class="classTitle"><span>GLSL Index</span></h1>
@@ -8,7 +8,7 @@
         <ul class="fileList" id="FileList">
             <for each="item" in="data">
                 <li>
-                    <h2 class="filename">{+new Link().toSymbol(item.alias).withText(item.name)+}</h2>
+                    <h2 class="filename">{+new Link().toFile("glslSymbols/" + item.alias + ".html").withText(item.name)+}</h2>
                     
                     <if test="item.desc">{+resolveLinks(item.desc)+}</if>
                 </li>
