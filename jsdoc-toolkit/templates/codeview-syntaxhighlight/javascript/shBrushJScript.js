@@ -79,7 +79,7 @@
                         'shadow1DProj shadow2DProj shadow1DLod ' +
                         'shadow2DLod shadow1DProjLod shadow2DProjLod ' +
                         'dFdx dFdy fwidth noise1 noise2 noise3 noise4 ' +
-                        'EmitVertex EndPrimitive' 
+                        'EmitVertex EndPrimitive' +
                         'gl_VertexID gl_InstanceID gl_Position ' +
                         'gl_PointSize gl_ClipDistance gl_PerVertex ' +
                         'gl_Layer gl_ClipVertex gl_FragCoord ' +

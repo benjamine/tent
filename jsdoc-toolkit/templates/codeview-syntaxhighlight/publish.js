@@ -6,8 +6,6 @@ function publish(symbolSet) {
 		templatesDir: JSDOC.opt.t || SYS.pwd+"../templates/jsdoc/",
 		staticDir:   "static/",
 		symbolsDir:  "symbols/",
-		glslSymbolsDir: "glslSymbols/",
-		jsSymbolsDir: "jsSymbols/",
 		srcDir:      "symbols/src/",
 		cssDir:      "css/",
 		fontsDir:    "css/fonts/",
@@ -29,8 +27,6 @@ function publish(symbolSet) {
 	IO.mkPath((publish.conf.outDir+publish.conf.fontsDir));
 	IO.mkPath((publish.conf.outDir+publish.conf.jsDir));
 	IO.mkPath((publish.conf.outDir+"symbols/src").split("/"));
-	IO.mkPath((publish.conf.outDir+publish.conf.glslSymbolsDir));
-	IO.mkPath((publish.conf.outDir+publish.conf.jsSymbolsDir));
 	
 	// used to allow Link to check the details of things being linked to
 	Link.symbolSet = symbolSet;
@@ -38,8 +34,6 @@ function publish(symbolSet) {
 	// create the required templates
 	try {
 		var classTemplate = new JSDOC.JsPlate(publish.conf.templatesDir+"class.tmpl");
-		var glslclassTemplate = new JSDOC.JsPlate(publish.conf.templatesDir+"glslclass.tmpl");
-		var jsclassTemplate = new JSDOC.JsPlate(publish.conf.templatesDir+"jsclass.tmpl");
 	}
 	catch(e) {
 		print("Couldn't create the required templates: "+e);
@@ -83,19 +77,6 @@ function publish(symbolSet) {
 		}
 	}
 	
-	// create each of the class pages
-	for (var i = 0, l = publish.classes.length; i < l; i++) {
-		var symbol = publish.classes[i];
-		
-		symbol.events = symbol.getEvents();   // 1 order matters
-		symbol.methods = symbol.getMethods(); // 2
-		
-		var output = "";
-		output = classTemplate.process(symbol);
-		
-		IO.saveFile(publish.conf.outDir+publish.conf.symbolsDir, ((JSDOC.opt.u)? Link.filemap[symbol.alias] : symbol.alias) + publish.conf.ext, output);
-	}
-	
 	// create the class index page
 	try {
 		var classesindexTemplate = new JSDOC.JsPlate(publish.conf.templatesDir+"allclasses.tmpl");
@@ -117,9 +98,9 @@ function publish(symbolSet) {
         symbol.methods = symbol.getMethods(); // 2
         
         var output = "";
-        output = glslclassTemplate.process(symbol);
+        output = classTemplate.process(symbol);
         
-        IO.saveFile(publish.conf.outDir+publish.conf.glslSymbolsDir, ((JSDOC.opt.u)? Link.filemap[symbol.alias] : symbol.alias) + publish.conf.ext, output);
+        IO.saveFile(publish.conf.outDir+publish.conf.symbolsDir, ((JSDOC.opt.u)? Link.filemap[symbol.alias] : symbol.alias) + publish.conf.ext, output);
     }
 	// create the GLSL index page
 	try {
@@ -142,9 +123,9 @@ function publish(symbolSet) {
         symbol.methods = symbol.getMethods(); // 2
         
         var output = "";
-        output = jsclassTemplate.process(symbol);
+        output = classTemplate.process(symbol);
         
-        IO.saveFile(publish.conf.outDir+publish.conf.jsSymbolsDir, ((JSDOC.opt.u)? Link.filemap[symbol.alias] : symbol.alias) + publish.conf.ext, output);
+        IO.saveFile(publish.conf.outDir+publish.conf.symbolsDir, ((JSDOC.opt.u)? Link.filemap[symbol.alias] : symbol.alias) + publish.conf.ext, output);
     }
     // create the Javscript index page
     try {
