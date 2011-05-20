@@ -385,7 +385,7 @@
                             </if>
                             
                             <if test="data.see.length">
-                                <dt class="heading"><br/><br/>See:</dt>
+                                <dt class="heading"><br/><br/>See:<br/></dt>
                                 <for each="item" in="data.see">
                                     <dd>{+ new Link().toSymbol(item)+"<br/>" +}</dd>
                                 </for>
@@ -450,7 +450,7 @@
                                     <dd>{+ member.since +}</dd>
                                 </if>
                                 <if test="member.see.length">
-                                    <dt class="heading"><br/>See:</dt>
+                                    <dt class="heading"><br/>See:<br/></dt>
                                     <for each="item" in="member.see">
                                         <dd>{+ new Link().toSymbol(item)+"<br/>" +}</dd>
                                     </for>
@@ -574,7 +574,7 @@
                                         </if>
                                         
                                         <if test="member.see.length">
-                                            <dt class="heading"><br/>See:</dt>
+                                            <dt class="heading"><br/>See:<br/></dt>
                                             <for each="item" in="member.see">
                                                 <dd>{+ new Link().toSymbol(item)+"<br/>" +}</dd>
                                             </for>
@@ -682,7 +682,7 @@
                                 </if>
                                 
                                 <if test="member.see.length">
-                                    <dt class="heading"><br/>See:</dt>
+                                    <dt class="heading"><br/>See:<br/></dt>
                                     <for each="item" in="member.see">
                                         <dd>{+ new Link().toSymbol(item)+"<br/>" +}</dd>
                                     </for>

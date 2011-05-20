@@ -2,13 +2,12 @@
 	<div class="menu">
 		<div class="indexLinks">
 		    
-			{+new Link().toFile(JSDOC.opt.D.index=="files"?"allclasses.html":"index.html").withText("all")+}
 			{+new Link().toFile("glslIndex.html").withText("glsl")+}
 			{+new Link().toFile("jsIndex.html").withText("js")+}
 			{+new Link().toFile(JSDOC.opt.D.index=="files"?"index.html":"files.html").withText("Files")+}
 		</div>
-	
-		<h2 class="heading1">Classes</h2>
+
+        <h2 class="heading1">Filter</h2> 
 		
 		<input type="text" name="classFilter" class="classFilter" id="ClassFilter" placeholder="Filter"></input>
 		
