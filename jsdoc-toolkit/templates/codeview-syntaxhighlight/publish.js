@@ -77,16 +77,6 @@ function publish(symbolSet) {
 		}
 	}
 	
-	// create the class index page
-	try {
-		var classesindexTemplate = new JSDOC.JsPlate(publish.conf.templatesDir+"allclasses.tmpl");
-	}
-	catch(e) { print(e.message); quit(); }
-	
-	var classesIndex = classesindexTemplate.process(publish.classes);
-	IO.saveFile(publish.conf.outDir, (JSDOC.opt.D.index=="files"?"allclasses":"index")+publish.conf.ext, classesIndex);
-	classesindexTemplate = classesIndex = classes = null;
-	
 	// GLSL
 	publish.classes = symbols.filter(isGLSL).sort(makeSortby("alias"));
 	
@@ -134,7 +124,7 @@ function publish(symbolSet) {
     catch(e) { print(e.message); quit(); }
     
     var jsIndex = jsindexTemplate.process(publish.classes);
-    IO.saveFile(publish.conf.outDir, ("jsIndex")+publish.conf.ext, jsIndex);
+    IO.saveFile(publish.conf.outDir, ("index")+publish.conf.ext, jsIndex);
     jsindexTemplate = jsIndex = classes = null;
     
 	// create the file index page
