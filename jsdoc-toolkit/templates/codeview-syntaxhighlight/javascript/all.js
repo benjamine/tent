@@ -251,7 +251,7 @@ codeview.classFilter = ( function() {
 	function onkeyup_ClassFilter() {
 		var listItems
 		var search = document.getElementById('ClassFilter').value
-		search = search.toLowerCase()
+		search = search.toLowerCase()                var numDocLinks = document.links.length;        for (i = 3; i < numDocLinks; i++) {            var currentLink = document.links[i];            var prefix = ((currentLink.href).split('?'))[0];            var anchorIndex = currentLink.href.indexOf('#');            if (search.length === 0) {                currentLink.href = prefix;            }            else if(anchorIndex !== -1) {                currentLink.href = prefix.slice(0, anchorIndex) + "?classFilter=" + search + currentLink.href.slice(anchorIndex);            }            else {                currentLink.href = prefix + "?classFilter=" + search;            }        }
 		if (document.getElementById('ClassList')) {
 			listItems = document.getElementById('ClassList').getElementsByTagName('li')
 			filterList(listItems, search)
@@ -307,11 +307,7 @@ codeview.classFilter = ( function() {
 			}
 		}
 	}
-	
-	
-	
-	
-	
+
 	/* Start public */
 	return {
 		Init: function() {
@@ -323,4 +319,4 @@ codeview.classFilter = ( function() {
 		}
 	}
 	/* End public */
-})();
+})();codeview.filter = function (searchTerm){    var listItems        if(!searchTerm){        search = document.getElementById('ClassFilter').value    }    else {        search = searchTerm    }    search = search.toLowerCase()        if (document.getElementById('ClassList')) {        listItems = document.getElementById('ClassList').getElementsByTagName('li')        filterList(listItems, search)    }    if (document.getElementById('ClassList2')) {        listItems = document.getElementById('ClassList2').getElementsByTagName('li')        filterList(listItems, search)    }    if (document.getElementById('FileList')) {        listItems = document.getElementById('FileList').getElementsByTagName('li')        filterList(listItems, search)    }    if (document.getElementById('MethodsListInherited')) {        var links = document.getElementById('MethodsListInherited').getElementsByTagName('a')        var linksSelected = new Array()        for (var i=0; i < links.length; i++) {            if (links[i].parentNode.parentNode.tagName == "DD") {                linksSelected.push(links[i])            }        }        filterList(linksSelected, search)    }    if (document.getElementById('MethodsList')) {        listItems = document.getElementById('MethodsList').getElementsByTagName('tbody')[0].getElementsByTagName('tr')        filterList(listItems, search, document.getElementById('MethodDetail').getElementsByTagName('li'))    }        function filterList(listItems, search, relatedElements) {        var itemContent = ""        for (var i=0; i < listItems.length; i++) {            itemContent = listItems[i].textContent||listItems[i].innerText            if (itemContent != undefined) {                itemContent = itemContent.toLowerCase()                itemContent = itemContent.replace(/\s/g, "")                if (itemContent.indexOf(search) >= 0 || itemContent == "") {                    listItems[i].style.display = ""                } else {                    listItems[i].style.display = "none"                }                if (relatedElements != null) {                    filterRelatedList(listItems[i], search, relatedElements)                }            }        }    }    function filterRelatedList(listItem, search, relatedElements) {        var itemIndex = parseInt(listItem.className.replace('item', ''))        if (itemIndex <= relatedElements.length) {            if (relatedElements[itemIndex].className == "item"+ itemIndex) {                relatedElements[itemIndex].style.display = listItem.style.display            }        }    }};
