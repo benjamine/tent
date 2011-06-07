@@ -569,12 +569,11 @@ tent.declare('tent.changes', function(){
         var filter = options.propertyFilter || defaultPropertyInterceptFilter;
         var backPropertyPrefix = options.backPropertyPrefix || defaultBackPropertyPrefix;
         
-        var filterDomProps = (!options.trackDomProperties) && this.isDOMObject();
-        
+        var filterDomProps = (!options.trackDomProperties) && this.isDOMObject();        
         
         for (var propName in this.subject) {
         
-            if (tent.isDOMProperty(propName)) {
+            if (filterDomProps && tent.isDOMProperty(propName)) {
                 continue;
             }
             
@@ -625,7 +624,6 @@ tent.declare('tent.changes', function(){
        
 	   	/**
 	   	 * @inner
-	   	 * @param {Object} l
 	   	 */
         this.subject.setLength = function(l){
 			// length setter that uses splice to trim arrays

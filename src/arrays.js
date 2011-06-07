@@ -3,7 +3,6 @@
  * @namespace Array utilities
  * @requires tent
  * @name tent.arrays
- * @namespace Array utilities
  */
 tent.declare('tent.arrays', function(){
 

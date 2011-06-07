@@ -4,7 +4,7 @@
 	<head>
 		<meta charset="utf-8"></meta>
 		<meta name="generator" content="JsDoc Toolkit"></meta>
-		<title>tent.changes.reverseProperties.Set | Tent Framework API</title>
+		<title>tent.connectors.rest.filters | Tent Framework API</title>
 
 		<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;"></meta>
 		<meta name="mobileoptimized" content="0"></meta>
@@ -127,12 +127,12 @@
 	<div class="innerContent">
 		<h1 class="classTitle">
 			
-			Class <span>tent.changes.reverseProperties.Set</span>
+			Namespace <span>tent.connectors.rest.filters</span>
 		</h1>
 		
 		<div class="intro">
 			<p class="description summary">
-				a set of reverse property definitions
+				processors and filters to include in rest connectors
 			</p>
 				
 			
@@ -140,7 +140,7 @@
 					
 					
 					
-						<li>Defined in: <a href="../symbols/src/src__changes.reverseproperties.js.html">changes.reverseproperties.js</a></li>
+						<li>Defined in: <a href="../symbols/src/src_connectors__rest.js.html">rest.js</a></li>
 					
 						
 				</ul>
@@ -149,8 +149,8 @@
 		
 		
 			<div class="props">
-				<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class tent.changes.reverseProperties.Set.">
-					<caption class="sectionTitle">Class Summary</caption>
+				<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class tent.connectors.rest.filters.">
+					<caption class="sectionTitle">Namespace Summary</caption>
 					<thead>
 						<tr>
 							<th scope="col">Constructor Attributes</th>
@@ -162,9 +162,9 @@
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription" >
 								<div class="fixedFont">
-									<b><a href="../symbols/tent.changes.reverseProperties.Set.html#constructor">tent.changes.reverseProperties.Set</a></b>(properties)
+									<b><a href="../symbols/tent.connectors.rest.filters.html#constructor">tent.connectors.rest.filters</a></b>
 								</div>
-								<div class="description">Creates a new set of reverse property definitions</div>
+								<div class="description"></div>
 							</td>
 						</tr>
 					</tbody>
@@ -173,55 +173,41 @@
 		
 		
 		
-<!--
-#### METHODS SUMMARY
--->
-		
 			
 			
-			<div class="props">
-				<h2 class="sectionTitle">Method Summary</h2>
-				
-				
-					<table class="summaryTable" id="MethodsList" cellspacing="0" summary="A summary of the methods documented in the class tent.changes.reverseProperties.Set.">
+				<div class="props">
+					<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class tent.connectors.rest.filters.">
+						<caption class="sectionTitle">Field Summary</caption>
+						
 						<thead>
 							<tr>
-								<th scope="col">Method Attributes</th>
-								<th scope="col">Method Name and Description</th>
+								<th scope="col">Field Attributes</th>
+								<th scope="col">Field Name and Description</th>
 							</tr>
 						</thead>
 						
 						<tbody>
 							
-							
-								<tr
-									 class='item0'
-								>
-									<td class="attributes">&nbsp;</td>
+								<tr>
+									<td class="attributes">&lt;static&gt; &nbsp;</td>
 									<td class="nameDescription">
-										<div class="fixedFont"><b><a href="../symbols/tent.changes.reverseProperties.Set.html#applyTo">applyTo</a></b>()
+										<div class="fixedFont">
+										tent.connectors.rest.filters.<b><a href="../symbols/tent.connectors.rest.filters.html#.saveChanges">saveChanges</a></b>
 										</div>
-										<div class="description">Applies this Set to all arguments</div>
-									</td>
-								</tr>
-							
-								<tr
-									 class='item1'
-								>
-									<td class="attributes">&nbsp;</td>
-									<td class="nameDescription">
-										<div class="fixedFont"><b><a href="../symbols/tent.changes.reverseProperties.Set.html#create">create</a></b>()
-										</div>
-										<div class="description">Creates a new Javascript Object and applies this Set to it, see #applyTo</div>
+										<div class="description">Filters that prepare data to save</div>
 									</td>
 								</tr>
 							
 						</tbody>
 					</table>
-				
+				</div>
 			
-				
-			</div>
+			
+			
+		
+<!--
+#### METHODS SUMMARY
+-->
 		
 		
 <!--
@@ -235,31 +221,20 @@
 			<div class="details props">
 				<div class="innerProps">
 					<h2 class="sectionTitle" id="constructor">
-						Class Detail
+						Namespace Detail
 					</h2>
 					
 					<div class="fixedFont">
-						<b>tent.changes.reverseProperties.Set</b>(properties)
+						<b>tent.connectors.rest.filters</b>
 					</div>
 					
 					<div class="description">
-						Creates a new set of reverse property definitions
+						
 						
 					</div>
 					
 					
 				
-					
-						<dl class="detailList params">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{Object}</span>  <b>properties</b>
-									
-								</dt>
-								<dd>an object which properties are property definitions, properties with reverse=true will be synced</dd>
-							
-						</dl>
 					
 					
 					
@@ -270,126 +245,41 @@
 #### FIELD DETAILS
 -->
 		
-<!--
-#### METHOD DETAILS
--->		
-		
 			<div class="details props">
 				<div class="innerProps">
 					<h2 class="sectionTitle">
-						Method Detail
+						Field Detail
 					</h2>
 					
-					<ul class="methodDetail" id="MethodDetail">
+					
+						<div class="fixedFont heading" id=".saveChanges">
+							<span class='lighter'>
+							&lt;static&gt; 
+							</span>
+							
+							
+							
+							<span class="light">tent.connectors.rest.filters.</span><b>saveChanges</b>							
+						</div>
+						
+						<div class="description">
+							Filters that prepare data to save
+							
+							
+							
+						</div>
 						
 						
-							<li 
-								 class='item0'
-							>
-								<div class="fixedFont heading" id="applyTo">
-									<span class='lighter'>
-									
-									</span>
-									
-									<span class="light">{Array}</span>
-									
-									<b>applyTo</b>()
-								</div>
-								
-								<div class="description">
-									Applies this Set to all arguments
-									
-									
-									
-									
-								</div>
-								
-								
-									
-										<pre class="code brush: js"">  // set reverse properties, start synchronization and logging  var Person = new tent.changes.reverseProperties.Set({  	father: { reverse: 'children', cardinality: 'n1' },  	children: { reverse: 'father', cardinality: '1n' },  	friends: { reverse: 'friends', cardinality: 'nm' },  });  Person.applyTo(p1,p2,p3).bind({ log: true });  p1.father = p2;  p2.friends.push(p3);  p3.children.push(p2);    // assert reverse properties are in sync  strictEqual(p1, p2.children[0]);  strictEqual(p2, p3.friends[0]);  strictEqual(p3, p2.father);</pre>
-									
-								
-								
-								
-								
-								
-									<dl class="detailList nomargin">
-									
-										
-										
-										
-										
-										
-										
-										
-											<dt class="heading">Returns:</dt>
-											
-												<dd><span class="light fixedFont">{Array}</span> an Array with all arguments and a 'bind' method, similar to <a href="../symbols/tent.changes.html#.bind">tent.changes.bind</a> that automatically includes reverse property sinchronization.</dd>
-											
-										
-										
-										
-										
-										
-									
-									</dl>
-								
-								<div class="hr"></div>
-							</li>
+							
 						
-							<li 
-								 class='item1'
-							>
-								<div class="fixedFont heading" id="create">
-									<span class='lighter'>
-									
-									</span>
-									
-									<span class="light">{Object}</span>
-									
-									<b>create</b>()
-								</div>
-								
-								<div class="description">
-									Creates a new Javascript Object and applies this Set to it, see #applyTo
-									
-									
-									
-									
-								</div>
-								
-								
-								
-								
-								
-								
-									<dl class="detailList nomargin">
-									
-										
-										
-										
-										
-										
-										
-										
-											<dt class="heading">Returns:</dt>
-											
-												<dd><span class="light fixedFont">{Object}</span> a new Javascript Object with this set applied</dd>
-											
-										
-										
-										
-										
-										
-									
-									</dl>
-								
-								
-							</li>
 						
-					</ul>
+					
 				</div>
 			</div>
+		
+<!--
+#### METHOD DETAILS
+-->		
 		
 		
 <!--

@@ -167,7 +167,7 @@ tent.declare('tent.entities', function(){
     
 	/**
 	 * Creates a new entity Collection.
-	 * This is intended for internal use, to add collections to a context use {@link tent.entities.Context#createCollection}
+	 * This is intended for internal use, to add collections to a context use {@link tent.entities.Context#getCollection}
 	 * 
 	 * @class a collection of entities of a {@link tent.entities.Type} attached to a {@link tent.entities.Context}
 	 * @constructor
@@ -383,7 +383,80 @@ tent.declare('tent.entities', function(){
         this.items.length = 0;
         return true;
     }
-    	
+
+	/**
+	 * Finds entities by id or using query objects (with matching properties) in this Collection
+	 * @param {string|number|Object|Array} idOrQuery an id, a query object (an object with the property values to find) or an array of these
+	 * @return {Object} the found entity, or null if not found, if an Array was provided an Array with the query result on each position
+	 */
+    tent.entities.Collection.prototype.find = function(idOrQuery){
+		if (idOrQuery instanceof Array) {
+			var results = [];
+			for (var i=0, l = idOrQuery.length; i<l; i++){
+				results[i] = this.find(idOrQuery[i]);
+			}
+			return results;
+		}
+		else {
+			var condition = null;
+			var idPropertyName = this.type ? this.type.idProperty : null;
+			if (typeof idOrQuery == 'string' || typeof idOrQuery == 'number') {
+				// compare by id
+				if (idPropertyName){
+					/**
+					 * @inner
+					 */
+					condition = function(item){
+						return item[idPropertyName] === idOrQuery;
+					}
+				}else{
+					/**
+					 * @inner
+					 */
+					condition = function(item){
+						return tent.entities.getId(item) === idOrQuery;
+					}
+				}
+			}
+			else {
+				if (idPropertyName && typeof idOrQuery[idPropertyName] != 'undefined'){
+					// compare id property
+					/**
+					 * @inner
+					 */
+					condition = function(item){
+						return item[idPropertyName]===idOrQuery[idPropertyName];
+					}
+				}else{
+					// compare all properties in query object
+					/**
+					 * @inner
+					 */
+					condition = function(item){
+						for (var prop in idOrQuery) {
+							if (item[prop] !== idOrQuery[prop]) {
+								return false;
+							}
+						}
+						return true;
+					}
+				}
+			}
+			return this.items.first(condition);
+		}
+    }
+
+	/**
+	 * Finds an entity by ID in this Collection
+	 * @param {string|number} id 
+	 * @return {Object} the found entity, or null if not found
+	 */
+    tent.entities.Collection.prototype.getById = function(id){
+		return this.items.first(function(item){
+			return tent.entities.getId(item) === id; 
+		});
+    }	
+		
 	/**
 	 * Creates a new entity Context
 	 * @class a Context that contains collections ({@link tent.entities.Collection}) of entities. Tracks changes on its entities.
@@ -495,6 +568,31 @@ tent.declare('tent.entities', function(){
     }
 	
 	/**
+	 * Finds entities by id or using query objects (with matching properties) in this Context
+	 * @param {string|number|Object|Array} idOrQuery an id, a query object (an object with the property values to find) or an array of these
+	 * @return {Object} the found entity, or null if not found, if an Array was provided an Array with the query result on each position
+	 */
+    tent.entities.Context.prototype.find = function(idOrQuery){
+		if (idOrQuery instanceof Array) {
+			var results = [];
+			for (var i=0, l = idOrQuery.length; i<l; i++){
+				results[i] = this.find(idOrQuery[i]);
+			}
+			return results;
+		}
+		else {
+			
+	        for (var collname in this.__collections__) {
+				var item = this.__collections__[collname].find(idOrQuery);
+				if (item){
+					return item;
+				}
+	        }
+	        return null;
+		}
+    }
+	
+	/**
 	 * Filters entities in this Context
 	 * @param {function()} condition a function that returns true for items that pass the filter
 	 * @return {Array} all entities in this Context that passed the filter
@@ -550,7 +648,7 @@ tent.declare('tent.entities', function(){
 	 * @return {tent.entities.Collection} the new (or previously existing) collection
 	 * @throws if no name and no type were provided
 	 */
-    tent.entities.Context.prototype.createCollection = function(type, name){
+    tent.entities.Context.prototype.getCollection = function(type, name){
     
         if (!name) {
             if (!type) {
@@ -667,7 +765,7 @@ tent.declare('tent.entities', function(){
                             }
                         }
                         this.__types__[arguments[i].name] = arguments[i];
-                        this.createCollection(arguments[i]);
+                        this.getCollection(arguments[i]);
                     }
                     else 
                         if (arguments[i] instanceof tent.entities.Context) {
@@ -688,7 +786,7 @@ tent.declare('tent.entities', function(){
                                         this.__types__[type.name] = type;
                                     }
                                 }
-                                var coll = this.createCollection(type); // create or get a collection
+                                var coll = this.getCollection(type); // create or get a collection
                                 coll.push(arguments[i]);
                             }
         }
@@ -738,7 +836,7 @@ tent.declare('tent.entities', function(){
                                         this.__types__[type.name] = type;
                                     }
                                 }
-                                var coll = this.createCollection(type); // create or get a collection
+                                var coll = this.getCollection(type); // create or get a collection
                                 coll.attach(arguments[i]);
                             }
         }
@@ -826,7 +924,7 @@ tent.declare('tent.entities', function(){
                         if (prop.cascadePush) {
                             var coll = null;
                             if (prop.collection) {
-                                var coll = this.__collections__[prop.collection] || this.createCollection(prop.collection);
+                                var coll = this.__collections__[prop.collection] || this.getCollection(prop.collection);
                             }
                             if (item[n] instanceof Array) {
                                 if (prop.cardinality && prop.cardinality[1] != '1') {
@@ -870,7 +968,7 @@ tent.declare('tent.entities', function(){
                         if (prop.cascadeAttach) {
                             var coll = null;
                             if (prop.collection) {
-                                var coll = this.__collections__[prop.collection] || this.createCollection(prop.collection);
+                                var coll = this.__collections__[prop.collection] || this.getCollection(prop.collection);
                             }
                             if (item[n] instanceof Array) {
                                 if (prop.cardinality && prop.cardinality[1] != '1') {
@@ -993,10 +1091,17 @@ tent.declare('tent.entities', function(){
 	tent.entities.Context.prototype.markAsSaving = function(){
         for (var i = 0; i < arguments.length; i++) {			
 			var item = arguments[i];
-			if (item.__syncState__ && item.__syncState__.saving){
-				throw 'cannot start saving, item already being saved';
+			if (item instanceof Array) {
+				this.markAsSaving.apply(this,item);
 			}
-			item.__syncState__ = { saving: true };
+			else {
+				if (item.__syncState__ && item.__syncState__.saving) {
+					throw 'cannot start saving, item already being saved';
+				}
+				item.__syncState__ = {
+					saving: true
+				};
+			}
 		}
 	}	
 	
@@ -1684,12 +1789,8 @@ tent.declare('tent.entities', function(){
 						this.context.touch(change);	
 					}
 				}else if (change.__changeState__ === tent.entities.ChangeStates.DELETED){
-					if (change.__syncState__ && change.__syncState__.deletedWhileSaving) {
-						delete change.__syncState__;
-					} else {
-					 	this.context.changes.items.splice(changeIndex,1);
-						change.__changeState__ = tent.entities.ChangeStates.DETACHED;
-					}
+				 	this.context.changes.items.splice(changeIndex,1);
+					change.__changeState__ = tent.entities.ChangeStates.DETACHED;
 				}
 				
 				delete change.__syncState__;

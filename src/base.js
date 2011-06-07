@@ -173,6 +173,22 @@ tent.mixin = function(target, mixin){
 }
 
 /**
+ * Combines option objects
+ */
+tent.combineOptions = function(){
+	var options = {};
+	for (var i=0, l= arguments.length; i<l; i++ ){
+		var arg = arguments[i];
+		for (var name in arg){
+			if (arg.hasOwnProperty(name)){
+				options[name] = arg[name];
+			}
+		}
+	}
+	return options;
+}
+
+/**
  * @param {Object} obj an object to test
  * @return {Boolean} is obj a DOM object?
  */
