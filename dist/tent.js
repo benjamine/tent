@@ -110,7 +110,7 @@ tent.combineOptions = function() {
     var arg = arguments[i];
     for(var name in arg) {
       if(arg.hasOwnProperty(name)) {
-        options[name] = arg[name]
+        options[name] = tent.clone(arg[name], {deep:true, ignoreCircularReferences:true})
       }
     }
   }
@@ -2352,6 +2352,13 @@ tent.clone = function(obj, options) {
     }
     return items
   };
+  tent.entities.Context.prototype.items = function() {
+    if(!this._Object) {
+      return this.getCollection().items
+    }else {
+      return this._Object.items
+    }
+  };
   tent.entities.Context.prototype.first = function(condition) {
     for(var collname in this.__collections__) {
       var item = this.__collections__[collname].items.first(condition);
@@ -2388,7 +2395,7 @@ tent.clone = function(obj, options) {
   tent.entities.Context.prototype.contains = function() {
     for(var ai = 0;ai < arguments.length;ai++) {
       var item = arguments[ai];
-      if(!item) {
+      if(typeof item != "object") {
         return false
       }else {
         if(item.__collection__) {
@@ -2845,10 +2852,7 @@ tent.clone = function(obj, options) {
               this.context.changes.items.pushUnique(item)
             }else {
               item.__changeState__ = tent.entities.ChangeStates.DETACHED;
-              delete item.__collection__;
-              if(!this.context.changes) {
-                this.context.changes = new tent.entities.ContextChanges(this.context)
-              }
+              delete item.__collection__
             }
           }
         }
@@ -3128,7 +3132,8 @@ tent.clone = function(obj, options) {
         }else {
           if(change.__changeState__ === tent.entities.ChangeStates.DELETED) {
             this.context.changes.items.splice(changeIndex, 1);
-            change.__changeState__ = tent.entities.ChangeStates.DETACHED
+            change.__changeState__ = tent.entities.ChangeStates.DETACHED;
+            delete change.__collection__
           }
         }
         delete change.__syncState__
@@ -3214,24 +3219,26 @@ tent.clone = function(obj, options) {
       throw"jQuery is required for ajax requests";
     }
     var opt = tent.combineOptions(tent.connectors.http.requestDefaultOptions, options);
-    jQuery.ajax({context:{options:opt, callback:callback}, url:tent.connectors.http.uriCombine(opt.baseUrl, opt.url), beforeSend:function(req) {
-      if(opt.auth) {
-        if(typeof Base64 == "undefined") {
-          throw"Base64 is required for http basic authentication";
+    (function(opt, callback) {
+      jQuery.ajax({url:tent.connectors.http.uriCombine(opt.baseUrl, opt.url), beforeSend:function(req) {
+        if(opt.auth) {
+          if(typeof Base64 == "undefined") {
+            throw"Base64 is required for http basic authentication";
+          }
+          var usrpwd64 = Base64.encode(opt.username + ":" + opt.password);
+          req.setRequestHeader("Origin", document.location.protocol + "//" + document.location.host);
+          req.setRequestHeader("Authorization", "Basic " + usrpwd64)
         }
-        var usrpwd64 = Base64.encode(opt.username + ":" + opt.password);
-        req.setRequestHeader("Origin", document.location.protocol + "//" + document.location.host);
-        req.setRequestHeader("Authorization", "Basic " + usrpwd64)
-      }
-    }, type:opt.type, cache:!!opt.cache, dataType:"json", contentType:"application/json", data:JSON.stringify(opt.data), headers:opt.headers, timeout:opt.timeout, username:opt.username, password:opt.password, success:function(data, textStatus, req) {
-      if(typeof this.callback == "function") {
-        this.callback({ok:true, data:data, req:req})
-      }
-    }, error:function(req, textStatus, error) {
-      if(typeof this.callback == "function") {
-        this.callback({error:error || "error", req:req})
-      }
-    }})
+      }, type:opt.type, cache:!!opt.cache, dataType:"json", contentType:"application/json", data:JSON.stringify(opt.data), headers:opt.headers, timeout:opt.timeout, username:opt.username, password:opt.password}).done(function(data, textStatus, req) {
+        if(typeof callback == "function") {
+          callback({ok:true, data:data, req:req})
+        }
+      }).fail(function(req, textStatus, error) {
+        if(typeof callback == "function") {
+          callback({error:error || "error", req:req})
+        }
+      })
+    })(opt, callback)
   };
   tent.connectors.http.request = tent.connectors.http.request_jquery
 });tent.declare("tent.connectors.rest", function() {
@@ -3248,10 +3255,10 @@ tent.clone = function(obj, options) {
     this.processors.saveResult.push(tent.connectors.rest.processors.saveResult.saveResultReceiveByPosition);
     this.filters.saveChanges.push(tent.connectors.rest.filters.saveChanges.packChanges, tent.connectors.rest.filters.saveChanges.setUrlAndMethod)
   };
-  tent.connectors.rest.RestConnector.createdb = function(callback) {
+  tent.connectors.rest.RestConnector.prototype.createdb = function(callback) {
     tent.connectors.http.request({url:this.baseUrl, type:"PUT"}, callback)
   };
-  tent.connectors.rest.RestConnector.deletedb = function(callback) {
+  tent.connectors.rest.RestConnector.prototype.deletedb = function(callback) {
     tent.connectors.http.request({url:this.baseUrl, type:"DELETE"}, callback)
   };
   tent.connectors.rest.RestConnector.prototype.filterData = function(data) {
@@ -3299,6 +3306,7 @@ tent.clone = function(obj, options) {
       this.loading = true;
       result.options.context = context;
       tent.connectors.http.request(tent.combineOptions(result.options, result.options.http), function(r) {
+        result.req = r.req;
         if(r.error) {
           result.error = r.error;
           connector.loading = false;
@@ -3307,7 +3315,6 @@ tent.clone = function(obj, options) {
           }
         }else {
           result.data = r.data;
-          result.req = r.req;
           result = connector.filterData(result);
           connector.process(result);
           if(!result.error) {
@@ -3347,6 +3354,9 @@ tent.clone = function(obj, options) {
       if(this.loading) {
         throw"cannot save while loading";
       }
+      if(!(context instanceof tent.entities.Context)) {
+        throw"a tent.entities.Context is required";
+      }
       this.saving = true;
       result.options.context = context;
       result = connector.filterData(result);
@@ -3360,7 +3370,11 @@ tent.clone = function(obj, options) {
         }
       }else {
         result.options.data = result.data;
+        if(result.options.data === "-") {
+          delete result.options.data
+        }
         tent.connectors.http.request(tent.combineOptions(result.options, result.options.http), function(r) {
+          result.req = r.req;
           if(r.error) {
             result.error = r.error;
             connector.saving = false;
@@ -3370,7 +3384,6 @@ tent.clone = function(obj, options) {
           }else {
             result.qdata = result.data;
             result.data = r.data;
-            result.req = r.req;
             result.action = "saveResult";
             result = connector.filterData(result);
             connector.process(result);
@@ -3590,7 +3603,10 @@ tent.clone = function(obj, options) {
           }
           d.options.http.url = uri
         }
-        d.data = d.data.items[0]
+        d.data = d.data.items[0];
+        if(d.options.http.type === "DELETE") {
+          d.data = "-"
+        }
       }
     }
     return d
@@ -3627,15 +3643,14 @@ tent.clone = function(obj, options) {
         d.data.docs = d.data.items;
         delete d.data.items
       }else {
-        if(d.data && d.packedChanges && d.packedChanges.length === 1) {
+        if(d.packedChanges && d.packedChanges.length === 1) {
           if(d.options.http.type === "DELETE") {
             if(!d.options.http.headers) {
               d.options.http.headers = {}
             }
             d.packedChanges[0]._deleted = true;
             d.options.http.headers["If-Match"] = d.packedChanges[0][d.options.saveChanges.revisionProperty];
-            d.options.http.url += "?rev=" + d.packedChanges[0][d.options.saveChanges.revisionProperty];
-            d.data = {}
+            d.options.http.url += "?rev=" + d.packedChanges[0][d.options.saveChanges.revisionProperty]
           }
         }
       }

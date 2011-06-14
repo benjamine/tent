@@ -181,7 +181,7 @@ tent.combineOptions = function(){
 		var arg = arguments[i];
 		for (var name in arg){
 			if (arg.hasOwnProperty(name)){
-				options[name] = arg[name];
+				options[name] = tent.clone(arg[name], {deep:true, ignoreCircularReferences: true});
 			}
 		}
 	}

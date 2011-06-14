@@ -551,6 +551,20 @@ tent.declare('tent.entities', function(){
         }
         return items;
     }
+	
+	/**
+	 * Returns items in the _Object default (untyped) collection.
+	 * Useful on simple contexts without types or collections
+	 * @return {Array} context._Object.items
+	 */
+    tent.entities.Context.prototype.items = function(){
+		if (!this._Object){
+			return this.getCollection().items;
+		}
+		else{
+			return this._Object.items;
+		}
+    }
     
 	/**
 	 * Finds the first entity that satisfies a condition in this Context
@@ -613,7 +627,7 @@ tent.declare('tent.entities', function(){
     
         for (var ai = 0; ai < arguments.length; ai++) {
             var item = arguments[ai];
-            if (!item) {
+            if (typeof item != 'object') {
                 return false;
             }
             else 
@@ -634,7 +648,7 @@ tent.declare('tent.entities', function(){
                                 return false;
                             }
                         }
-                        else {
+                        else {							
                             return false;
                         }
         }
@@ -1344,9 +1358,6 @@ tent.declare('tent.entities', function(){
 						} else {
     	                    item.__changeState__ = tent.entities.ChangeStates.DETACHED;
 	                        delete item.__collection__;
-	                        if (!this.context.changes) {
-	                            this.context.changes = new tent.entities.ContextChanges(this.context);
-	                        }
 						}
                     }
             }
@@ -1791,6 +1802,7 @@ tent.declare('tent.entities', function(){
 				}else if (change.__changeState__ === tent.entities.ChangeStates.DELETED){
 				 	this.context.changes.items.splice(changeIndex,1);
 					change.__changeState__ = tent.entities.ChangeStates.DETACHED;
+                    delete change.__collection__;
 				}
 				
 				delete change.__syncState__;

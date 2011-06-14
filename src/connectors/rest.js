@@ -128,7 +128,7 @@ tent.declare('tent.connectors.rest', function(){
 	/**
 	 * Creates the database for this connector
 	 */		
-	tent.connectors.rest.RestConnector.createdb = function(callback){
+	tent.connectors.rest.RestConnector.prototype.createdb = function(callback){
 		tent.connectors.http.request({
 			url: this.baseUrl,
 			type: 'PUT'
@@ -138,7 +138,7 @@ tent.declare('tent.connectors.rest', function(){
 	/**
 	 * Creates the database for this connector
 	 */		
-	tent.connectors.rest.RestConnector.deletedb = function(callback){
+	tent.connectors.rest.RestConnector.prototype.deletedb = function(callback){
 		tent.connectors.http.request({
 			url: this.baseUrl,
 			type: 'DELETE'
@@ -214,6 +214,7 @@ tent.declare('tent.connectors.rest', function(){
 			result.options.context = context;
 							
 			tent.connectors.http.request(tent.combineOptions(result.options, result.options.http), function (r){
+				result.req = r.req;
 				if (r.error){
 					result.error = r.error;
 					connector.loading = false;
@@ -222,7 +223,6 @@ tent.declare('tent.connectors.rest', function(){
 					}
 				}else{				
 					result.data = r.data;
-					result.req = r.req;
 					result = connector.filterData(result);
 					connector.process(result);
 					if (!result.error){
@@ -276,6 +276,10 @@ tent.declare('tent.connectors.rest', function(){
                 throw 'cannot save while loading';
             }
 			
+			if (!(context instanceof tent.entities.Context)){
+				throw 'a tent.entities.Context is required';
+			}
+			
 	        this.saving = true;
 
 			result.options.context = context;
@@ -294,7 +298,12 @@ tent.declare('tent.connectors.rest', function(){
 			}
 			else {
 				result.options.data = result.data;
+				if (result.options.data === '-'){
+					// no http body
+					delete result.options.data;
+				}
 				tent.connectors.http.request(tent.combineOptions(result.options, result.options.http), function(r){
+					result.req = r.req;
 					if (r.error) {
 						result.error = r.error;
 						connector.saving = false;
@@ -305,7 +314,6 @@ tent.declare('tent.connectors.rest', function(){
 					else {
 						result.qdata = result.data;
 						result.data = r.data;
-						result.req = r.req;
 						result.action = 'saveResult';
 						result = connector.filterData(result);
 						connector.process(result);
@@ -651,6 +659,9 @@ tent.declare('tent.connectors.rest', function(){
 					
 					// if single change, set data as the single item
 					d.data = d.data.items[0];
+					if (d.options.http.type === 'DELETE'){
+						d.data = '-'; // no http body
+					}
 				}
 				
 				return d;

@@ -94,50 +94,45 @@ tent.declare('tent.connectors.http', function(){
         }
         
         var opt = tent.combineOptions(tent.connectors.http.requestDefaultOptions, options);
-        
-        jQuery.ajax({
-            context: {
-				options: opt,
-				callback: callback
-			},
-            url: tent.connectors.http.uriCombine(opt.baseUrl, opt.url),
-            beforeSend: function(req){
-                if (opt.auth) {
-                    if (typeof Base64 == 'undefined') {
-                        throw 'Base64 is required for http basic authentication';
-                    }
-                    var usrpwd64 = Base64.encode(opt.username + ':' + opt.password)
-                    req.setRequestHeader("Origin", document.location.protocol + "//" + document.location.host);
-                    req.setRequestHeader("Authorization", "Basic " + usrpwd64);
-                }
-            },
-            type: opt.type,
-            cache: !!opt.cache,
-            dataType: 'json',
-			contentType: 'application/json',
-            data: JSON.stringify(opt.data),
-            headers: opt.headers,
-            timeout: opt.timeout,
-            username: opt.username,
-            password: opt.password,
-            success: function(data, textStatus, req){
-                if (typeof this.callback == 'function') {
-                    this.callback({
+        (function(opt, callback){
+			jQuery.ajax({
+				url: tent.connectors.http.uriCombine(opt.baseUrl, opt.url),
+				beforeSend: function(req){
+					if (opt.auth) {
+						if (typeof Base64 == 'undefined') {
+							throw 'Base64 is required for http basic authentication';
+						}
+						var usrpwd64 = Base64.encode(opt.username + ':' + opt.password)
+						req.setRequestHeader("Origin", document.location.protocol + "//" + document.location.host);
+						req.setRequestHeader("Authorization", "Basic " + usrpwd64);
+					}
+				},
+				type: opt.type,
+				cache: !!opt.cache,
+				dataType: 'json',
+				contentType: 'application/json',
+				data: JSON.stringify(opt.data),
+				headers: opt.headers,
+				timeout: opt.timeout,
+				username: opt.username,
+				password: opt.password
+			}).done(function(data, textStatus, req){
+				if (typeof callback == 'function') {
+					callback({
 						ok: true,
 						data: data,
 						req: req
 					});
-                }
-            },
-            error: function(req, textStatus, error){
-                if (typeof this.callback == 'function') {
-                    this.callback({
+				}
+			}).fail(function(req, textStatus, error){
+				if (typeof callback == 'function') {
+					callback({
 						error: error || 'error',
 						req: req
 					});
-                }
-            }
-        });
+				}
+			});
+		})(opt, callback);
     };
     
     /**

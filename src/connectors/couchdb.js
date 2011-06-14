@@ -56,7 +56,7 @@ tent.declare('tent.connectors.couchdb', function(){
                 delete d.data.items;
             }
             else 
-                if (d.data && d.packedChanges && d.packedChanges.length === 1) {
+                if (d.packedChanges && d.packedChanges.length === 1) {
                     if (d.options.http.type === 'DELETE') {
                         if (!d.options.http.headers) {
                             d.options.http.headers = {};
@@ -64,7 +64,6 @@ tent.declare('tent.connectors.couchdb', function(){
                         d.packedChanges[0]._deleted = true;
                         d.options.http.headers["If-Match"] = d.packedChanges[0][d.options.saveChanges.revisionProperty];
                         d.options.http.url += "?rev=" + d.packedChanges[0][d.options.saveChanges.revisionProperty];
-                        d.data = {}; // when deleting no body is required
                     }
                 }
             return d;
