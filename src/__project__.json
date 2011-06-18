@@ -23,5 +23,9 @@
 		"description": "REST connector for Apache CouchDB databases",
 		"files":["connectors/couchdb.js"]
 	}
-	]
+	],
+	"doc":{
+		"type": "jsdoc",
+		"config": "../jsdoc.conf"
+	}
 }
