@@ -1,0 +1,1325 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+		<meta charset="utf-8"></meta>
+		<meta name="generator" content="JsDoc Toolkit"></meta>
+		<title>tent.changes.Observable | Tent Framework API</title>
+
+		<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;"></meta>
+		<meta name="mobileoptimized" content="0"></meta>
+	
+		<link rel="stylesheet" href="../css/all.css" media="all"></link>
+		<link rel="stylesheet" href="../css/handheld.css" media="only screen and (max-width: 660px)"></link>
+		<link rel="stylesheet" href="../css/handheld.css" media="handheld"></link>
+		<link rel="stylesheet" href="../css/screen.css" media="screen and (min-width: 661px)"></link>
+
+		<!-- Syntax Highlighting -->
+		<link rel="stylesheet" href="../css/shCore.css" media="all"></link>
+		<link rel="stylesheet" href="../css/shThemeDefault.css" media="all"></link>
+		<script src="../javascript/shCore.js"></script>
+		<script src="../javascript/shBrushJScript.js"></script>
+
+		<script src="../javascript/all.js"></script>
+		<!--[if lt IE 9]>
+			<script src="../javascript/html5.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+<div class="index">
+	<div class="menu">
+		<div class="indexLinks">
+			<a href="../index.html">Classes</a>
+			<a href="../files.html">Files</a>
+		</div>
+	
+		<h2 class="heading1">Classes</h2>
+		
+		<input type="text" name="classFilter" class="classFilter" id="ClassFilter" placeholder="Filter"></input>
+		
+		<nav>
+			<ul class="classList" id="ClassList">
+				
+					<li><a href="../symbols/_global_.html">_global_</a></li>
+				
+					<li><a href="../symbols/tent.html">tent</a></li>
+				
+					<li><a href="../symbols/tent.arrays.html">tent<span class='break'> </span>.<span class='break'> </span>arrays</a></li>
+				
+					<li><a href="../symbols/tent.arrays.functions.html">tent<span class='break'> </span>.<span class='break'> </span>arrays<span class='break'> </span>.<span class='break'> </span>functions</a></li>
+				
+					<li><a href="../symbols/tent.changes.html">tent<span class='break'> </span>.<span class='break'> </span>changes</a></li>
+				
+					<li><a href="../symbols/tent.changes.Change.html">tent<span class='break'> </span>.<span class='break'> </span>changes<span class='break'> </span>.<span class='break'> </span>Change</a></li>
+				
+					<li><a href="../symbols/tent.changes.LogHandler.html">tent<span class='break'> </span>.<span class='break'> </span>changes<span class='break'> </span>.<span class='break'> </span>LogHandler</a></li>
+				
+					<li><a href="../symbols/tent.changes.Observable.html">tent<span class='break'> </span>.<span class='break'> </span>changes<span class='break'> </span>.<span class='break'> </span>Observable</a></li>
+				
+					<li><a href="../symbols/tent.changes.reverseProperties.html">tent<span class='break'> </span>.<span class='break'> </span>changes<span class='break'> </span>.<span class='break'> </span>reverseProperties</a></li>
+				
+					<li><a href="../symbols/tent.changes.reverseProperties.Set.html">tent<span class='break'> </span>.<span class='break'> </span>changes<span class='break'> </span>.<span class='break'> </span>reverseProperties<span class='break'> </span>.<span class='break'> </span>Set</a></li>
+				
+					<li><a href="../symbols/tent.connectors.html">tent<span class='break'> </span>.<span class='break'> </span>connectors</a></li>
+				
+					<li><a href="../symbols/tent.connectors.couchdb.html">tent<span class='break'> </span>.<span class='break'> </span>connectors<span class='break'> </span>.<span class='break'> </span>couchdb</a></li>
+				
+					<li><a href="../symbols/tent.connectors.couchdb.CouchDBConnector.html">tent<span class='break'> </span>.<span class='break'> </span>connectors<span class='break'> </span>.<span class='break'> </span>couchdb<span class='break'> </span>.<span class='break'> </span>CouchDBConnector</a></li>
+				
+					<li><a href="../symbols/tent.connectors.http.html">tent<span class='break'> </span>.<span class='break'> </span>connectors<span class='break'> </span>.<span class='break'> </span>http</a></li>
+				
+					<li><a href="../symbols/tent.connectors.rest.html">tent<span class='break'> </span>.<span class='break'> </span>connectors<span class='break'> </span>.<span class='break'> </span>rest</a></li>
+				
+					<li><a href="../symbols/tent.connectors.rest.filters.html">tent<span class='break'> </span>.<span class='break'> </span>connectors<span class='break'> </span>.<span class='break'> </span>rest<span class='break'> </span>.<span class='break'> </span>filters</a></li>
+				
+					<li><a href="../symbols/tent.connectors.rest.processors.html">tent<span class='break'> </span>.<span class='break'> </span>connectors<span class='break'> </span>.<span class='break'> </span>rest<span class='break'> </span>.<span class='break'> </span>processors</a></li>
+				
+					<li><a href="../symbols/tent.connectors.rest.RestConnector.html">tent<span class='break'> </span>.<span class='break'> </span>connectors<span class='break'> </span>.<span class='break'> </span>rest<span class='break'> </span>.<span class='break'> </span>RestConnector</a></li>
+				
+					<li><a href="../symbols/tent.coreTypes.html">tent<span class='break'> </span>.<span class='break'> </span>coreTypes</a></li>
+				
+					<li><a href="../symbols/tent.coreTypes.Enum.html">tent<span class='break'> </span>.<span class='break'> </span>coreTypes<span class='break'> </span>.<span class='break'> </span>Enum</a></li>
+				
+					<li><a href="../symbols/tent.coreTypes.NameCounter.html">tent<span class='break'> </span>.<span class='break'> </span>coreTypes<span class='break'> </span>.<span class='break'> </span>NameCounter</a></li>
+				
+					<li><a href="../symbols/tent.databinding.html">tent<span class='break'> </span>.<span class='break'> </span>databinding</a></li>
+				
+					<li><a href="../symbols/tent.entities.html">tent<span class='break'> </span>.<span class='break'> </span>entities</a></li>
+				
+					<li><a href="../symbols/tent.entities.Collection.html">tent<span class='break'> </span>.<span class='break'> </span>entities<span class='break'> </span>.<span class='break'> </span>Collection</a></li>
+				
+					<li><a href="../symbols/tent.entities.Context.html">tent<span class='break'> </span>.<span class='break'> </span>entities<span class='break'> </span>.<span class='break'> </span>Context</a></li>
+				
+					<li><a href="../symbols/tent.entities.ContextChangeHandler.html">tent<span class='break'> </span>.<span class='break'> </span>entities<span class='break'> </span>.<span class='break'> </span>ContextChangeHandler</a></li>
+				
+					<li><a href="../symbols/tent.entities.ContextChanges.html">tent<span class='break'> </span>.<span class='break'> </span>entities<span class='break'> </span>.<span class='break'> </span>ContextChanges</a></li>
+				
+					<li><a href="../symbols/tent.entities.EntityLink.html">tent<span class='break'> </span>.<span class='break'> </span>entities<span class='break'> </span>.<span class='break'> </span>EntityLink</a></li>
+				
+					<li><a href="../symbols/tent.entities.Type.html">tent<span class='break'> </span>.<span class='break'> </span>entities<span class='break'> </span>.<span class='break'> </span>Type</a></li>
+				
+					<li><a href="../symbols/tent.events.html">tent<span class='break'> </span>.<span class='break'> </span>events</a></li>
+				
+					<li><a href="../symbols/tent.events.extendFunctions.html">tent<span class='break'> </span>.<span class='break'> </span>events<span class='break'> </span>.<span class='break'> </span>extendFunctions</a></li>
+				
+					<li><a href="../symbols/tent.logging.html">tent<span class='break'> </span>.<span class='break'> </span>logging</a></li>
+				
+					<li><a href="../symbols/tent.logging.Log.html">tent<span class='break'> </span>.<span class='break'> </span>logging<span class='break'> </span>.<span class='break'> </span>Log</a></li>
+				
+					<li><a href="../symbols/tent.Namespace.html">tent<span class='break'> </span>.<span class='break'> </span>Namespace</a></li>
+				
+			</ul>
+		</nav>
+	</div>
+	<div class="fineprint" style="clear:both">
+		&copy;2011<br />
+		Documentation generator: <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0<br />
+		Template: <a href="http://www.thebrightlines.com/2010/05/06/new-template-for-jsdoctoolkit-codeview/" target="_blank">Codeview</a> 1.2<br />
+		Generated on: 2011-5-13 23:34
+	</div>
+</div>
+
+<div class="index indexStatic"></div>
+
+<div class="content">
+	<div class="innerContent">
+		<h1 class="classTitle">
+			
+			Class <span>tent.changes.Observable</span>
+		</h1>
+		
+		<div class="intro">
+			<p class="description summary">
+				Observes changes on a Javascript object and notifies them to subscribed handlers
+			</p>
+				
+			
+				<ul class="summary">
+					
+					
+					
+						<li>Defined in: <a href="../symbols/src/src__changes.js.html">changes.js</a></li>
+					
+						
+				</ul>
+			
+		</div>
+		
+		
+			<div class="props">
+				<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class tent.changes.Observable.">
+					<caption class="sectionTitle">Class Summary</caption>
+					<thead>
+						<tr>
+							<th scope="col">Constructor Attributes</th>
+							<th scope="col">Constructor Name and Description</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription" >
+								<div class="fixedFont">
+									<b><a href="../symbols/tent.changes.Observable.html#constructor">tent.changes.Observable</a></b>(subject)
+								</div>
+								<div class="description">Creates a new Observable that notifies changes on a Javascript object, see http://en.wikipedia.org/wiki/Observer_pattern</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		
+		
+		
+			
+			
+				<div class="props">
+					<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class tent.changes.Observable.">
+						<caption class="sectionTitle">Field Summary</caption>
+						
+						<thead>
+							<tr>
+								<th scope="col">Field Attributes</th>
+								<th scope="col">Field Name and Description</th>
+							</tr>
+						</thead>
+						
+						<tbody>
+							
+								<tr>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										<b><a href="../symbols/tent.changes.Observable.html#changesWhileSuspended">changesWhileSuspended</a></b>
+										</div>
+										<div class="description">Changes (Array of <a href="../symbols/tent.changes.Change.html">tent.changes.Change</a> occurred while suspended (see #suspend)</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										<b><a href="../symbols/tent.changes.Observable.html#subject">subject</a></b>
+										</div>
+										<div class="description">Object or Array beeing observed</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										<b><a href="../symbols/tent.changes.Observable.html#suspended">suspended</a></b>
+										</div>
+										<div class="description">Indicates if change notification is suspended, see #suspend and #resumeThis can be used to suspend notifications while performing bulk changes.</div>
+									</td>
+								</tr>
+							
+						</tbody>
+					</table>
+				</div>
+			
+			
+			
+		
+<!--
+#### METHODS SUMMARY
+-->
+		
+			
+			
+			<div class="props">
+				<h2 class="sectionTitle">Method Summary</h2>
+				
+				
+					<table class="summaryTable" id="MethodsList" cellspacing="0" summary="A summary of the methods documented in the class tent.changes.Observable.">
+						<thead>
+							<tr>
+								<th scope="col">Method Attributes</th>
+								<th scope="col">Method Name and Description</th>
+							</tr>
+						</thead>
+						
+						<tbody>
+							
+							
+								<tr
+									 class='item0'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/tent.changes.Observable.html#bind">bind</a></b>(eventType, handler)
+										</div>
+										<div class="description">Binds a change handler to an event type, see <a href="../symbols/tent.changes.html#.EventTypes">tent.changes.EventTypes</a></div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item1'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/tent.changes.Observable.html#interceptArrayModifiers">interceptArrayModifiers</a></b>(options)
+										</div>
+										<div class="description">Intercepts all array modifying functions on #subject (if #subject is an Array)<p>The only modifications that are not intercepted are:<ul>  <li>setting by index, ie: array[index]=value, use array.set(index,value) instead.</div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item2'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/tent.changes.Observable.html#interceptFunction">interceptFunction</a></b>(name, override)
+										</div>
+										<div class="description">Intercepts a function on #subject</div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item3'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/tent.changes.Observable.html#interceptProperties">interceptProperties</a></b>(options)
+										</div>
+										<div class="description">Intercepts properties of #subject, if new properties are added this function can be called again (it's idempotent)</div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item4'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/tent.changes.Observable.html#interceptProperty">interceptProperty</a></b>(name, _name, getter, setter)
+										</div>
+										<div class="description">Intercepts a property on #subject</div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item5'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/tent.changes.Observable.html#isDOMObject">isDOMObject</a></b>()
+										</div>
+										<div class="description"></div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item6'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/tent.changes.Observable.html#isValidHandler">isValidHandler</a></b>(handler)
+										</div>
+										<div class="description">Test if an object is a valid change handler, eg: a function or an object with handle() function This function is used to test handlers when binding #bind</div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item7'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/tent.changes.Observable.html#log">log</a></b>(enable)
+										</div>
+										<div class="description">Activates/Deactivates logging of changes, a default <a href="../symbols/tent.changes.LogHandler.html">tent.changes.LogHandler</a> is used.</div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item8'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/tent.changes.Observable.html#removeInterceptor">removeInterceptor</a></b>(name)
+										</div>
+										<div class="description">Removes an interceptor by name, restoring the property or function original state</div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item9'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/tent.changes.Observable.html#removeInterceptors">removeInterceptors</a></b>()
+										</div>
+										<div class="description">Removes all interceptors, see #removeInterceptor</div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item10'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/tent.changes.Observable.html#resume">resume</a></b>()
+										</div>
+										<div class="description">Resumes change notification, notifying at once all changes ocurred while suspendedIf few changes have ocurred while suspended (5 or less) they are all notified in order.</div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item11'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/tent.changes.Observable.html#suspend">suspend</a></b>()
+										</div>
+										<div class="description">Suspends change notification, see #suspended</div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item12'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/tent.changes.Observable.html#unbind">unbind</a></b>(eventType, handler)
+										</div>
+										<div class="description">Unbinds a handler</div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item13'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/tent.changes.Observable.html#unbindWhere">unbindWhere</a></b>(filter)
+										</div>
+										<div class="description">Unbinds all handlers that pass a filter</div>
+									</td>
+								</tr>
+							
+						</tbody>
+					</table>
+				
+			
+				
+			</div>
+		
+		
+<!--
+#### EVENTS SUMMARY
+-->
+		
+<!--
+#### CONSTRUCTOR DETAILS
+-->
+		
+			<div class="details props">
+				<div class="innerProps">
+					<h2 class="sectionTitle" id="constructor">
+						Class Detail
+					</h2>
+					
+					<div class="fixedFont">
+						<b>tent.changes.Observable</b>(subject)
+					</div>
+					
+					<div class="description">
+						Creates a new Observable that notifies changes on a Javascript object, see http://en.wikipedia.org/wiki/Observer_pattern
+						
+					</div>
+					
+					
+				
+					
+						<dl class="detailList params">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Object}</span>  <b>subject</b>
+									
+								</dt>
+								<dd>the object to observe</dd>
+							
+						</dl>
+					
+					
+					
+				</div>
+			</div>
+		
+<!--
+#### FIELD DETAILS
+-->
+		
+			<div class="details props">
+				<div class="innerProps">
+					<h2 class="sectionTitle">
+						Field Detail
+					</h2>
+					
+					
+						<div class="fixedFont heading" id="changesWhileSuspended">
+							<span class='lighter'>
+							
+							</span>
+							
+							<span class="light">{Array}</span>
+							
+							<b>changesWhileSuspended</b>							
+						</div>
+						
+						<div class="description">
+							Changes (Array of <a href="../symbols/tent.changes.Change.html">tent.changes.Change</a> occurred while suspended (see #suspend)
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id="subject">
+							<span class='lighter'>
+							
+							</span>
+							
+							<span class="light">{Object|Array}</span>
+							
+							<b>subject</b>							
+						</div>
+						
+						<div class="description">
+							Object or Array beeing observed
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id="suspended">
+							<span class='lighter'>
+							
+							</span>
+							
+							<span class="light">{Boolean}</span>
+							
+							<b>suspended</b>							
+						</div>
+						
+						<div class="description">
+							Indicates if change notification is suspended, see #suspend and #resumeThis can be used to suspend notifications while performing bulk changes.Changes while suspended are notified on resume.
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						
+					
+				</div>
+			</div>
+		
+<!--
+#### METHOD DETAILS
+-->		
+		
+			<div class="details props">
+				<div class="innerProps">
+					<h2 class="sectionTitle">
+						Method Detail
+					</h2>
+					
+					<ul class="methodDetail" id="MethodDetail">
+						
+						
+							<li 
+								 class='item0'
+							>
+								<div class="fixedFont heading" id="bind">
+									<span class='lighter'>
+									
+									</span>
+									
+									<span class="light">{Boolean}</span>
+									
+									<b>bind</b>(eventType, handler)
+								</div>
+								
+								<div class="description">
+									Binds a change handler to an event type, see <a href="../symbols/tent.changes.html#.EventTypes">tent.changes.EventTypes</a>
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+									<dl class="detailList params">
+										<dt class="heading">Parameters:</dt>
+										
+											<dt>
+												<span class="light fixedFont">{Number}</span> <b>eventType</b>
+												<i>Optional</i>
+											</dt>
+											<dd>a value of <a href="../symbols/tent.changes.html#.EventTypes">tent.changes.EventTypes</a>, if none is provided all events are included</dd>
+										
+											<dt>
+												<span class="light fixedFont">{Object|function()}</span> <b>handler</b>
+												
+											</dt>
+											<dd>a valid change handler, see #isValidHandler</dd>
+										
+									</dl>
+								
+								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{Boolean}</span> false if no action has been performed (ie: the binding already exists)</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item1'
+							>
+								<div class="fixedFont heading" id="interceptArrayModifiers">
+									<span class='lighter'>
+									
+									</span>
+									
+									<span class="light">{<a href="../symbols/tent.changes.Observable.html">tent.changes.Observable</a>}</span>
+									
+									<b>interceptArrayModifiers</b>(options)
+								</div>
+								
+								<div class="description">
+									Intercepts all array modifying functions on #subject (if #subject is an Array)<p>The only modifications that are not intercepted are:<ul>  <li>setting by index, ie: array[index]=value, use array.set(index,value) instead.</li>  <li>setting array length property, ie: array.length = newlength, use array.setLength(newLength) instead.</li></ul></p>
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+									<dl class="detailList params">
+										<dt class="heading">Parameters:</dt>
+										
+											<dt>
+												<span class="light fixedFont">{Object}</span> <b>options</b>
+												<i>Optional</i>
+											</dt>
+											<dd>intercepting options</dd>
+										
+									</dl>
+								
+								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{<a href="../symbols/tent.changes.Observable.html">tent.changes.Observable</a>}</span> this</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item2'
+							>
+								<div class="fixedFont heading" id="interceptFunction">
+									<span class='lighter'>
+									
+									</span>
+									
+									
+									
+									<b>interceptFunction</b>(name, override)
+								</div>
+								
+								<div class="description">
+									Intercepts a function on #subject
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+									<dl class="detailList params">
+										<dt class="heading">Parameters:</dt>
+										
+											<dt>
+												<span class="light fixedFont">{Object}</span> <b>name</b>
+												
+											</dt>
+											<dd>the function name</dd>
+										
+											<dt>
+												<span class="light fixedFont">{Object}</span> <b>override</b>
+												
+											</dt>
+											<dd>the function to use as replacement</dd>
+										
+									</dl>
+								
+								
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item3'
+							>
+								<div class="fixedFont heading" id="interceptProperties">
+									<span class='lighter'>
+									
+									</span>
+									
+									<span class="light">{<a href="../symbols/tent.changes.Observable.html">tent.changes.Observable</a>}</span>
+									
+									<b>interceptProperties</b>(options)
+								</div>
+								
+								<div class="description">
+									Intercepts properties of #subject, if new properties are added this function can be called again (it's idempotent)
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+									<dl class="detailList params">
+										<dt class="heading">Parameters:</dt>
+										
+											<dt>
+												<span class="light fixedFont">{Object}</span> <b>options</b>
+												<i>Optional</i>
+											</dt>
+											<dd>intercepting options</dd>
+										
+											<dt>
+												<span class="light fixedFont">{function()}</span> <b>options.propertyFilter</b>
+												<i>Optional</i>
+											</dt>
+											<dd>property filter, by default all properties starting with underscore are filtered</dd>
+										
+											<dt>
+												<span class="light fixedFont">{String}</span> <b>options.backPropertyPrefix</b>
+												<i>Optional</i>
+											</dt>
+											<dd>prefix for back storage properties, by default is underscore</dd>
+										
+											<dt>
+												<span class="light fixedFont">{Boolean}</span> <b>options.trackDomProperties</b>
+												<i>Optional</i>
+											</dt>
+											<dd>if true dom properties are intercepted too (by default false), see tent.isDomObject and tent.isDomProperty</dd>
+										
+									</dl>
+								
+								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{<a href="../symbols/tent.changes.Observable.html">tent.changes.Observable</a>}</span> this</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item4'
+							>
+								<div class="fixedFont heading" id="interceptProperty">
+									<span class='lighter'>
+									
+									</span>
+									
+									<span class="light">{Object}</span>
+									
+									<b>interceptProperty</b>(name, _name, getter, setter)
+								</div>
+								
+								<div class="description">
+									Intercepts a property on #subject
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+									<dl class="detailList params">
+										<dt class="heading">Parameters:</dt>
+										
+											<dt>
+												<span class="light fixedFont">{String}</span> <b>name</b>
+												
+											</dt>
+											<dd>property name</dd>
+										
+											<dt>
+												<span class="light fixedFont">{String}</span> <b>_name</b>
+												
+											</dt>
+											<dd>back storage property name</dd>
+										
+											<dt>
+												<span class="light fixedFont">{function()}</span> <b>getter</b>
+												
+											</dt>
+											<dd>getter function</dd>
+										
+											<dt>
+												<span class="light fixedFont">{function()}</span> <b>setter</b>
+												
+											</dt>
+											<dd>setter function</dd>
+										
+									</dl>
+								
+								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{Object}</span> the new interceptor, or the already existing if there was one.</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item5'
+							>
+								<div class="fixedFont heading" id="isDOMObject">
+									<span class='lighter'>
+									
+									</span>
+									
+									<span class="light">{Boolean}</span>
+									
+									<b>isDOMObject</b>()
+								</div>
+								
+								<div class="description">
+									
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{Boolean}</span> true if #subject is a DOM Object, see <a href="../symbols/tent.html#.isDOMObject">tent.isDOMObject</a></dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item6'
+							>
+								<div class="fixedFont heading" id="isValidHandler">
+									<span class='lighter'>
+									
+									</span>
+									
+									<span class="light">{Boolean}</span>
+									
+									<b>isValidHandler</b>(handler)
+								</div>
+								
+								<div class="description">
+									Test if an object is a valid change handler, eg: a function or an object with handle() function This function is used to test handlers when binding #bind
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+									<dl class="detailList params">
+										<dt class="heading">Parameters:</dt>
+										
+											<dt>
+												<span class="light fixedFont">{Object|function()}</span> <b>handler</b>
+												
+											</dt>
+											<dd></dd>
+										
+									</dl>
+								
+								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{Boolean}</span> true if handler is a valid change handler</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item7'
+							>
+								<div class="fixedFont heading" id="log">
+									<span class='lighter'>
+									
+									</span>
+									
+									<span class="light">{Boolean}</span>
+									
+									<b>log</b>(enable)
+								</div>
+								
+								<div class="description">
+									Activates/Deactivates logging of changes, a default <a href="../symbols/tent.changes.LogHandler.html">tent.changes.LogHandler</a> is used.
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+									<dl class="detailList params">
+										<dt class="heading">Parameters:</dt>
+										
+											<dt>
+												<span class="light fixedFont">{Boolean}</span> <b>enable</b>
+												<i>Optional</i>
+											</dt>
+											<dd>true to enable (default), false to disable</dd>
+										
+									</dl>
+								
+								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{Boolean}</span> false if no action has been performed (ie: logging was already enabled/disabled)</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item8'
+							>
+								<div class="fixedFont heading" id="removeInterceptor">
+									<span class='lighter'>
+									
+									</span>
+									
+									
+									
+									<b>removeInterceptor</b>(name)
+								</div>
+								
+								<div class="description">
+									Removes an interceptor by name, restoring the property or function original state
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+									<dl class="detailList params">
+										<dt class="heading">Parameters:</dt>
+										
+											<dt>
+												<span class="light fixedFont">{String}</span> <b>name</b>
+												
+											</dt>
+											<dd>a function or property name on #subject</dd>
+										
+									</dl>
+								
+								
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item9'
+							>
+								<div class="fixedFont heading" id="removeInterceptors">
+									<span class='lighter'>
+									
+									</span>
+									
+									
+									
+									<b>removeInterceptors</b>()
+								</div>
+								
+								<div class="description">
+									Removes all interceptors, see #removeInterceptor
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+								
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item10'
+							>
+								<div class="fixedFont heading" id="resume">
+									<span class='lighter'>
+									
+									</span>
+									
+									
+									
+									<b>resume</b>()
+								</div>
+								
+								<div class="description">
+									Resumes change notification, notifying at once all changes ocurred while suspendedIf few changes have ocurred while suspended (5 or less) they are all notified in order.If many changes have ocurred a tent.changes.EventTypes.MANYCHANGES event is fired with all changes packed in its data
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+								
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item11'
+							>
+								<div class="fixedFont heading" id="suspend">
+									<span class='lighter'>
+									
+									</span>
+									
+									
+									
+									<b>suspend</b>()
+								</div>
+								
+								<div class="description">
+									Suspends change notification, see #suspended
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+								
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item12'
+							>
+								<div class="fixedFont heading" id="unbind">
+									<span class='lighter'>
+									
+									</span>
+									
+									<span class="light">{Boolean}</span>
+									
+									<b>unbind</b>(eventType, handler)
+								</div>
+								
+								<div class="description">
+									Unbinds a handler
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+									<dl class="detailList params">
+										<dt class="heading">Parameters:</dt>
+										
+											<dt>
+												<span class="light fixedFont">{Number}</span> <b>eventType</b>
+												<i>Optional</i>
+											</dt>
+											<dd>a value of <a href="../symbols/tent.changes.html#.EventTypes">tent.changes.EventTypes</a>, if none is provided all events are included</dd>
+										
+											<dt>
+												<span class="light fixedFont">{Object|function()}</span> <b>handler</b>
+												
+											</dt>
+											<dd>the handler to unbind</dd>
+										
+									</dl>
+								
+								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{Boolean}</span> false if no action has been performed (ie: the binding doesn't exists)</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item13'
+							>
+								<div class="fixedFont heading" id="unbindWhere">
+									<span class='lighter'>
+									
+									</span>
+									
+									<span class="light">{Boolean}</span>
+									
+									<b>unbindWhere</b>(filter)
+								</div>
+								
+								<div class="description">
+									Unbinds all handlers that pass a filter
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+									<dl class="detailList params">
+										<dt class="heading">Parameters:</dt>
+										
+											<dt>
+												<span class="light fixedFont">{function()}</span> <b>filter</b>
+												
+											</dt>
+											<dd>a function that receives a handler and returns true if it must be unbound</dd>
+										
+									</dl>
+								
+								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{Boolean}</span> false if no action has been performed (ie: no handler has been unbound)</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
+								
+								
+							</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+		
+<!--
+#### EVENT DETAILS
+-->		
+		
+	</div>
+</div>
+		<script type="text/javascript">
+			wbos.CssTools.MediaQueryFallBack.LoadCss('../css/screen.css', '../css/handheld.css', 660);
+			codeview.classFilter.Init();
+			
+			// Syntax Highlighting
+			SyntaxHighlighter.all();
+		</script>
+	</body>
+</html>
+

@@ -1,0 +1,931 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+		<meta charset="utf-8"></meta>
+		<meta name="generator" content="JsDoc Toolkit"></meta>
+		<title>tent.entities.Collection | Tent Framework API</title>
+
+		<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;"></meta>
+		<meta name="mobileoptimized" content="0"></meta>
+	
+		<link rel="stylesheet" href="../css/all.css" media="all"></link>
+		<link rel="stylesheet" href="../css/handheld.css" media="only screen and (max-width: 660px)"></link>
+		<link rel="stylesheet" href="../css/handheld.css" media="handheld"></link>
+		<link rel="stylesheet" href="../css/screen.css" media="screen and (min-width: 661px)"></link>
+
+		<!-- Syntax Highlighting -->
+		<link rel="stylesheet" href="../css/shCore.css" media="all"></link>
+		<link rel="stylesheet" href="../css/shThemeDefault.css" media="all"></link>
+		<script src="../javascript/shCore.js"></script>
+		<script src="../javascript/shBrushJScript.js"></script>
+
+		<script src="../javascript/all.js"></script>
+		<!--[if lt IE 9]>
+			<script src="../javascript/html5.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+<div class="index">
+	<div class="menu">
+		<div class="indexLinks">
+			<a href="../index.html">Classes</a>
+			<a href="../files.html">Files</a>
+		</div>
+	
+		<h2 class="heading1">Classes</h2>
+		
+		<input type="text" name="classFilter" class="classFilter" id="ClassFilter" placeholder="Filter"></input>
+		
+		<nav>
+			<ul class="classList" id="ClassList">
+				
+					<li><a href="../symbols/_global_.html">_global_</a></li>
+				
+					<li><a href="../symbols/tent.html">tent</a></li>
+				
+					<li><a href="../symbols/tent.arrays.html">tent<span class='break'> </span>.<span class='break'> </span>arrays</a></li>
+				
+					<li><a href="../symbols/tent.arrays.functions.html">tent<span class='break'> </span>.<span class='break'> </span>arrays<span class='break'> </span>.<span class='break'> </span>functions</a></li>
+				
+					<li><a href="../symbols/tent.changes.html">tent<span class='break'> </span>.<span class='break'> </span>changes</a></li>
+				
+					<li><a href="../symbols/tent.changes.Change.html">tent<span class='break'> </span>.<span class='break'> </span>changes<span class='break'> </span>.<span class='break'> </span>Change</a></li>
+				
+					<li><a href="../symbols/tent.changes.LogHandler.html">tent<span class='break'> </span>.<span class='break'> </span>changes<span class='break'> </span>.<span class='break'> </span>LogHandler</a></li>
+				
+					<li><a href="../symbols/tent.changes.Observable.html">tent<span class='break'> </span>.<span class='break'> </span>changes<span class='break'> </span>.<span class='break'> </span>Observable</a></li>
+				
+					<li><a href="../symbols/tent.changes.reverseProperties.html">tent<span class='break'> </span>.<span class='break'> </span>changes<span class='break'> </span>.<span class='break'> </span>reverseProperties</a></li>
+				
+					<li><a href="../symbols/tent.changes.reverseProperties.Set.html">tent<span class='break'> </span>.<span class='break'> </span>changes<span class='break'> </span>.<span class='break'> </span>reverseProperties<span class='break'> </span>.<span class='break'> </span>Set</a></li>
+				
+					<li><a href="../symbols/tent.connectors.html">tent<span class='break'> </span>.<span class='break'> </span>connectors</a></li>
+				
+					<li><a href="../symbols/tent.connectors.couchdb.html">tent<span class='break'> </span>.<span class='break'> </span>connectors<span class='break'> </span>.<span class='break'> </span>couchdb</a></li>
+				
+					<li><a href="../symbols/tent.connectors.couchdb.CouchDBConnector.html">tent<span class='break'> </span>.<span class='break'> </span>connectors<span class='break'> </span>.<span class='break'> </span>couchdb<span class='break'> </span>.<span class='break'> </span>CouchDBConnector</a></li>
+				
+					<li><a href="../symbols/tent.connectors.http.html">tent<span class='break'> </span>.<span class='break'> </span>connectors<span class='break'> </span>.<span class='break'> </span>http</a></li>
+				
+					<li><a href="../symbols/tent.connectors.rest.html">tent<span class='break'> </span>.<span class='break'> </span>connectors<span class='break'> </span>.<span class='break'> </span>rest</a></li>
+				
+					<li><a href="../symbols/tent.connectors.rest.filters.html">tent<span class='break'> </span>.<span class='break'> </span>connectors<span class='break'> </span>.<span class='break'> </span>rest<span class='break'> </span>.<span class='break'> </span>filters</a></li>
+				
+					<li><a href="../symbols/tent.connectors.rest.processors.html">tent<span class='break'> </span>.<span class='break'> </span>connectors<span class='break'> </span>.<span class='break'> </span>rest<span class='break'> </span>.<span class='break'> </span>processors</a></li>
+				
+					<li><a href="../symbols/tent.connectors.rest.RestConnector.html">tent<span class='break'> </span>.<span class='break'> </span>connectors<span class='break'> </span>.<span class='break'> </span>rest<span class='break'> </span>.<span class='break'> </span>RestConnector</a></li>
+				
+					<li><a href="../symbols/tent.coreTypes.html">tent<span class='break'> </span>.<span class='break'> </span>coreTypes</a></li>
+				
+					<li><a href="../symbols/tent.coreTypes.Enum.html">tent<span class='break'> </span>.<span class='break'> </span>coreTypes<span class='break'> </span>.<span class='break'> </span>Enum</a></li>
+				
+					<li><a href="../symbols/tent.coreTypes.NameCounter.html">tent<span class='break'> </span>.<span class='break'> </span>coreTypes<span class='break'> </span>.<span class='break'> </span>NameCounter</a></li>
+				
+					<li><a href="../symbols/tent.databinding.html">tent<span class='break'> </span>.<span class='break'> </span>databinding</a></li>
+				
+					<li><a href="../symbols/tent.entities.html">tent<span class='break'> </span>.<span class='break'> </span>entities</a></li>
+				
+					<li><a href="../symbols/tent.entities.Collection.html">tent<span class='break'> </span>.<span class='break'> </span>entities<span class='break'> </span>.<span class='break'> </span>Collection</a></li>
+				
+					<li><a href="../symbols/tent.entities.Context.html">tent<span class='break'> </span>.<span class='break'> </span>entities<span class='break'> </span>.<span class='break'> </span>Context</a></li>
+				
+					<li><a href="../symbols/tent.entities.ContextChangeHandler.html">tent<span class='break'> </span>.<span class='break'> </span>entities<span class='break'> </span>.<span class='break'> </span>ContextChangeHandler</a></li>
+				
+					<li><a href="../symbols/tent.entities.ContextChanges.html">tent<span class='break'> </span>.<span class='break'> </span>entities<span class='break'> </span>.<span class='break'> </span>ContextChanges</a></li>
+				
+					<li><a href="../symbols/tent.entities.EntityLink.html">tent<span class='break'> </span>.<span class='break'> </span>entities<span class='break'> </span>.<span class='break'> </span>EntityLink</a></li>
+				
+					<li><a href="../symbols/tent.entities.Type.html">tent<span class='break'> </span>.<span class='break'> </span>entities<span class='break'> </span>.<span class='break'> </span>Type</a></li>
+				
+					<li><a href="../symbols/tent.events.html">tent<span class='break'> </span>.<span class='break'> </span>events</a></li>
+				
+					<li><a href="../symbols/tent.events.extendFunctions.html">tent<span class='break'> </span>.<span class='break'> </span>events<span class='break'> </span>.<span class='break'> </span>extendFunctions</a></li>
+				
+					<li><a href="../symbols/tent.logging.html">tent<span class='break'> </span>.<span class='break'> </span>logging</a></li>
+				
+					<li><a href="../symbols/tent.logging.Log.html">tent<span class='break'> </span>.<span class='break'> </span>logging<span class='break'> </span>.<span class='break'> </span>Log</a></li>
+				
+					<li><a href="../symbols/tent.Namespace.html">tent<span class='break'> </span>.<span class='break'> </span>Namespace</a></li>
+				
+			</ul>
+		</nav>
+	</div>
+	<div class="fineprint" style="clear:both">
+		&copy;2011<br />
+		Documentation generator: <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0<br />
+		Template: <a href="http://www.thebrightlines.com/2010/05/06/new-template-for-jsdoctoolkit-codeview/" target="_blank">Codeview</a> 1.2<br />
+		Generated on: 2011-5-13 23:34
+	</div>
+</div>
+
+<div class="index indexStatic"></div>
+
+<div class="content">
+	<div class="innerContent">
+		<h1 class="classTitle">
+			
+			Class <span>tent.entities.Collection</span>
+		</h1>
+		
+		<div class="intro">
+			<p class="description summary">
+				a collection of entities of a <a href="../symbols/tent.entities.Type.html">tent.entities.Type</a> attached to a <a href="../symbols/tent.entities.Context.html">tent.entities.Context</a>
+			</p>
+				
+			
+				<ul class="summary">
+					
+					
+					
+						<li>Defined in: <a href="../symbols/src/src__entities.js.html">entities.js</a></li>
+					
+						
+				</ul>
+			
+		</div>
+		
+		
+			<div class="props">
+				<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class tent.entities.Collection.">
+					<caption class="sectionTitle">Class Summary</caption>
+					<thead>
+						<tr>
+							<th scope="col">Constructor Attributes</th>
+							<th scope="col">Constructor Name and Description</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription" >
+								<div class="fixedFont">
+									<b><a href="../symbols/tent.entities.Collection.html#constructor">tent.entities.Collection</a></b>(context, type, name)
+								</div>
+								<div class="description">Creates a new entity Collection.</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		
+		
+		
+			
+			
+				<div class="props">
+					<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class tent.entities.Collection.">
+						<caption class="sectionTitle">Field Summary</caption>
+						
+						<thead>
+							<tr>
+								<th scope="col">Field Attributes</th>
+								<th scope="col">Field Name and Description</th>
+							</tr>
+						</thead>
+						
+						<tbody>
+							
+								<tr>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										<b><a href="../symbols/tent.entities.Collection.html#context">context</a></b>
+										</div>
+										<div class="description">the <a href="../symbols/tent.entities.Context.html">tent.entities.Context</a> that owns this collection</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										<b><a href="../symbols/tent.entities.Collection.html#items">items</a></b>
+										</div>
+										<div class="description">Objects in this collection</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										<b><a href="../symbols/tent.entities.Collection.html#name">name</a></b>
+										</div>
+										<div class="description">Collection name</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										<b><a href="../symbols/tent.entities.Collection.html#type">type</a></b>
+										</div>
+										<div class="description">the <a href="../symbols/tent.entities.Type.html">tent.entities.Type</a> of objects on this collection</div>
+									</td>
+								</tr>
+							
+						</tbody>
+					</table>
+				</div>
+			
+			
+			
+		
+<!--
+#### METHODS SUMMARY
+-->
+		
+			
+			
+			<div class="props">
+				<h2 class="sectionTitle">Method Summary</h2>
+				
+				
+					<table class="summaryTable" id="MethodsList" cellspacing="0" summary="A summary of the methods documented in the class tent.entities.Collection.">
+						<thead>
+							<tr>
+								<th scope="col">Method Attributes</th>
+								<th scope="col">Method Name and Description</th>
+							</tr>
+						</thead>
+						
+						<tbody>
+							
+							
+								<tr
+									 class='item0'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/tent.entities.Collection.html#attach">attach</a></b>()
+										</div>
+										<div class="description">Attachs all arguments to this collection.</div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item1'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/tent.entities.Collection.html#detach">detach</a></b>()
+										</div>
+										<div class="description">Detaches all arguments from this collection (and its #context)</div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item2'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/tent.entities.Collection.html#detachAll">detachAll</a></b>()
+										</div>
+										<div class="description">Detaches (#detach) all entities in this collection (#items)</div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item3'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/tent.entities.Collection.html#find">find</a></b>(idOrQuery)
+										</div>
+										<div class="description">Finds entities by id or using query objects (with matching properties) in this Collection</div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item4'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/tent.entities.Collection.html#getById">getById</a></b>(id)
+										</div>
+										<div class="description">Finds an entity by ID in this Collection</div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item5'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/tent.entities.Collection.html#push">push</a></b>()
+										</div>
+										<div class="description">Adds all arguments to this collection</div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item6'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/tent.entities.Collection.html#remove">remove</a></b>()
+										</div>
+										<div class="description">Removes all arguments from this collection.</div>
+									</td>
+								</tr>
+							
+						</tbody>
+					</table>
+				
+			
+				
+			</div>
+		
+		
+<!--
+#### EVENTS SUMMARY
+-->
+		
+<!--
+#### CONSTRUCTOR DETAILS
+-->
+		
+			<div class="details props">
+				<div class="innerProps">
+					<h2 class="sectionTitle" id="constructor">
+						Class Detail
+					</h2>
+					
+					<div class="fixedFont">
+						<b>tent.entities.Collection</b>(context, type, name)
+					</div>
+					
+					<div class="description">
+						Creates a new entity Collection.This is intended for internal use, to add collections to a context use <a href="../symbols/tent.entities.Context.html#getCollection">tent.entities.Context#getCollection</a>
+						
+					</div>
+					
+					
+				
+					
+						<dl class="detailList params">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{<a href="../symbols/tent.entities.Context.html">tent.entities.Context</a>}</span>  <b>context</b>
+									
+								</dt>
+								<dd></dd>
+							
+								<dt>
+									<span class="light fixedFont">{<a href="../symbols/tent.entities.Type.html">tent.entities.Type</a>}</span>  <b>type</b>
+									
+								</dt>
+								<dd></dd>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span>  <b>name</b>
+									
+								</dt>
+								<dd>name for this collection, if not specified the type name is used</dd>
+							
+						</dl>
+					
+					
+					
+				</div>
+			</div>
+		
+<!--
+#### FIELD DETAILS
+-->
+		
+			<div class="details props">
+				<div class="innerProps">
+					<h2 class="sectionTitle">
+						Field Detail
+					</h2>
+					
+					
+						<div class="fixedFont heading" id="context">
+							<span class='lighter'>
+							
+							</span>
+							
+							<span class="light">{<a href="../symbols/tent.entities.Context.html">tent.entities.Context</a>}</span>
+							
+							<b>context</b>							
+						</div>
+						
+						<div class="description">
+							the <a href="../symbols/tent.entities.Context.html">tent.entities.Context</a> that owns this collection
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id="items">
+							<span class='lighter'>
+							
+							</span>
+							
+							<span class="light">{Array}</span>
+							
+							<b>items</b>							
+						</div>
+						
+						<div class="description">
+							Objects in this collection
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id="name">
+							<span class='lighter'>
+							
+							</span>
+							
+							<span class="light">{String}</span>
+							
+							<b>name</b>							
+						</div>
+						
+						<div class="description">
+							Collection name
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id="type">
+							<span class='lighter'>
+							
+							</span>
+							
+							<span class="light">{<a href="../symbols/tent.entities.Type.html">tent.entities.Type</a>}</span>
+							
+							<b>type</b>							
+						</div>
+						
+						<div class="description">
+							the <a href="../symbols/tent.entities.Type.html">tent.entities.Type</a> of objects on this collection
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						
+					
+				</div>
+			</div>
+		
+<!--
+#### METHOD DETAILS
+-->		
+		
+			<div class="details props">
+				<div class="innerProps">
+					<h2 class="sectionTitle">
+						Method Detail
+					</h2>
+					
+					<ul class="methodDetail" id="MethodDetail">
+						
+						
+							<li 
+								 class='item0'
+							>
+								<div class="fixedFont heading" id="attach">
+									<span class='lighter'>
+									
+									</span>
+									
+									<span class="light">{Number}</span>
+									
+									<b>attach</b>()
+								</div>
+								
+								<div class="description">
+									Attachs all arguments to this collection. Each object change state is preserved. If no change state is found, object are added as unchanged.
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+											<dt class="heading">Throws:</dt>
+											
+												<dt>
+													 <b></b>
+												</dt>
+												<dd>if an argument already belongs to another collection</dd>
+											
+												<dt>
+													 <b></b>
+												</dt>
+												<dd>if an argument has a <a href="../symbols/tent.entities.Type.html">tent.entities.Type</a> different from this collection #type</dd>
+											
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{Number}</span> the number of entities in this collection</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item1'
+							>
+								<div class="fixedFont heading" id="detach">
+									<span class='lighter'>
+									
+									</span>
+									
+									<span class="light">{Boolean}</span>
+									
+									<b>detach</b>()
+								</div>
+								
+								<div class="description">
+									Detaches all arguments from this collection (and its #context)
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{Boolean}</span> true if any element has been detached (ie: a change has been made)</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item2'
+							>
+								<div class="fixedFont heading" id="detachAll">
+									<span class='lighter'>
+									
+									</span>
+									
+									<span class="light">{Boolean}</span>
+									
+									<b>detachAll</b>()
+								</div>
+								
+								<div class="description">
+									Detaches (#detach) all entities in this collection (#items)
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{Boolean}</span> true if any element has been detached (ie: a change has been made)</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item3'
+							>
+								<div class="fixedFont heading" id="find">
+									<span class='lighter'>
+									
+									</span>
+									
+									<span class="light">{Object}</span>
+									
+									<b>find</b>(idOrQuery)
+								</div>
+								
+								<div class="description">
+									Finds entities by id or using query objects (with matching properties) in this Collection
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+									<dl class="detailList params">
+										<dt class="heading">Parameters:</dt>
+										
+											<dt>
+												<span class="light fixedFont">{string|number|Object|Array}</span> <b>idOrQuery</b>
+												
+											</dt>
+											<dd>an id, a query object (an object with the property values to find) or an array of these</dd>
+										
+									</dl>
+								
+								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{Object}</span> the found entity, or null if not found, if an Array was provided an Array with the query result on each position</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item4'
+							>
+								<div class="fixedFont heading" id="getById">
+									<span class='lighter'>
+									
+									</span>
+									
+									<span class="light">{Object}</span>
+									
+									<b>getById</b>(id)
+								</div>
+								
+								<div class="description">
+									Finds an entity by ID in this Collection
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+									<dl class="detailList params">
+										<dt class="heading">Parameters:</dt>
+										
+											<dt>
+												<span class="light fixedFont">{string|number}</span> <b>id</b>
+												
+											</dt>
+											<dd></dd>
+										
+									</dl>
+								
+								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{Object}</span> the found entity, or null if not found</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item5'
+							>
+								<div class="fixedFont heading" id="push">
+									<span class='lighter'>
+									
+									</span>
+									
+									<span class="light">{Number}</span>
+									
+									<b>push</b>()
+								</div>
+								
+								<div class="description">
+									Adds all arguments to this collection
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+											<dt class="heading">Throws:</dt>
+											
+												<dt>
+													 <b></b>
+												</dt>
+												<dd>if an argument already belongs to another collection</dd>
+											
+												<dt>
+													 <b></b>
+												</dt>
+												<dd>if an argument has a <a href="../symbols/tent.entities.Type.html">tent.entities.Type</a> different from this collection #type</dd>
+											
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{Number}</span> the number of entities in this collection</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item6'
+							>
+								<div class="fixedFont heading" id="remove">
+									<span class='lighter'>
+									
+									</span>
+									
+									<span class="light">{Boolean}</span>
+									
+									<b>remove</b>()
+								</div>
+								
+								<div class="description">
+									Removes all arguments from this collection.
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{Boolean}</span> true if any element has been removed (ie: a change has been made)</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
+								
+								
+							</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+		
+<!--
+#### EVENT DETAILS
+-->		
+		
+	</div>
+</div>
+		<script type="text/javascript">
+			wbos.CssTools.MediaQueryFallBack.LoadCss('../css/screen.css', '../css/handheld.css', 660);
+			codeview.classFilter.Init();
+			
+			// Syntax Highlighting
+			SyntaxHighlighter.all();
+		</script>
+	</body>
+</html>
+

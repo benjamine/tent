@@ -1,0 +1,27 @@
+{
+	"packages":[
+	{
+		"name":"tent.light",
+		"description": "change tracking and reverse properties",
+		"files":[
+			"base.js", "arrays.js", "coretypes.js", "logging.js", "changes.js",
+			"changes.reverseproperties.js" 
+		]
+	},
+	{
+		"name":"tent",
+		"description": "full: change tracking, reverse properties, entity contexts, REST connector",
+		"files":[
+			"base.js", "arrays.js", "coretypes.js", "logging.js", "changes.js",
+			"changes.reverseproperties.js", 
+			"databinding.js", "entities.js",
+			"connectors/base.js", "connectors/http.js", "connectors/rest.js"
+		]
+	},
+	{
+		"name":"tent.couchdb",
+		"description": "REST connector for Apache CouchDB databases",
+		"files":["connectors/couchdb.js"]
+	}
+	]
+}

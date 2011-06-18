@@ -1,0 +1,1645 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+		<meta charset="utf-8"></meta>
+		<meta name="generator" content="JsDoc Toolkit"></meta>
+		<title>tent.entities.Context | Tent Framework API</title>
+
+		<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;"></meta>
+		<meta name="mobileoptimized" content="0"></meta>
+	
+		<link rel="stylesheet" href="../css/all.css" media="all"></link>
+		<link rel="stylesheet" href="../css/handheld.css" media="only screen and (max-width: 660px)"></link>
+		<link rel="stylesheet" href="../css/handheld.css" media="handheld"></link>
+		<link rel="stylesheet" href="../css/screen.css" media="screen and (min-width: 661px)"></link>
+
+		<!-- Syntax Highlighting -->
+		<link rel="stylesheet" href="../css/shCore.css" media="all"></link>
+		<link rel="stylesheet" href="../css/shThemeDefault.css" media="all"></link>
+		<script src="../javascript/shCore.js"></script>
+		<script src="../javascript/shBrushJScript.js"></script>
+
+		<script src="../javascript/all.js"></script>
+		<!--[if lt IE 9]>
+			<script src="../javascript/html5.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+<div class="index">
+	<div class="menu">
+		<div class="indexLinks">
+			<a href="../index.html">Classes</a>
+			<a href="../files.html">Files</a>
+		</div>
+	
+		<h2 class="heading1">Classes</h2>
+		
+		<input type="text" name="classFilter" class="classFilter" id="ClassFilter" placeholder="Filter"></input>
+		
+		<nav>
+			<ul class="classList" id="ClassList">
+				
+					<li><a href="../symbols/_global_.html">_global_</a></li>
+				
+					<li><a href="../symbols/tent.html">tent</a></li>
+				
+					<li><a href="../symbols/tent.arrays.html">tent<span class='break'> </span>.<span class='break'> </span>arrays</a></li>
+				
+					<li><a href="../symbols/tent.arrays.functions.html">tent<span class='break'> </span>.<span class='break'> </span>arrays<span class='break'> </span>.<span class='break'> </span>functions</a></li>
+				
+					<li><a href="../symbols/tent.changes.html">tent<span class='break'> </span>.<span class='break'> </span>changes</a></li>
+				
+					<li><a href="../symbols/tent.changes.Change.html">tent<span class='break'> </span>.<span class='break'> </span>changes<span class='break'> </span>.<span class='break'> </span>Change</a></li>
+				
+					<li><a href="../symbols/tent.changes.LogHandler.html">tent<span class='break'> </span>.<span class='break'> </span>changes<span class='break'> </span>.<span class='break'> </span>LogHandler</a></li>
+				
+					<li><a href="../symbols/tent.changes.Observable.html">tent<span class='break'> </span>.<span class='break'> </span>changes<span class='break'> </span>.<span class='break'> </span>Observable</a></li>
+				
+					<li><a href="../symbols/tent.changes.reverseProperties.html">tent<span class='break'> </span>.<span class='break'> </span>changes<span class='break'> </span>.<span class='break'> </span>reverseProperties</a></li>
+				
+					<li><a href="../symbols/tent.changes.reverseProperties.Set.html">tent<span class='break'> </span>.<span class='break'> </span>changes<span class='break'> </span>.<span class='break'> </span>reverseProperties<span class='break'> </span>.<span class='break'> </span>Set</a></li>
+				
+					<li><a href="../symbols/tent.connectors.html">tent<span class='break'> </span>.<span class='break'> </span>connectors</a></li>
+				
+					<li><a href="../symbols/tent.connectors.couchdb.html">tent<span class='break'> </span>.<span class='break'> </span>connectors<span class='break'> </span>.<span class='break'> </span>couchdb</a></li>
+				
+					<li><a href="../symbols/tent.connectors.couchdb.CouchDBConnector.html">tent<span class='break'> </span>.<span class='break'> </span>connectors<span class='break'> </span>.<span class='break'> </span>couchdb<span class='break'> </span>.<span class='break'> </span>CouchDBConnector</a></li>
+				
+					<li><a href="../symbols/tent.connectors.http.html">tent<span class='break'> </span>.<span class='break'> </span>connectors<span class='break'> </span>.<span class='break'> </span>http</a></li>
+				
+					<li><a href="../symbols/tent.connectors.rest.html">tent<span class='break'> </span>.<span class='break'> </span>connectors<span class='break'> </span>.<span class='break'> </span>rest</a></li>
+				
+					<li><a href="../symbols/tent.connectors.rest.filters.html">tent<span class='break'> </span>.<span class='break'> </span>connectors<span class='break'> </span>.<span class='break'> </span>rest<span class='break'> </span>.<span class='break'> </span>filters</a></li>
+				
+					<li><a href="../symbols/tent.connectors.rest.processors.html">tent<span class='break'> </span>.<span class='break'> </span>connectors<span class='break'> </span>.<span class='break'> </span>rest<span class='break'> </span>.<span class='break'> </span>processors</a></li>
+				
+					<li><a href="../symbols/tent.connectors.rest.RestConnector.html">tent<span class='break'> </span>.<span class='break'> </span>connectors<span class='break'> </span>.<span class='break'> </span>rest<span class='break'> </span>.<span class='break'> </span>RestConnector</a></li>
+				
+					<li><a href="../symbols/tent.coreTypes.html">tent<span class='break'> </span>.<span class='break'> </span>coreTypes</a></li>
+				
+					<li><a href="../symbols/tent.coreTypes.Enum.html">tent<span class='break'> </span>.<span class='break'> </span>coreTypes<span class='break'> </span>.<span class='break'> </span>Enum</a></li>
+				
+					<li><a href="../symbols/tent.coreTypes.NameCounter.html">tent<span class='break'> </span>.<span class='break'> </span>coreTypes<span class='break'> </span>.<span class='break'> </span>NameCounter</a></li>
+				
+					<li><a href="../symbols/tent.databinding.html">tent<span class='break'> </span>.<span class='break'> </span>databinding</a></li>
+				
+					<li><a href="../symbols/tent.entities.html">tent<span class='break'> </span>.<span class='break'> </span>entities</a></li>
+				
+					<li><a href="../symbols/tent.entities.Collection.html">tent<span class='break'> </span>.<span class='break'> </span>entities<span class='break'> </span>.<span class='break'> </span>Collection</a></li>
+				
+					<li><a href="../symbols/tent.entities.Context.html">tent<span class='break'> </span>.<span class='break'> </span>entities<span class='break'> </span>.<span class='break'> </span>Context</a></li>
+				
+					<li><a href="../symbols/tent.entities.ContextChangeHandler.html">tent<span class='break'> </span>.<span class='break'> </span>entities<span class='break'> </span>.<span class='break'> </span>ContextChangeHandler</a></li>
+				
+					<li><a href="../symbols/tent.entities.ContextChanges.html">tent<span class='break'> </span>.<span class='break'> </span>entities<span class='break'> </span>.<span class='break'> </span>ContextChanges</a></li>
+				
+					<li><a href="../symbols/tent.entities.EntityLink.html">tent<span class='break'> </span>.<span class='break'> </span>entities<span class='break'> </span>.<span class='break'> </span>EntityLink</a></li>
+				
+					<li><a href="../symbols/tent.entities.Type.html">tent<span class='break'> </span>.<span class='break'> </span>entities<span class='break'> </span>.<span class='break'> </span>Type</a></li>
+				
+					<li><a href="../symbols/tent.events.html">tent<span class='break'> </span>.<span class='break'> </span>events</a></li>
+				
+					<li><a href="../symbols/tent.events.extendFunctions.html">tent<span class='break'> </span>.<span class='break'> </span>events<span class='break'> </span>.<span class='break'> </span>extendFunctions</a></li>
+				
+					<li><a href="../symbols/tent.logging.html">tent<span class='break'> </span>.<span class='break'> </span>logging</a></li>
+				
+					<li><a href="../symbols/tent.logging.Log.html">tent<span class='break'> </span>.<span class='break'> </span>logging<span class='break'> </span>.<span class='break'> </span>Log</a></li>
+				
+					<li><a href="../symbols/tent.Namespace.html">tent<span class='break'> </span>.<span class='break'> </span>Namespace</a></li>
+				
+			</ul>
+		</nav>
+	</div>
+	<div class="fineprint" style="clear:both">
+		&copy;2011<br />
+		Documentation generator: <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0<br />
+		Template: <a href="http://www.thebrightlines.com/2010/05/06/new-template-for-jsdoctoolkit-codeview/" target="_blank">Codeview</a> 1.2<br />
+		Generated on: 2011-5-13 23:34
+	</div>
+</div>
+
+<div class="index indexStatic"></div>
+
+<div class="content">
+	<div class="innerContent">
+		<h1 class="classTitle">
+			
+			Class <span>tent.entities.Context</span>
+		</h1>
+		
+		<div class="intro">
+			<p class="description summary">
+				a Context that contains collections (<a href="../symbols/tent.entities.Collection.html">tent.entities.Collection</a>) of entities. Tracks changes on its entities.
+			</p>
+				
+			
+				<ul class="summary">
+					
+					
+					
+						<li>Defined in: <a href="../symbols/src/src__entities.js.html">entities.js</a></li>
+					
+						
+				</ul>
+			
+		</div>
+		
+		
+			<div class="props">
+				<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class tent.entities.Context.">
+					<caption class="sectionTitle">Class Summary</caption>
+					<thead>
+						<tr>
+							<th scope="col">Constructor Attributes</th>
+							<th scope="col">Constructor Name and Description</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription" >
+								<div class="fixedFont">
+									<b><a href="../symbols/tent.entities.Context.html#constructor">tent.entities.Context</a></b>(trackChanges, options)
+								</div>
+								<div class="description">Creates a new entity Context</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		
+		
+		
+			
+			
+				<div class="props">
+					<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class tent.entities.Context.">
+						<caption class="sectionTitle">Field Summary</caption>
+						
+						<thead>
+							<tr>
+								<th scope="col">Field Attributes</th>
+								<th scope="col">Field Name and Description</th>
+							</tr>
+						</thead>
+						
+						<tbody>
+							
+								<tr>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										<b><a href="../symbols/tent.entities.Context.html#changeHandler">changeHandler</a></b>
+										</div>
+										<div class="description">Change handler for this context</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										<b><a href="../symbols/tent.entities.Context.html#changes">changes</a></b>
+										</div>
+										<div class="description">Changes detected on this context.</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										<b><a href="../symbols/tent.entities.Context.html#options">options</a></b>
+										</div>
+										<div class="description">Configuration options for this context</div>
+									</td>
+								</tr>
+							
+						</tbody>
+					</table>
+				</div>
+			
+			
+			
+		
+<!--
+#### METHODS SUMMARY
+-->
+		
+			
+			
+			<div class="props">
+				<h2 class="sectionTitle">Method Summary</h2>
+				
+				
+					<table class="summaryTable" id="MethodsList" cellspacing="0" summary="A summary of the methods documented in the class tent.entities.Context.">
+						<thead>
+							<tr>
+								<th scope="col">Method Attributes</th>
+								<th scope="col">Method Name and Description</th>
+							</tr>
+						</thead>
+						
+						<tbody>
+							
+							
+								<tr
+									 class='item0'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/tent.entities.Context.html#acceptAllChanges">acceptAllChanges</a></b>()
+										</div>
+										<div class="description">Clears all detected changes, marking all entities as unchanged.</div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item1'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/tent.entities.Context.html#acceptChanges">acceptChanges</a></b>(change)
+										</div>
+										<div class="description">Clears detected changes, marking entities as unchanged.</div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item2'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/tent.entities.Context.html#all">all</a></b>()
+										</div>
+										<div class="description">Returns all entities in this Context</div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item3'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/tent.entities.Context.html#attach">attach</a></b>()
+										</div>
+										<div class="description">Attachs all arguments to this Context.</div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item4'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/tent.entities.Context.html#contains">contains</a></b>()
+										</div>
+										<div class="description">Searchs for all arguments in this Context.</div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item5'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/tent.entities.Context.html#detach">detach</a></b>()
+										</div>
+										<div class="description">Detaches all arguments from this context.</div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item6'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/tent.entities.Context.html#detachAll">detachAll</a></b>()
+										</div>
+										<div class="description">Detaches all entities on this Context</div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item7'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/tent.entities.Context.html#filter">filter</a></b>(condition)
+										</div>
+										<div class="description">Filters entities in this Context</div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item8'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/tent.entities.Context.html#find">find</a></b>(idOrQuery)
+										</div>
+										<div class="description">Finds entities by id or using query objects (with matching properties) in this Context</div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item9'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/tent.entities.Context.html#first">first</a></b>(condition)
+										</div>
+										<div class="description">Finds the first entity that satisfies a condition in this Context</div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item10'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/tent.entities.Context.html#getCollection">getCollection</a></b>(type, name)
+										</div>
+										<div class="description">Creates a new <a href="../symbols/tent.entities.Collection.html">tent.entities.Collection</a> on this Context.</div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item11'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/tent.entities.Context.html#getId">getId</a></b>(item)
+										</div>
+										<div class="description">Gets the id of an entity</div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item12'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/tent.entities.Context.html#getIdPropertyName">getIdPropertyName</a></b>(item)
+										</div>
+										<div class="description">Gets the name of the id property of an entity</div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item13'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/tent.entities.Context.html#hasChanges">hasChanges</a></b>()
+										</div>
+										<div class="description">Indicates if changes on this Context's entities has been detected</div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item14'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/tent.entities.Context.html#items">items</a></b>()
+										</div>
+										<div class="description">Returns items in the _Object default (untyped) collection.</div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item15'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/tent.entities.Context.html#markAsSaving">markAsSaving</a></b>()
+										</div>
+										<div class="description">Marks items being saved by a a sync operation (this prevents concurrent modification conflicts)</div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item16'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/tent.entities.Context.html#push">push</a></b>()
+										</div>
+										<div class="description">Adds all arguments to this Context.</div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item17'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/tent.entities.Context.html#pushModel">pushModel</a></b>(model)
+										</div>
+										<div class="description">Adds an entity model to this context.</div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item18'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/tent.entities.Context.html#remove">remove</a></b>()
+										</div>
+										<div class="description">Removes all arguments from this context.</div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item19'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/tent.entities.Context.html#touch">touch</a></b>()
+										</div>
+										<div class="description">Marks all arguments as modified</div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item20'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/tent.entities.Context.html#trackChanges">trackChanges</a></b>()
+										</div>
+										<div class="description">Activates change tracking for this context</div>
+									</td>
+								</tr>
+							
+						</tbody>
+					</table>
+				
+			
+				
+			</div>
+		
+		
+<!--
+#### EVENTS SUMMARY
+-->
+		
+<!--
+#### CONSTRUCTOR DETAILS
+-->
+		
+			<div class="details props">
+				<div class="innerProps">
+					<h2 class="sectionTitle" id="constructor">
+						Class Detail
+					</h2>
+					
+					<div class="fixedFont">
+						<b>tent.entities.Context</b>(trackChanges, options)
+					</div>
+					
+					<div class="description">
+						Creates a new entity Context
+						
+					</div>
+					
+					
+				
+					
+						<dl class="detailList params">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Boolean}</span>  <b>trackChanges</b>
+									<i>Optional</i>
+								</dt>
+								<dd>if true change tracking is activated</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Object}</span>  <b>options</b>
+									<i>Optional</i>
+								</dt>
+								<dd></dd>
+							
+								<dt>
+									<span class="light fixedFont">{Boolean}</span>  <b>options.trackChanges</b>
+									<i>Optional</i>
+								</dt>
+								<dd>if true change tracking is activated</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Boolean}</span>  <b>options.defaultIdProperty</b>
+									<i>Optional</i>
+								</dt>
+								<dd>default id property name in entities</dd>
+							
+						</dl>
+					
+					
+					
+				</div>
+			</div>
+		
+<!--
+#### FIELD DETAILS
+-->
+		
+			<div class="details props">
+				<div class="innerProps">
+					<h2 class="sectionTitle">
+						Field Detail
+					</h2>
+					
+					
+						<div class="fixedFont heading" id="changeHandler">
+							<span class='lighter'>
+							
+							</span>
+							
+							<span class="light">{<a href="../symbols/tent.entities.ContextChangeHandler.html">tent.entities.ContextChangeHandler</a>}</span>
+							
+							<b>changeHandler</b>							
+						</div>
+						
+						<div class="description">
+							Change handler for this context
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id="changes">
+							<span class='lighter'>
+							
+							</span>
+							
+							<span class="light">{<a href="../symbols/tent.entities.ContextChanges.html">tent.entities.ContextChanges</a>}</span>
+							
+							<b>changes</b>							
+						</div>
+						
+						<div class="description">
+							Changes detected on this context. Activate change tracking calling #trackChanges
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id="options">
+							<span class='lighter'>
+							
+							</span>
+							
+							
+							
+							<b>options</b>							
+						</div>
+						
+						<div class="description">
+							Configuration options for this context
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						
+					
+				</div>
+			</div>
+		
+<!--
+#### METHOD DETAILS
+-->		
+		
+			<div class="details props">
+				<div class="innerProps">
+					<h2 class="sectionTitle">
+						Method Detail
+					</h2>
+					
+					<ul class="methodDetail" id="MethodDetail">
+						
+						
+							<li 
+								 class='item0'
+							>
+								<div class="fixedFont heading" id="acceptAllChanges">
+									<span class='lighter'>
+									
+									</span>
+									
+									
+									
+									<b>acceptAllChanges</b>()
+								</div>
+								
+								<div class="description">
+									Clears all detected changes, marking all entities as unchanged.
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+								
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item1'
+							>
+								<div class="fixedFont heading" id="acceptChanges">
+									<span class='lighter'>
+									
+									</span>
+									
+									
+									
+									<b>acceptChanges</b>(change)
+								</div>
+								
+								<div class="description">
+									Clears detected changes, marking entities as unchanged.
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+									<dl class="detailList params">
+										<dt class="heading">Parameters:</dt>
+										
+											<dt>
+												<span class="light fixedFont">{Object|Number}</span> <b>change</b>
+												<i>Optional</i>
+											</dt>
+											<dd>a changed object or an index in the <a href="../symbols/tent.entities.ContextChanges.html#items">tent.entities.ContextChanges#items</a> array on #changes (you can use one or more of this parameters)</dd>
+										
+									</dl>
+								
+								
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item2'
+							>
+								<div class="fixedFont heading" id="all">
+									<span class='lighter'>
+									
+									</span>
+									
+									<span class="light">{Array}</span>
+									
+									<b>all</b>()
+								</div>
+								
+								<div class="description">
+									Returns all entities in this Context
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{Array}</span> all entities in this Context</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item3'
+							>
+								<div class="fixedFont heading" id="attach">
+									<span class='lighter'>
+									
+									</span>
+									
+									
+									
+									<b>attach</b>()
+								</div>
+								
+								<div class="description">
+									Attachs all arguments to this Context. Arguments can be entity objects (with or without type).Each entity change state is preserved, if no change state is found entity is added as unchanged.
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+											<dt class="heading">Throws:</dt>
+											
+												<dt>
+													 <b></b>
+												</dt>
+												<dd>if an argument belongs to another context</dd>
+											
+												<dt>
+													 <b></b>
+												</dt>
+												<dd>if an argument type name exists in this context and is different</dd>
+											
+										
+										
+										
+										
+										
+										
+										
+									
+									</dl>
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item4'
+							>
+								<div class="fixedFont heading" id="contains">
+									<span class='lighter'>
+									
+									</span>
+									
+									<span class="light">{Boolean}</span>
+									
+									<b>contains</b>()
+								</div>
+								
+								<div class="description">
+									Searchs for all arguments in this Context. Arguments can be an entity object, a <a href="../symbols/tent.entities.Type.html">tent.entities.Type</a> or a <a href="../symbols/tent.entities.Collection.html">tent.entities.Collection</a>
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{Boolean}</span> true if all arguments were found on this Context</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item5'
+							>
+								<div class="fixedFont heading" id="detach">
+									<span class='lighter'>
+									
+									</span>
+									
+									
+									
+									<b>detach</b>()
+								</div>
+								
+								<div class="description">
+									Detaches all arguments from this context.
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+								
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item6'
+							>
+								<div class="fixedFont heading" id="detachAll">
+									<span class='lighter'>
+									
+									</span>
+									
+									
+									
+									<b>detachAll</b>()
+								</div>
+								
+								<div class="description">
+									Detaches all entities on this Context
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+								
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item7'
+							>
+								<div class="fixedFont heading" id="filter">
+									<span class='lighter'>
+									
+									</span>
+									
+									<span class="light">{Array}</span>
+									
+									<b>filter</b>(condition)
+								</div>
+								
+								<div class="description">
+									Filters entities in this Context
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+									<dl class="detailList params">
+										<dt class="heading">Parameters:</dt>
+										
+											<dt>
+												<span class="light fixedFont">{function()}</span> <b>condition</b>
+												
+											</dt>
+											<dd>a function that returns true for items that pass the filter</dd>
+										
+									</dl>
+								
+								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{Array}</span> all entities in this Context that passed the filter</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item8'
+							>
+								<div class="fixedFont heading" id="find">
+									<span class='lighter'>
+									
+									</span>
+									
+									<span class="light">{Object}</span>
+									
+									<b>find</b>(idOrQuery)
+								</div>
+								
+								<div class="description">
+									Finds entities by id or using query objects (with matching properties) in this Context
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+									<dl class="detailList params">
+										<dt class="heading">Parameters:</dt>
+										
+											<dt>
+												<span class="light fixedFont">{string|number|Object|Array}</span> <b>idOrQuery</b>
+												
+											</dt>
+											<dd>an id, a query object (an object with the property values to find) or an array of these</dd>
+										
+									</dl>
+								
+								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{Object}</span> the found entity, or null if not found, if an Array was provided an Array with the query result on each position</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item9'
+							>
+								<div class="fixedFont heading" id="first">
+									<span class='lighter'>
+									
+									</span>
+									
+									<span class="light">{Object}</span>
+									
+									<b>first</b>(condition)
+								</div>
+								
+								<div class="description">
+									Finds the first entity that satisfies a condition in this Context
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+									<dl class="detailList params">
+										<dt class="heading">Parameters:</dt>
+										
+											<dt>
+												<span class="light fixedFont">{function()}</span> <b>condition</b>
+												<i>Optional</i>
+											</dt>
+											<dd>a function that returns true for the item to find, if no function is provided the first element in the context is return</dd>
+										
+									</dl>
+								
+								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{Object}</span> the found entity, or null if not found</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item10'
+							>
+								<div class="fixedFont heading" id="getCollection">
+									<span class='lighter'>
+									
+									</span>
+									
+									<span class="light">{<a href="../symbols/tent.entities.Collection.html">tent.entities.Collection</a>}</span>
+									
+									<b>getCollection</b>(type, name)
+								</div>
+								
+								<div class="description">
+									Creates a new <a href="../symbols/tent.entities.Collection.html">tent.entities.Collection</a> on this Context. If the collection already exists no action is performed.
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+									<dl class="detailList params">
+										<dt class="heading">Parameters:</dt>
+										
+											<dt>
+												<span class="light fixedFont">{<a href="../symbols/tent.entities.Type.html">tent.entities.Type</a>}</span> <b>type</b>
+												<i>Optional</i>
+											</dt>
+											<dd>the type for items in this collection, if not provided an untyped collection is created</dd>
+										
+											<dt>
+												<span class="light fixedFont">{String}</span> <b>name</b>
+												<i>Optional</i>
+											</dt>
+											<dd>a name for the collection, if not provided the type name is used (for the untyped collection name is '_Object')</dd>
+										
+									</dl>
+								
+								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+											<dt class="heading">Throws:</dt>
+											
+												<dt>
+													 <b></b>
+												</dt>
+												<dd>if no name and no type were provided</dd>
+											
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{<a href="../symbols/tent.entities.Collection.html">tent.entities.Collection</a>}</span> the new (or previously existing) collection</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item11'
+							>
+								<div class="fixedFont heading" id="getId">
+									<span class='lighter'>
+									
+									</span>
+									
+									
+									
+									<b>getId</b>(item)
+								</div>
+								
+								<div class="description">
+									Gets the id of an entity
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+									<dl class="detailList params">
+										<dt class="heading">Parameters:</dt>
+										
+											<dt>
+												<span class="light fixedFont">{Object}</span> <b>item</b>
+												
+											</dt>
+											<dd></dd>
+										
+									</dl>
+								
+								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd>the item id, or undefined if no id property could be found</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item12'
+							>
+								<div class="fixedFont heading" id="getIdPropertyName">
+									<span class='lighter'>
+									
+									</span>
+									
+									<span class="light">{String}</span>
+									
+									<b>getIdPropertyName</b>(item)
+								</div>
+								
+								<div class="description">
+									Gets the name of the id property of an entity
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+									<dl class="detailList params">
+										<dt class="heading">Parameters:</dt>
+										
+											<dt>
+												<span class="light fixedFont">{Object}</span> <b>item</b>
+												
+											</dt>
+											<dd></dd>
+										
+									</dl>
+								
+								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{String}</span> the item id property name, or undefined if no id property could be found</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item13'
+							>
+								<div class="fixedFont heading" id="hasChanges">
+									<span class='lighter'>
+									
+									</span>
+									
+									<span class="light">{Boolean}</span>
+									
+									<b>hasChanges</b>()
+								</div>
+								
+								<div class="description">
+									Indicates if changes on this Context's entities has been detected
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{Boolean}</span> true if any change has ocurred</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item14'
+							>
+								<div class="fixedFont heading" id="items">
+									<span class='lighter'>
+									
+									</span>
+									
+									<span class="light">{Array}</span>
+									
+									<b>items</b>()
+								</div>
+								
+								<div class="description">
+									Returns items in the _Object default (untyped) collection.Useful on simple contexts without types or collections
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{Array}</span> context._Object.items</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item15'
+							>
+								<div class="fixedFont heading" id="markAsSaving">
+									<span class='lighter'>
+									
+									</span>
+									
+									
+									
+									<b>markAsSaving</b>()
+								</div>
+								
+								<div class="description">
+									Marks items being saved by a a sync operation (this prevents concurrent modification conflicts)
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+								
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item16'
+							>
+								<div class="fixedFont heading" id="push">
+									<span class='lighter'>
+									
+									</span>
+									
+									
+									
+									<b>push</b>()
+								</div>
+								
+								<div class="description">
+									Adds all arguments to this Context. Arguments can be an entity object (with or without type) or a <a href="../symbols/tent.entities.Type.html">tent.entities.Type</a>.When a type is added, a <a href="../symbols/tent.entities.Collection.html">tent.entities.Collection</a> with that type and the same name is created.
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+											<dt class="heading">Throws:</dt>
+											
+												<dt>
+													 <b></b>
+												</dt>
+												<dd>if an argument belongs to another context</dd>
+											
+										
+										
+										
+										
+										
+										
+										
+									
+									</dl>
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item17'
+							>
+								<div class="fixedFont heading" id="pushModel">
+									<span class='lighter'>
+									
+									</span>
+									
+									
+									
+									<b>pushModel</b>(model)
+								</div>
+								
+								<div class="description">
+									Adds an entity model to this context. Allows to load entity models using JSON.
+									
+									
+									
+									
+								</div>
+								
+								
+									
+										<pre class="code brush: js"">	var ctx = new tent.entities.Context(); ctx.pushModel({    Person: { 	name: {}, // scalar property 	age: {}, // scalar property	 	pet: { 		reverse: 'owner', // each Person is his pet''s owner 		cardinality: '11', // one Person has one pet (optional, as '11' is the default) 		collection: 'Animal', // pets belong to the 'Animal' collection (see {@link tent.entities.Collection} 	}    },   Animal: { 	name: {}, // scalar property 	age: {}, // scalar property	 	color: {}, // scalar property	 	owner: { 		reverse: 'pet', // each Animal is his owner''s pet 		cardinality: '11', // one Animal has one owner (optional, as '11' is the default) 		collection: 'Person', // owner belong to the 'Person' collection (see {@link tent.entities.Collection} 	}    } );</pre>
+									
+								
+								
+								
+									<dl class="detailList params">
+										<dt class="heading">Parameters:</dt>
+										
+											<dt>
+												<span class="light fixedFont">{Object}</span> <b>model</b>
+												
+											</dt>
+											<dd>an entity model</dd>
+										
+											<dt>
+												<span class="light fixedFont">{Object}</span> <b>model.types</b>
+												
+											</dt>
+											<dd>a javascript Object with properties represent entity types (<a href="../symbols/tent.entities.Type.html">tent.entities.Type</a>)</dd>
+										
+									</dl>
+								
+								
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item18'
+							>
+								<div class="fixedFont heading" id="remove">
+									<span class='lighter'>
+									
+									</span>
+									
+									
+									
+									<b>remove</b>()
+								</div>
+								
+								<div class="description">
+									Removes all arguments from this context. Arguments can be entity objects (with or without type).
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+								
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item19'
+							>
+								<div class="fixedFont heading" id="touch">
+									<span class='lighter'>
+									
+									</span>
+									
+									
+									
+									<b>touch</b>()
+								</div>
+								
+								<div class="description">
+									Marks all arguments as modified
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+								
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item20'
+							>
+								<div class="fixedFont heading" id="trackChanges">
+									<span class='lighter'>
+									
+									</span>
+									
+									
+									
+									<b>trackChanges</b>()
+								</div>
+								
+								<div class="description">
+									Activates change tracking for this context
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+								
+								
+								
+							</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+		
+<!--
+#### EVENT DETAILS
+-->		
+		
+	</div>
+</div>
+		<script type="text/javascript">
+			wbos.CssTools.MediaQueryFallBack.LoadCss('../css/screen.css', '../css/handheld.css', 660);
+			codeview.classFilter.Init();
+			
+			// Syntax Highlighting
+			SyntaxHighlighter.all();
+		</script>
+	</body>
+</html>
+

@@ -1,0 +1,1029 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+		<meta charset="utf-8"></meta>
+		<meta name="generator" content="JsDoc Toolkit"></meta>
+		<title>tent.arrays.functions | Tent Framework API</title>
+
+		<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;"></meta>
+		<meta name="mobileoptimized" content="0"></meta>
+	
+		<link rel="stylesheet" href="../css/all.css" media="all"></link>
+		<link rel="stylesheet" href="../css/handheld.css" media="only screen and (max-width: 660px)"></link>
+		<link rel="stylesheet" href="../css/handheld.css" media="handheld"></link>
+		<link rel="stylesheet" href="../css/screen.css" media="screen and (min-width: 661px)"></link>
+
+		<!-- Syntax Highlighting -->
+		<link rel="stylesheet" href="../css/shCore.css" media="all"></link>
+		<link rel="stylesheet" href="../css/shThemeDefault.css" media="all"></link>
+		<script src="../javascript/shCore.js"></script>
+		<script src="../javascript/shBrushJScript.js"></script>
+
+		<script src="../javascript/all.js"></script>
+		<!--[if lt IE 9]>
+			<script src="../javascript/html5.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+<div class="index">
+	<div class="menu">
+		<div class="indexLinks">
+			<a href="../index.html">Classes</a>
+			<a href="../files.html">Files</a>
+		</div>
+	
+		<h2 class="heading1">Classes</h2>
+		
+		<input type="text" name="classFilter" class="classFilter" id="ClassFilter" placeholder="Filter"></input>
+		
+		<nav>
+			<ul class="classList" id="ClassList">
+				
+					<li><a href="../symbols/_global_.html">_global_</a></li>
+				
+					<li><a href="../symbols/tent.html">tent</a></li>
+				
+					<li><a href="../symbols/tent.arrays.html">tent<span class='break'> </span>.<span class='break'> </span>arrays</a></li>
+				
+					<li><a href="../symbols/tent.arrays.functions.html">tent<span class='break'> </span>.<span class='break'> </span>arrays<span class='break'> </span>.<span class='break'> </span>functions</a></li>
+				
+					<li><a href="../symbols/tent.changes.html">tent<span class='break'> </span>.<span class='break'> </span>changes</a></li>
+				
+					<li><a href="../symbols/tent.changes.Change.html">tent<span class='break'> </span>.<span class='break'> </span>changes<span class='break'> </span>.<span class='break'> </span>Change</a></li>
+				
+					<li><a href="../symbols/tent.changes.LogHandler.html">tent<span class='break'> </span>.<span class='break'> </span>changes<span class='break'> </span>.<span class='break'> </span>LogHandler</a></li>
+				
+					<li><a href="../symbols/tent.changes.Observable.html">tent<span class='break'> </span>.<span class='break'> </span>changes<span class='break'> </span>.<span class='break'> </span>Observable</a></li>
+				
+					<li><a href="../symbols/tent.changes.reverseProperties.html">tent<span class='break'> </span>.<span class='break'> </span>changes<span class='break'> </span>.<span class='break'> </span>reverseProperties</a></li>
+				
+					<li><a href="../symbols/tent.changes.reverseProperties.Set.html">tent<span class='break'> </span>.<span class='break'> </span>changes<span class='break'> </span>.<span class='break'> </span>reverseProperties<span class='break'> </span>.<span class='break'> </span>Set</a></li>
+				
+					<li><a href="../symbols/tent.connectors.html">tent<span class='break'> </span>.<span class='break'> </span>connectors</a></li>
+				
+					<li><a href="../symbols/tent.connectors.couchdb.html">tent<span class='break'> </span>.<span class='break'> </span>connectors<span class='break'> </span>.<span class='break'> </span>couchdb</a></li>
+				
+					<li><a href="../symbols/tent.connectors.couchdb.CouchDBConnector.html">tent<span class='break'> </span>.<span class='break'> </span>connectors<span class='break'> </span>.<span class='break'> </span>couchdb<span class='break'> </span>.<span class='break'> </span>CouchDBConnector</a></li>
+				
+					<li><a href="../symbols/tent.connectors.http.html">tent<span class='break'> </span>.<span class='break'> </span>connectors<span class='break'> </span>.<span class='break'> </span>http</a></li>
+				
+					<li><a href="../symbols/tent.connectors.rest.html">tent<span class='break'> </span>.<span class='break'> </span>connectors<span class='break'> </span>.<span class='break'> </span>rest</a></li>
+				
+					<li><a href="../symbols/tent.connectors.rest.filters.html">tent<span class='break'> </span>.<span class='break'> </span>connectors<span class='break'> </span>.<span class='break'> </span>rest<span class='break'> </span>.<span class='break'> </span>filters</a></li>
+				
+					<li><a href="../symbols/tent.connectors.rest.processors.html">tent<span class='break'> </span>.<span class='break'> </span>connectors<span class='break'> </span>.<span class='break'> </span>rest<span class='break'> </span>.<span class='break'> </span>processors</a></li>
+				
+					<li><a href="../symbols/tent.connectors.rest.RestConnector.html">tent<span class='break'> </span>.<span class='break'> </span>connectors<span class='break'> </span>.<span class='break'> </span>rest<span class='break'> </span>.<span class='break'> </span>RestConnector</a></li>
+				
+					<li><a href="../symbols/tent.coreTypes.html">tent<span class='break'> </span>.<span class='break'> </span>coreTypes</a></li>
+				
+					<li><a href="../symbols/tent.coreTypes.Enum.html">tent<span class='break'> </span>.<span class='break'> </span>coreTypes<span class='break'> </span>.<span class='break'> </span>Enum</a></li>
+				
+					<li><a href="../symbols/tent.coreTypes.NameCounter.html">tent<span class='break'> </span>.<span class='break'> </span>coreTypes<span class='break'> </span>.<span class='break'> </span>NameCounter</a></li>
+				
+					<li><a href="../symbols/tent.databinding.html">tent<span class='break'> </span>.<span class='break'> </span>databinding</a></li>
+				
+					<li><a href="../symbols/tent.entities.html">tent<span class='break'> </span>.<span class='break'> </span>entities</a></li>
+				
+					<li><a href="../symbols/tent.entities.Collection.html">tent<span class='break'> </span>.<span class='break'> </span>entities<span class='break'> </span>.<span class='break'> </span>Collection</a></li>
+				
+					<li><a href="../symbols/tent.entities.Context.html">tent<span class='break'> </span>.<span class='break'> </span>entities<span class='break'> </span>.<span class='break'> </span>Context</a></li>
+				
+					<li><a href="../symbols/tent.entities.ContextChangeHandler.html">tent<span class='break'> </span>.<span class='break'> </span>entities<span class='break'> </span>.<span class='break'> </span>ContextChangeHandler</a></li>
+				
+					<li><a href="../symbols/tent.entities.ContextChanges.html">tent<span class='break'> </span>.<span class='break'> </span>entities<span class='break'> </span>.<span class='break'> </span>ContextChanges</a></li>
+				
+					<li><a href="../symbols/tent.entities.EntityLink.html">tent<span class='break'> </span>.<span class='break'> </span>entities<span class='break'> </span>.<span class='break'> </span>EntityLink</a></li>
+				
+					<li><a href="../symbols/tent.entities.Type.html">tent<span class='break'> </span>.<span class='break'> </span>entities<span class='break'> </span>.<span class='break'> </span>Type</a></li>
+				
+					<li><a href="../symbols/tent.events.html">tent<span class='break'> </span>.<span class='break'> </span>events</a></li>
+				
+					<li><a href="../symbols/tent.events.extendFunctions.html">tent<span class='break'> </span>.<span class='break'> </span>events<span class='break'> </span>.<span class='break'> </span>extendFunctions</a></li>
+				
+					<li><a href="../symbols/tent.logging.html">tent<span class='break'> </span>.<span class='break'> </span>logging</a></li>
+				
+					<li><a href="../symbols/tent.logging.Log.html">tent<span class='break'> </span>.<span class='break'> </span>logging<span class='break'> </span>.<span class='break'> </span>Log</a></li>
+				
+					<li><a href="../symbols/tent.Namespace.html">tent<span class='break'> </span>.<span class='break'> </span>Namespace</a></li>
+				
+			</ul>
+		</nav>
+	</div>
+	<div class="fineprint" style="clear:both">
+		&copy;2011<br />
+		Documentation generator: <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0<br />
+		Template: <a href="http://www.thebrightlines.com/2010/05/06/new-template-for-jsdoctoolkit-codeview/" target="_blank">Codeview</a> 1.2<br />
+		Generated on: 2011-5-13 23:34
+	</div>
+</div>
+
+<div class="index indexStatic"></div>
+
+<div class="content">
+	<div class="innerContent">
+		<h1 class="classTitle">
+			
+			Namespace <span>tent.arrays.functions</span>
+		</h1>
+		
+		<div class="intro">
+			<p class="description summary">
+				Common Array functions
+			</p>
+				
+			
+				<ul class="summary">
+					
+					
+					
+						<li>Defined in: <a href="../symbols/src/src__arrays.js.html">arrays.js</a></li>
+					
+						
+				</ul>
+			
+		</div>
+		
+		
+			<div class="props">
+				<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class tent.arrays.functions.">
+					<caption class="sectionTitle">Namespace Summary</caption>
+					<thead>
+						<tr>
+							<th scope="col">Constructor Attributes</th>
+							<th scope="col">Constructor Name and Description</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription" >
+								<div class="fixedFont">
+									<b><a href="../symbols/tent.arrays.functions.html#constructor">tent.arrays.functions</a></b>
+								</div>
+								<div class="description">Common Array functions</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		
+		
+		
+<!--
+#### METHODS SUMMARY
+-->
+		
+			
+			
+			<div class="props">
+				<h2 class="sectionTitle">Method Summary</h2>
+				
+				
+					<table class="summaryTable" id="MethodsList" cellspacing="0" summary="A summary of the methods documented in the class tent.arrays.functions.">
+						<thead>
+							<tr>
+								<th scope="col">Method Attributes</th>
+								<th scope="col">Method Name and Description</th>
+							</tr>
+						</thead>
+						
+						<tbody>
+							
+							
+								<tr
+									 class='item0'
+								>
+									<td class="attributes">&lt;static&gt; &nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">tent.arrays.functions.<b><a href="../symbols/tent.arrays.functions.html#.clone">clone</a></b>()
+										</div>
+										<div class="description"></div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item1'
+								>
+									<td class="attributes">&lt;static&gt; &nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">tent.arrays.functions.<b><a href="../symbols/tent.arrays.functions.html#.filter">filter</a></b>(condition)
+										</div>
+										<div class="description">Creates a new Array filtering items of this Array</div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item2'
+								>
+									<td class="attributes">&lt;static&gt; &nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">tent.arrays.functions.<b><a href="../symbols/tent.arrays.functions.html#.findByProperty">findByProperty</a></b>(propertyName, value)
+										</div>
+										<div class="description">finds an item by a property</div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item3'
+								>
+									<td class="attributes">&lt;static&gt; &nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">tent.arrays.functions.<b><a href="../symbols/tent.arrays.functions.html#.first">first</a></b>(condition)
+										</div>
+										<div class="description">finds the first item that satisfies a condition</div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item4'
+								>
+									<td class="attributes">&lt;static&gt; &nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">tent.arrays.functions.<b><a href="../symbols/tent.arrays.functions.html#.indexByProperty">indexByProperty</a></b>(propertyName, value)
+										</div>
+										<div class="description">finds an item by a property</div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item5'
+								>
+									<td class="attributes">&lt;static&gt; &nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">tent.arrays.functions.<b><a href="../symbols/tent.arrays.functions.html#.indexOf">indexOf</a></b>(item)
+										</div>
+										<div class="description"></div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item6'
+								>
+									<td class="attributes">&lt;static&gt; &nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">tent.arrays.functions.<b><a href="../symbols/tent.arrays.functions.html#.isCloneOf">isCloneOf</a></b>(array)
+										</div>
+										<div class="description"></div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item7'
+								>
+									<td class="attributes">&lt;static&gt; &nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">tent.arrays.functions.<b><a href="../symbols/tent.arrays.functions.html#.lastIndexOf">lastIndexOf</a></b>(item)
+										</div>
+										<div class="description"></div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item8'
+								>
+									<td class="attributes">&lt;static&gt; &nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">tent.arrays.functions.<b><a href="../symbols/tent.arrays.functions.html#.pushUnique">pushUnique</a></b>()
+										</div>
+										<div class="description">push arguments, filtering already existing items</div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item9'
+								>
+									<td class="attributes">&lt;static&gt; &nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">tent.arrays.functions.<b><a href="../symbols/tent.arrays.functions.html#.remove">remove</a></b>()
+										</div>
+										<div class="description">removes all references to argument items from the array, returns true if one or more items are removed</div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item10'
+								>
+									<td class="attributes">&lt;static&gt; &nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">tent.arrays.functions.<b><a href="../symbols/tent.arrays.functions.html#.set">set</a></b>(i, item)
+										</div>
+										<div class="description">equivalent to: this[i] = item</div>
+									</td>
+								</tr>
+							
+						</tbody>
+					</table>
+				
+			
+				
+			</div>
+		
+		
+<!--
+#### EVENTS SUMMARY
+-->
+		
+<!--
+#### CONSTRUCTOR DETAILS
+-->
+		
+			<div class="details props">
+				<div class="innerProps">
+					<h2 class="sectionTitle" id="constructor">
+						Namespace Detail
+					</h2>
+					
+					<div class="fixedFont">
+						<b>tent.arrays.functions</b>
+					</div>
+					
+					<div class="description">
+						Common Array functions
+						
+					</div>
+					
+					
+				
+					
+					
+					
+				</div>
+			</div>
+		
+<!--
+#### FIELD DETAILS
+-->
+		
+<!--
+#### METHOD DETAILS
+-->		
+		
+			<div class="details props">
+				<div class="innerProps">
+					<h2 class="sectionTitle">
+						Method Detail
+					</h2>
+					
+					<ul class="methodDetail" id="MethodDetail">
+						
+						
+							<li 
+								 class='item0'
+							>
+								<div class="fixedFont heading" id=".clone">
+									<span class='lighter'>
+									&lt;static&gt; 
+									</span>
+									
+									<span class="light">{Array}</span>
+									
+									<span class="light">tent.arrays.functions.</span><b>clone</b>()
+								</div>
+								
+								<div class="description">
+									
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{Array}</span> a new array with the same contents</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item1'
+							>
+								<div class="fixedFont heading" id=".filter">
+									<span class='lighter'>
+									&lt;static&gt; 
+									</span>
+									
+									<span class="light">{Array}</span>
+									
+									<span class="light">tent.arrays.functions.</span><b>filter</b>(condition)
+								</div>
+								
+								<div class="description">
+									Creates a new Array filtering items of this Array
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+									<dl class="detailList params">
+										<dt class="heading">Parameters:</dt>
+										
+											<dt>
+												<span class="light fixedFont">{function()}</span> <b>condition</b>
+												
+											</dt>
+											<dd>a function that returns true for elements to include in results</dd>
+										
+									</dl>
+								
+								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{Array}</span> a new array containing items that satisfied the condition</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item2'
+							>
+								<div class="fixedFont heading" id=".findByProperty">
+									<span class='lighter'>
+									&lt;static&gt; 
+									</span>
+									
+									
+									
+									<span class="light">tent.arrays.functions.</span><b>findByProperty</b>(propertyName, value)
+								</div>
+								
+								<div class="description">
+									finds an item by a property
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+									<dl class="detailList params">
+										<dt class="heading">Parameters:</dt>
+										
+											<dt>
+												<span class="light fixedFont">{String}</span> <b>propertyName</b>
+												
+											</dt>
+											<dd></dd>
+										
+											<dt>
+												<b>value</b>
+												
+											</dt>
+											<dd></dd>
+										
+									</dl>
+								
+								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd>the first item with the specified value on the specified property, or null if no item is found</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item3'
+							>
+								<div class="fixedFont heading" id=".first">
+									<span class='lighter'>
+									&lt;static&gt; 
+									</span>
+									
+									
+									
+									<span class="light">tent.arrays.functions.</span><b>first</b>(condition)
+								</div>
+								
+								<div class="description">
+									finds the first item that satisfies a condition
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+									<dl class="detailList params">
+										<dt class="heading">Parameters:</dt>
+										
+											<dt>
+												<span class="light fixedFont">{function()}</span> <b>condition</b>
+												<i>Optional</i>
+											</dt>
+											<dd>the condition to evaluate, or null to return the first item in the array</dd>
+										
+									</dl>
+								
+								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd>the first item that satisfies the condition, or null if no item is found</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item4'
+							>
+								<div class="fixedFont heading" id=".indexByProperty">
+									<span class='lighter'>
+									&lt;static&gt; 
+									</span>
+									
+									<span class="light">{Number}</span>
+									
+									<span class="light">tent.arrays.functions.</span><b>indexByProperty</b>(propertyName, value)
+								</div>
+								
+								<div class="description">
+									finds an item by a property
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+									<dl class="detailList params">
+										<dt class="heading">Parameters:</dt>
+										
+											<dt>
+												<span class="light fixedFont">{String}</span> <b>propertyName</b>
+												
+											</dt>
+											<dd></dd>
+										
+											<dt>
+												<b>value</b>
+												
+											</dt>
+											<dd></dd>
+										
+									</dl>
+								
+								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{Number}</span> the index of the first item with the specified value on the specified property, or -1 if no item is found</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item5'
+							>
+								<div class="fixedFont heading" id=".indexOf">
+									<span class='lighter'>
+									&lt;static&gt; 
+									</span>
+									
+									<span class="light">{Number}</span>
+									
+									<span class="light">tent.arrays.functions.</span><b>indexOf</b>(item)
+								</div>
+								
+								<div class="description">
+									
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+									<dl class="detailList params">
+										<dt class="heading">Parameters:</dt>
+										
+											<dt>
+												<span class="light fixedFont">{Object}</span> <b>item</b>
+												
+											</dt>
+											<dd>an item to search for</dd>
+										
+									</dl>
+								
+								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{Number}</span> the first index where item is found, or -1 if item is not found</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item6'
+							>
+								<div class="fixedFont heading" id=".isCloneOf">
+									<span class='lighter'>
+									&lt;static&gt; 
+									</span>
+									
+									<span class="light">{Boolean}</span>
+									
+									<span class="light">tent.arrays.functions.</span><b>isCloneOf</b>(array)
+								</div>
+								
+								<div class="description">
+									
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+									<dl class="detailList params">
+										<dt class="heading">Parameters:</dt>
+										
+											<dt>
+												<span class="light fixedFont">{Object}</span> <b>array</b>
+												
+											</dt>
+											<dd>an array to compare with</dd>
+										
+									</dl>
+								
+								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{Boolean}</span> true if both arrays contains the same elements</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item7'
+							>
+								<div class="fixedFont heading" id=".lastIndexOf">
+									<span class='lighter'>
+									&lt;static&gt; 
+									</span>
+									
+									<span class="light">{Number}</span>
+									
+									<span class="light">tent.arrays.functions.</span><b>lastIndexOf</b>(item)
+								</div>
+								
+								<div class="description">
+									
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+									<dl class="detailList params">
+										<dt class="heading">Parameters:</dt>
+										
+											<dt>
+												<span class="light fixedFont">{Object}</span> <b>item</b>
+												
+											</dt>
+											<dd>an item to search for</dd>
+										
+									</dl>
+								
+								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{Number}</span> the last index where item is found, or -1 if item is not found</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item8'
+							>
+								<div class="fixedFont heading" id=".pushUnique">
+									<span class='lighter'>
+									&lt;static&gt; 
+									</span>
+									
+									<span class="light">{Number}</span>
+									
+									<span class="light">tent.arrays.functions.</span><b>pushUnique</b>()
+								</div>
+								
+								<div class="description">
+									push arguments, filtering already existing items
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{Number}</span> resulting length of this Array</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item9'
+							>
+								<div class="fixedFont heading" id=".remove">
+									<span class='lighter'>
+									&lt;static&gt; 
+									</span>
+									
+									<span class="light">{Boolean}</span>
+									
+									<span class="light">tent.arrays.functions.</span><b>remove</b>()
+								</div>
+								
+								<div class="description">
+									removes all references to argument items from the array, returns true if one or more items are removed
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{Boolean}</span> true if any item is removed</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item10'
+							>
+								<div class="fixedFont heading" id=".set">
+									<span class='lighter'>
+									&lt;static&gt; 
+									</span>
+									
+									
+									
+									<span class="light">tent.arrays.functions.</span><b>set</b>(i, item)
+								</div>
+								
+								<div class="description">
+									equivalent to: this[i] = item
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+									<dl class="detailList params">
+										<dt class="heading">Parameters:</dt>
+										
+											<dt>
+												<span class="light fixedFont">{Object}</span> <b>i</b>
+												
+											</dt>
+											<dd>index to set</dd>
+										
+											<dt>
+												<span class="light fixedFont">{Object}</span> <b>item</b>
+												
+											</dt>
+											<dd>value to set at index</dd>
+										
+									</dl>
+								
+								
+								
+								
+							</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+		
+<!--
+#### EVENT DETAILS
+-->		
+		
+	</div>
+</div>
+		<script type="text/javascript">
+			wbos.CssTools.MediaQueryFallBack.LoadCss('../css/screen.css', '../css/handheld.css', 660);
+			codeview.classFilter.Init();
+			
+			// Syntax Highlighting
+			SyntaxHighlighter.all();
+		</script>
+	</body>
+</html>
+

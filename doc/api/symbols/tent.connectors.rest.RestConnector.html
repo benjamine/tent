@@ -1,0 +1,795 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+		<meta charset="utf-8"></meta>
+		<meta name="generator" content="JsDoc Toolkit"></meta>
+		<title>tent.connectors.rest.RestConnector | Tent Framework API</title>
+
+		<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;"></meta>
+		<meta name="mobileoptimized" content="0"></meta>
+	
+		<link rel="stylesheet" href="../css/all.css" media="all"></link>
+		<link rel="stylesheet" href="../css/handheld.css" media="only screen and (max-width: 660px)"></link>
+		<link rel="stylesheet" href="../css/handheld.css" media="handheld"></link>
+		<link rel="stylesheet" href="../css/screen.css" media="screen and (min-width: 661px)"></link>
+
+		<!-- Syntax Highlighting -->
+		<link rel="stylesheet" href="../css/shCore.css" media="all"></link>
+		<link rel="stylesheet" href="../css/shThemeDefault.css" media="all"></link>
+		<script src="../javascript/shCore.js"></script>
+		<script src="../javascript/shBrushJScript.js"></script>
+
+		<script src="../javascript/all.js"></script>
+		<!--[if lt IE 9]>
+			<script src="../javascript/html5.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+<div class="index">
+	<div class="menu">
+		<div class="indexLinks">
+			<a href="../index.html">Classes</a>
+			<a href="../files.html">Files</a>
+		</div>
+	
+		<h2 class="heading1">Classes</h2>
+		
+		<input type="text" name="classFilter" class="classFilter" id="ClassFilter" placeholder="Filter"></input>
+		
+		<nav>
+			<ul class="classList" id="ClassList">
+				
+					<li><a href="../symbols/_global_.html">_global_</a></li>
+				
+					<li><a href="../symbols/tent.html">tent</a></li>
+				
+					<li><a href="../symbols/tent.arrays.html">tent<span class='break'> </span>.<span class='break'> </span>arrays</a></li>
+				
+					<li><a href="../symbols/tent.arrays.functions.html">tent<span class='break'> </span>.<span class='break'> </span>arrays<span class='break'> </span>.<span class='break'> </span>functions</a></li>
+				
+					<li><a href="../symbols/tent.changes.html">tent<span class='break'> </span>.<span class='break'> </span>changes</a></li>
+				
+					<li><a href="../symbols/tent.changes.Change.html">tent<span class='break'> </span>.<span class='break'> </span>changes<span class='break'> </span>.<span class='break'> </span>Change</a></li>
+				
+					<li><a href="../symbols/tent.changes.LogHandler.html">tent<span class='break'> </span>.<span class='break'> </span>changes<span class='break'> </span>.<span class='break'> </span>LogHandler</a></li>
+				
+					<li><a href="../symbols/tent.changes.Observable.html">tent<span class='break'> </span>.<span class='break'> </span>changes<span class='break'> </span>.<span class='break'> </span>Observable</a></li>
+				
+					<li><a href="../symbols/tent.changes.reverseProperties.html">tent<span class='break'> </span>.<span class='break'> </span>changes<span class='break'> </span>.<span class='break'> </span>reverseProperties</a></li>
+				
+					<li><a href="../symbols/tent.changes.reverseProperties.Set.html">tent<span class='break'> </span>.<span class='break'> </span>changes<span class='break'> </span>.<span class='break'> </span>reverseProperties<span class='break'> </span>.<span class='break'> </span>Set</a></li>
+				
+					<li><a href="../symbols/tent.connectors.html">tent<span class='break'> </span>.<span class='break'> </span>connectors</a></li>
+				
+					<li><a href="../symbols/tent.connectors.couchdb.html">tent<span class='break'> </span>.<span class='break'> </span>connectors<span class='break'> </span>.<span class='break'> </span>couchdb</a></li>
+				
+					<li><a href="../symbols/tent.connectors.couchdb.CouchDBConnector.html">tent<span class='break'> </span>.<span class='break'> </span>connectors<span class='break'> </span>.<span class='break'> </span>couchdb<span class='break'> </span>.<span class='break'> </span>CouchDBConnector</a></li>
+				
+					<li><a href="../symbols/tent.connectors.http.html">tent<span class='break'> </span>.<span class='break'> </span>connectors<span class='break'> </span>.<span class='break'> </span>http</a></li>
+				
+					<li><a href="../symbols/tent.connectors.rest.html">tent<span class='break'> </span>.<span class='break'> </span>connectors<span class='break'> </span>.<span class='break'> </span>rest</a></li>
+				
+					<li><a href="../symbols/tent.connectors.rest.filters.html">tent<span class='break'> </span>.<span class='break'> </span>connectors<span class='break'> </span>.<span class='break'> </span>rest<span class='break'> </span>.<span class='break'> </span>filters</a></li>
+				
+					<li><a href="../symbols/tent.connectors.rest.processors.html">tent<span class='break'> </span>.<span class='break'> </span>connectors<span class='break'> </span>.<span class='break'> </span>rest<span class='break'> </span>.<span class='break'> </span>processors</a></li>
+				
+					<li><a href="../symbols/tent.connectors.rest.RestConnector.html">tent<span class='break'> </span>.<span class='break'> </span>connectors<span class='break'> </span>.<span class='break'> </span>rest<span class='break'> </span>.<span class='break'> </span>RestConnector</a></li>
+				
+					<li><a href="../symbols/tent.coreTypes.html">tent<span class='break'> </span>.<span class='break'> </span>coreTypes</a></li>
+				
+					<li><a href="../symbols/tent.coreTypes.Enum.html">tent<span class='break'> </span>.<span class='break'> </span>coreTypes<span class='break'> </span>.<span class='break'> </span>Enum</a></li>
+				
+					<li><a href="../symbols/tent.coreTypes.NameCounter.html">tent<span class='break'> </span>.<span class='break'> </span>coreTypes<span class='break'> </span>.<span class='break'> </span>NameCounter</a></li>
+				
+					<li><a href="../symbols/tent.databinding.html">tent<span class='break'> </span>.<span class='break'> </span>databinding</a></li>
+				
+					<li><a href="../symbols/tent.entities.html">tent<span class='break'> </span>.<span class='break'> </span>entities</a></li>
+				
+					<li><a href="../symbols/tent.entities.Collection.html">tent<span class='break'> </span>.<span class='break'> </span>entities<span class='break'> </span>.<span class='break'> </span>Collection</a></li>
+				
+					<li><a href="../symbols/tent.entities.Context.html">tent<span class='break'> </span>.<span class='break'> </span>entities<span class='break'> </span>.<span class='break'> </span>Context</a></li>
+				
+					<li><a href="../symbols/tent.entities.ContextChangeHandler.html">tent<span class='break'> </span>.<span class='break'> </span>entities<span class='break'> </span>.<span class='break'> </span>ContextChangeHandler</a></li>
+				
+					<li><a href="../symbols/tent.entities.ContextChanges.html">tent<span class='break'> </span>.<span class='break'> </span>entities<span class='break'> </span>.<span class='break'> </span>ContextChanges</a></li>
+				
+					<li><a href="../symbols/tent.entities.EntityLink.html">tent<span class='break'> </span>.<span class='break'> </span>entities<span class='break'> </span>.<span class='break'> </span>EntityLink</a></li>
+				
+					<li><a href="../symbols/tent.entities.Type.html">tent<span class='break'> </span>.<span class='break'> </span>entities<span class='break'> </span>.<span class='break'> </span>Type</a></li>
+				
+					<li><a href="../symbols/tent.events.html">tent<span class='break'> </span>.<span class='break'> </span>events</a></li>
+				
+					<li><a href="../symbols/tent.events.extendFunctions.html">tent<span class='break'> </span>.<span class='break'> </span>events<span class='break'> </span>.<span class='break'> </span>extendFunctions</a></li>
+				
+					<li><a href="../symbols/tent.logging.html">tent<span class='break'> </span>.<span class='break'> </span>logging</a></li>
+				
+					<li><a href="../symbols/tent.logging.Log.html">tent<span class='break'> </span>.<span class='break'> </span>logging<span class='break'> </span>.<span class='break'> </span>Log</a></li>
+				
+					<li><a href="../symbols/tent.Namespace.html">tent<span class='break'> </span>.<span class='break'> </span>Namespace</a></li>
+				
+			</ul>
+		</nav>
+	</div>
+	<div class="fineprint" style="clear:both">
+		&copy;2011<br />
+		Documentation generator: <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0<br />
+		Template: <a href="http://www.thebrightlines.com/2010/05/06/new-template-for-jsdoctoolkit-codeview/" target="_blank">Codeview</a> 1.2<br />
+		Generated on: 2011-5-13 23:34
+	</div>
+</div>
+
+<div class="index indexStatic"></div>
+
+<div class="content">
+	<div class="innerContent">
+		<h1 class="classTitle">
+			
+			Class <span>tent.connectors.rest.RestConnector</span>
+		</h1>
+		
+		<div class="intro">
+			<p class="description summary">
+				a REST connector
+			</p>
+				
+			
+				<ul class="summary">
+					
+					
+					
+						<li>Defined in: <a href="../symbols/src/src_connectors__rest.js.html">rest.js</a></li>
+					
+						
+				</ul>
+			
+		</div>
+		
+		
+			<div class="props">
+				<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class tent.connectors.rest.RestConnector.">
+					<caption class="sectionTitle">Class Summary</caption>
+					<thead>
+						<tr>
+							<th scope="col">Constructor Attributes</th>
+							<th scope="col">Constructor Name and Description</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription" >
+								<div class="fixedFont">
+									<b><a href="../symbols/tent.connectors.rest.RestConnector.html#constructor">tent.connectors.rest.RestConnector</a></b>()
+								</div>
+								<div class="description">Creates a new REST connector</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		
+		
+		
+			
+			
+				<div class="props">
+					<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class tent.connectors.rest.RestConnector.">
+						<caption class="sectionTitle">Field Summary</caption>
+						
+						<thead>
+							<tr>
+								<th scope="col">Field Attributes</th>
+								<th scope="col">Field Name and Description</th>
+							</tr>
+						</thead>
+						
+						<tbody>
+							
+								<tr>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										<b><a href="../symbols/tent.connectors.rest.RestConnector.html#auth">auth</a></b>
+										</div>
+										<div class="description">Authentication</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										<b><a href="../symbols/tent.connectors.rest.RestConnector.html#baseUrl">baseUrl</a></b>
+										</div>
+										<div class="description">Absolute base URI of the restful service</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										<b><a href="../symbols/tent.connectors.rest.RestConnector.html#filters">filters</a></b>
+										</div>
+										<div class="description">Filters to apply when loading/saving items</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										<b><a href="../symbols/tent.connectors.rest.RestConnector.html#loading">loading</a></b>
+										</div>
+										<div class="description">Indicates if loading items</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										<b><a href="../symbols/tent.connectors.rest.RestConnector.html#options">options</a></b>
+										</div>
+										<div class="description">Options</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										<b><a href="../symbols/tent.connectors.rest.RestConnector.html#processors">processors</a></b>
+										</div>
+										<div class="description">Processor to use when receiving data (loading or receiving save results)</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										<b><a href="../symbols/tent.connectors.rest.RestConnector.html#provider">provider</a></b>
+										</div>
+										<div class="description">Name of the connector persistence provider, eg: db, service or storage method name</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										<b><a href="../symbols/tent.connectors.rest.RestConnector.html#saving">saving</a></b>
+										</div>
+										<div class="description">Indicates if saving changes</div>
+									</td>
+								</tr>
+							
+						</tbody>
+					</table>
+				</div>
+			
+			
+			
+		
+<!--
+#### METHODS SUMMARY
+-->
+		
+			
+			
+			<div class="props">
+				<h2 class="sectionTitle">Method Summary</h2>
+				
+				
+					<table class="summaryTable" id="MethodsList" cellspacing="0" summary="A summary of the methods documented in the class tent.connectors.rest.RestConnector.">
+						<thead>
+							<tr>
+								<th scope="col">Method Attributes</th>
+								<th scope="col">Method Name and Description</th>
+							</tr>
+						</thead>
+						
+						<tbody>
+							
+							
+								<tr
+									 class='item0'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/tent.connectors.rest.RestConnector.html#createdb">createdb</a></b>(callback)
+										</div>
+										<div class="description">Creates the database for this connector</div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item1'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/tent.connectors.rest.RestConnector.html#deletedb">deletedb</a></b>(callback)
+										</div>
+										<div class="description">Creates the database for this connector</div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item2'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/tent.connectors.rest.RestConnector.html#load">load</a></b>(context, url, options, callback)
+										</div>
+										<div class="description">Load entities from an URL into a <a href="../symbols/tent.entities.Context.html">tent.entities.Context</a></div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item3'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/tent.connectors.rest.RestConnector.html#saveChanges">saveChanges</a></b>(context, options, callback)
+										</div>
+										<div class="description">Persists all changes in a <a href="../symbols/tent.entities.Context.html">tent.entities.Context</a></div>
+									</td>
+								</tr>
+							
+						</tbody>
+					</table>
+				
+			
+				
+			</div>
+		
+		
+<!--
+#### EVENTS SUMMARY
+-->
+		
+<!--
+#### CONSTRUCTOR DETAILS
+-->
+		
+			<div class="details props">
+				<div class="innerProps">
+					<h2 class="sectionTitle" id="constructor">
+						Class Detail
+					</h2>
+					
+					<div class="fixedFont">
+						<b>tent.connectors.rest.RestConnector</b>()
+					</div>
+					
+					<div class="description">
+						Creates a new REST connector
+						
+					</div>
+					
+					
+				
+					
+					
+					
+				</div>
+			</div>
+		
+<!--
+#### FIELD DETAILS
+-->
+		
+			<div class="details props">
+				<div class="innerProps">
+					<h2 class="sectionTitle">
+						Field Detail
+					</h2>
+					
+					
+						<div class="fixedFont heading" id="auth">
+							<span class='lighter'>
+							
+							</span>
+							
+							
+							
+							<b>auth</b>							
+						</div>
+						
+						<div class="description">
+							Authentication
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id="baseUrl">
+							<span class='lighter'>
+							
+							</span>
+							
+							<span class="light">{String}</span>
+							
+							<b>baseUrl</b>							
+						</div>
+						
+						<div class="description">
+							Absolute base URI of the restful service
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id="filters">
+							<span class='lighter'>
+							
+							</span>
+							
+							
+							
+							<b>filters</b>							
+						</div>
+						
+						<div class="description">
+							Filters to apply when loading/saving items
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id="loading">
+							<span class='lighter'>
+							
+							</span>
+							
+							<span class="light">{Boolean}</span>
+							
+							<b>loading</b>							
+						</div>
+						
+						<div class="description">
+							Indicates if loading items
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id="options">
+							<span class='lighter'>
+							
+							</span>
+							
+							
+							
+							<b>options</b>							
+						</div>
+						
+						<div class="description">
+							Options
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id="processors">
+							<span class='lighter'>
+							
+							</span>
+							
+							
+							
+							<b>processors</b>							
+						</div>
+						
+						<div class="description">
+							Processor to use when receiving data (loading or receiving save results)
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id="provider">
+							<span class='lighter'>
+							
+							</span>
+							
+							<span class="light">{String}</span>
+							
+							<b>provider</b>							
+						</div>
+						
+						<div class="description">
+							Name of the connector persistence provider, eg: db, service or storage method name
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id="saving">
+							<span class='lighter'>
+							
+							</span>
+							
+							<span class="light">{Boolean}</span>
+							
+							<b>saving</b>							
+						</div>
+						
+						<div class="description">
+							Indicates if saving changes
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						
+					
+				</div>
+			</div>
+		
+<!--
+#### METHOD DETAILS
+-->		
+		
+			<div class="details props">
+				<div class="innerProps">
+					<h2 class="sectionTitle">
+						Method Detail
+					</h2>
+					
+					<ul class="methodDetail" id="MethodDetail">
+						
+						
+							<li 
+								 class='item0'
+							>
+								<div class="fixedFont heading" id="createdb">
+									<span class='lighter'>
+									
+									</span>
+									
+									
+									
+									<b>createdb</b>(callback)
+								</div>
+								
+								<div class="description">
+									Creates the database for this connector
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+									<dl class="detailList params">
+										<dt class="heading">Parameters:</dt>
+										
+											<dt>
+												<b>callback</b>
+												
+											</dt>
+											<dd></dd>
+										
+									</dl>
+								
+								
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item1'
+							>
+								<div class="fixedFont heading" id="deletedb">
+									<span class='lighter'>
+									
+									</span>
+									
+									
+									
+									<b>deletedb</b>(callback)
+								</div>
+								
+								<div class="description">
+									Creates the database for this connector
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+									<dl class="detailList params">
+										<dt class="heading">Parameters:</dt>
+										
+											<dt>
+												<b>callback</b>
+												
+											</dt>
+											<dd></dd>
+										
+									</dl>
+								
+								
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item2'
+							>
+								<div class="fixedFont heading" id="load">
+									<span class='lighter'>
+									
+									</span>
+									
+									
+									
+									<b>load</b>(context, url, options, callback)
+								</div>
+								
+								<div class="description">
+									Load entities from an URL into a <a href="../symbols/tent.entities.Context.html">tent.entities.Context</a>
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+									<dl class="detailList params">
+										<dt class="heading">Parameters:</dt>
+										
+											<dt>
+												<span class="light fixedFont">{<a href="../symbols/tent.entities.Context.html">tent.entities.Context</a>}</span> <b>context</b>
+												
+											</dt>
+											<dd></dd>
+										
+											<dt>
+												<span class="light fixedFont">{String}</span> <b>url</b>
+												
+											</dt>
+											<dd>url that returns a JSON representation of entities</dd>
+										
+											<dt>
+												<span class="light fixedFont">{Object}</span> <b>options</b>
+												<i>Optional</i>
+											</dt>
+											<dd>loading options</dd>
+										
+											<dt>
+												<span class="light fixedFont">{function()}</span> <b>callback</b>
+												<i>Optional</i>
+											</dt>
+											<dd>function to call when operation is complete (error or success)</dd>
+										
+									</dl>
+								
+								
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item3'
+							>
+								<div class="fixedFont heading" id="saveChanges">
+									<span class='lighter'>
+									
+									</span>
+									
+									
+									
+									<b>saveChanges</b>(context, options, callback)
+								</div>
+								
+								<div class="description">
+									Persists all changes in a <a href="../symbols/tent.entities.Context.html">tent.entities.Context</a>
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+									<dl class="detailList params">
+										<dt class="heading">Parameters:</dt>
+										
+											<dt>
+												<span class="light fixedFont">{<a href="../symbols/tent.entities.Context.html">tent.entities.Context</a>}</span> <b>context</b>
+												
+											</dt>
+											<dd></dd>
+										
+											<dt>
+												<span class="light fixedFont">{Object}</span> <b>options</b>
+												<i>Optional</i>
+											</dt>
+											<dd>saving options</dd>
+										
+											<dt>
+												<span class="light fixedFont">{function()}</span> <b>callback</b>
+												<i>Optional</i>
+											</dt>
+											<dd>function to call when operation is complete (error or success)</dd>
+										
+									</dl>
+								
+								
+								
+								
+							</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+		
+<!--
+#### EVENT DETAILS
+-->		
+		
+	</div>
+</div>
+		<script type="text/javascript">
+			wbos.CssTools.MediaQueryFallBack.LoadCss('../css/screen.css', '../css/handheld.css', 660);
+			codeview.classFilter.Init();
+			
+			// Syntax Highlighting
+			SyntaxHighlighter.all();
+		</script>
+	</body>
+</html>
+

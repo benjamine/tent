@@ -1,0 +1,14 @@
+{
+  "author": "Benjamín Eidelman <beneidel@gmail.com>",
+  "name": "tent",
+  "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/benjamine/tent.git"
+  },
+  "main": "./src",
+  "dependencies": {
+  },
+  "devDependencies": {
+  }
+}
