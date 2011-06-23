@@ -29,6 +29,9 @@
                 else if (data.isGlslFunction) {
                     classType += "glsl Function ";
                 }
+                else if (data.isInternallyConstructed) {
+                    classType += "Factory Created Type ";
+                }
                 else {
                     classType += "Class ";
                 }
@@ -90,7 +93,7 @@
                             !}&nbsp;</td>
                             <td class="nameDescription" {!if (data.comment.getTag("hilited").length){output += 'style="color: red"'}!}>
                                 <div class="fixedFont">
-                                    <b>{+ new Link().toSymbol(data.alias).inner('constructor')+}</b><if test="classType != 'Namespace '">{+ makeSignature(data.params) +}</if>
+                                    <b>{+ new Link().toSymbol(data.alias).inner('constructor')+}</b><if test="classType != 'Namespace '">{+ data.isInternallyConstructed ? "" : makeSignature(data.params) +}</if>
                                 </div>
                                 <div class="description">{+resolveLinks(summarize(data.desc))+}</div>
                             </td>
@@ -320,7 +323,7 @@
                         if (data.isPrivate) output += "&lt;private&gt; ";
                         if (data.isInner) output += "&lt;inner&gt; ";
                     !}
-                        <b>{+ data.alias +}</b><if test="(classType != 'Namespace ') && !(data.isGlslConstant || data.isGlslUniform)">{+ makeSignature(data.params) +}</if>
+                        <b>{+ data.alias +}</b><if test="(classType != 'Namespace ') && !(data.isGlslConstant || data.isGlslUniform || data.isInternallyConstructed)">{+ makeSignature(data.params) +}</if>
                     </div>
                     
                     <div class="description">
@@ -334,7 +337,7 @@
                         </for>
                     </if>
                 
-                    <if test="data.params.length">
+                    <if test="!data.isInternallyConstructed && data.params.length">
                         <dl class="detailList params">
                             <dt class="heading">Parameters:</dt>
                             <for each="item" in="data.params">
@@ -347,7 +350,7 @@
                         </dl>
                     </if>
                     
-                    <if test="data.deprecated || data.since || data.exceptions.length || data.returns.length || data.requires.length || data.see.length">
+                    <if test="data.deprecated || data.since || data.hasPerformance || data.exceptions.length || data.returns.length || data.requires.length || data.see.length">
                         <dl class="detailList nomargin">
                             <if test="data.deprecated">
                                 <dt>
@@ -358,6 +361,11 @@
                             <if test="data.since">
                                 <dt class="heading">Since:</dt>
                                 <dd>{+ data.since +}</dd>
+                            </if>
+                            
+                            <if test="data.hasPerformance">
+                                <dt class="heading">Performance: </dt>
+                                <dd>{+resolveLinks(data.performance) + "<br/><br/>" +} </dd> 
                             </if>
                             
                             <if test="data.exceptions.length">
@@ -436,7 +444,7 @@
                                 <pre class="code brush: js"">{+example+}</pre>
                             </for>
                         </if>
-                            <if test="member.deprecated || member.since || member.see.length || member.defaultValue">
+                            <if test="member.deprecated || member.since || member.hasPerformance || member.see.length || member.defaultValue">
                             <dl class="detailList nomargin">
                             
                                 <if test="member.deprecated">
@@ -448,6 +456,10 @@
                                 <if test="member.since">
                                     <dt class="heading">Since:</dt>
                                     <dd>{+ member.since +}</dd>
+                                </if>
+                                <if test="member.hasPerformance">
+                                    <dt class="heading">Performance: </dt>
+                                    <dd>{+resolveLinks(member.performance) + "<br/><br/>" +} </dd> 
                                 </if>
                                 <if test="member.see.length">
                                     <dt class="heading"><br/>See:<br/></dt>
@@ -463,7 +475,7 @@
                                 </if>
                             </dl>
                         </if>
-                        
+
                         <if test="!$member_last"><div class="hr"></div></if>
                     </for>
                 </div>
@@ -534,7 +546,7 @@
                                     </dl>
                                 </if>
                                 
-                                <if test="member.deprecated || member.since || member.exceptions.length || member.returns.length || member.requires.length || member.see.length">
+                                <if test="member.deprecated || member.since || member.hasPerformance || member.exceptions.length || member.returns.length || member.requires.length || member.see.length">
                                     <dl class="detailList nomargin">
                                     
                                         <if test="member.deprecated">
@@ -547,6 +559,11 @@
                                         <if test="member.since">
                                             <dt class="heading">Since:</dt>
                                             <dd>{+ member.since +}</dd>
+                                        </if>
+                                        
+                                        <if test="member.hasPerformance">
+                                            <dt class="heading">Performance: </dt>
+                                            <dd>{+resolveLinks(member.performance) + "<br/><br/>" +} </dd> 
                                         </if>
                                         
                                         <if test="member.exceptions.length">
@@ -579,7 +596,6 @@
                                                 <dd>{+ new Link().toSymbol(item)+"<br/>" +}</dd>
                                             </for>
                                         </if>
-                                    
                                     </dl>
                                 </if>
                                 <if test="!$member_last"><div class="hr"></div></if>
@@ -645,7 +661,7 @@
                             </dl>
                         </if>
                         
-                        <if test="member.deprecated || member.since || member.exceptions.length || member.returns.length || member.see.length">
+                        <if test="member.deprecated || member.since || member.hasPerformance || member.exceptions.length || member.returns.length || member.see.length">
                             <dl class="detailList nomargin">
                                 <if test="member.deprecated">
                                     <dt class="heading">Deprecated:</dt>
@@ -655,6 +671,11 @@
                                 <if test="member.since">
                                     <dt class="heading">Since:</dt>
                                     <dd>{+ member.since +}</dd>
+                                </if>
+                                
+                                <if test="member.hasPerformance">
+                                    <dt class="heading">Performance: </dt>
+                                    <dd>{+resolveLinks(member.performance) + "<br/><br/>" +} </dd> 
                                 </if>
                                 
                                 <if test="member.exceptions.length">

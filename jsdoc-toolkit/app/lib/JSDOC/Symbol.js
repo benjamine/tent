@@ -27,6 +27,7 @@ JSDOC.Symbol.prototype.init = function() {
 	this.example = [];
 	this.exceptions = [];
 	this.fires = [];
+	this.hasPerformance = false;
 	this.id = JSDOC.Symbol.count++;
 	this.inherits = [];
 	this.inheritsFrom = [];
@@ -36,10 +37,12 @@ JSDOC.Symbol.prototype.init = function() {
 	this.isIgnored = false;
 	this.isInner = false;
 	this.isNamespace = false;
+	this.isInternallyConstructed = false;
 	this.isPrivate = false;
 	this.isStatic = false;
 	this.memberOf = "";
 	this.methods = [];
+	this.performance = [];
 	this.properties = [];
 	this.requires = [];
 	this.returns = [];
@@ -314,7 +317,20 @@ JSDOC.Symbol.prototype.setTags = function() {
         this.classDesc = glslConstant[0].desc;
         this.isGlslConstant = true;
     }
-	
+    
+    // @internalConstructor
+    var internallyConstructed = this.comment.getTag("internalConstructor");
+    if (internallyConstructed.length) {
+        this.isa = "CONSTRUCTOR";
+        this.isInternallyConstructed = true;
+    }
+    
+    // @performance
+    var performance = this.comment.getTag("performance");
+	if (performance.length) {
+        this.hasPerformance = true;
+        this.performance = performance.map(function($){return $.desc;}).join("\n");; 
+    }
 	// @param
 	var params = this.comment.getTag("param");
 	if (params.length) {
