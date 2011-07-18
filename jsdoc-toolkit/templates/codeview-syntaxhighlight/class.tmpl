@@ -11,6 +11,10 @@
                     classType += "Built-In ";
                 }
                 
+                if (data.isImmutable) {
+                    classType += "Immutable ";
+                }
+                
                 if (data.isNamespace) {
                     if (data.is('FUNCTION')) {
                         classType += "Function ";
@@ -28,6 +32,9 @@
                 }
                 else if (data.isGlslFunction) {
                     classType += "glsl Function ";
+                }
+                else if (data.isGlslStruct) {
+                    classType += "glsl Struct ";
                 }
                 else if (data.isInternallyConstructed) {
                     classType += "Factory Created Type ";
