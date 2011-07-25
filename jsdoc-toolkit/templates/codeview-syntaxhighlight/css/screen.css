@@ -137,8 +137,33 @@ div.content *.classTitle {
 	box-shadow: 0px 0px 10px #c4c4c4;
 }
 
+div.content *.box {
+    position: relative;
+    left: -10px;
+    margin-bottom: 15px;
+    -moz-border-radius: 15px;
+    -webkit-border-radius: 15px;
+    border-radius: 15px;
+    padding: 5px 15px;
+    padding-bottom: 10px;
+    background-color: #FFFFFF;
+    background-color: rgba(255, 255, 255, 0.5);
+    -moz-box-shadow: 0px 0px 10px #c4c4c4;
+    -webkit-box-shadow: 0px 0px 10px #c4c4c4;
+    box-shadow: 0px 0px 10px #c4c4c4;
+}
+
+div.content *.indexHeading {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+div.content .right {
+    text-align: right;
+}
+
 div.content div.intro {
-	margin: 15px 0 45px
+	margin: 15px 0px 15px
 }
 
 div.content p.summary {
@@ -169,11 +194,11 @@ div.content div.props {
 }
 
 div.content div.hr {
-	margin: 0 10px 0 0;
-	height: 4em;
+	margin: 10px 0px 10px 0px;
+	height: 1px;
+	color: #DADADA;
+	background-color: #DADADA;
 }
-
-
 
 table.summaryTable {
 	position: relative;

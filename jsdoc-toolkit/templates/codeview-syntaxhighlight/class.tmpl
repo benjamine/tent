@@ -43,8 +43,11 @@
                     classType += "Class ";
                 }
             !}
-            {+classType+}<span>{+data.alias+}</span>
+            <span>{+data.alias+}</span>
         </h1>
+        <if test="classType != 'Class '">
+            <h1 class="classType">{+classType+}</h1>
+        </if>
         
         <div class="intro">
             <p class="description summary">
@@ -57,10 +60,7 @@
                         <li>Version {+ data.version +}</li>
                     </if>
                     
-                    <if test="!data.isBuiltin()">{# isn't defined in any file #}
-                        <li>Defined in: {+new Link().toSrc(data.srcFile)+}</li>
-                    </if>
-                        <if test="data.augments.length"><li>Extends <span class="fixedFont">
+                    <if test="data.augments.length"><li>Extends <span class="fixedFont">
                         {+
                             data.augments
                             .sort()
@@ -74,10 +74,10 @@
             </if>
         </div>
         
-        <if test="!data.isBuiltin() && (data.isNamespace || data.is('CONSTRUCTOR')) && !(data.isGlslConstant || data.isGlslUniform || data.isGlslFunction)">
+        <if test="!data.isBuiltin() && (data.isNamespace || data.is('CONSTRUCTOR')) && !(data.isEnumeration || data.isClassConstant) && !(data.isGlslConstant || data.isGlslUniform || data.isGlslFunction || data.isGlslStruct)">
             <div class="props">
                 <table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class {+data.alias+}.">
-                    <caption class="sectionTitle">{+classType+}Summary</caption>
+                    <caption class="sectionTitle">Summary</caption>
                     <thead>
                         <tr>
                             {!
@@ -85,7 +85,7 @@
                                   constructorType = "Constructor";
                               }
                               else {
-                                  constructorType = classType;
+                                  constructorType = "";
                               }
                             !}
                             <th scope="col">{+constructorType+} Attributes</th>
@@ -112,7 +112,7 @@
         
         <if test="data.properties.length">
             {! var ownProperties = data.properties.filter(function($){return $.memberOf == data.alias && !$.isNamespace}).sort(makeSortby("name")); !}
-            <if test="ownProperties.length">
+            <if test="ownProperties.length && !(data.isEnumeration || data.isClassConstant)">
                 <div class="props">
                     <table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class {+data.alias+}.">
                         <caption class="sectionTitle">Field Summary</caption>
@@ -187,7 +187,7 @@
                     <table class="summaryTable" id="MethodsList" cellspacing="0" summary="A summary of the methods documented in the class {+data.alias+}.">
                         <thead>
                             <tr>
-                                <th scope="col">Method Attributes</th>
+                                <th scope="col">Attributes</th>
                                 <th scope="col">Method Name and Description</th>
                             </tr>
                         </thead>
@@ -323,14 +323,41 @@
             <div class="details props">
                 <div class="innerProps">
                     <h2 class="sectionTitle" id="constructor">
-                        {+classType+}Detail
+                    
+                    {!
+                        if (data.isEnumeration) {
+                            constructorType = "Enumeration ";
+                        }
+                        else if (data.isGlslUniform) {
+                            constructorType = "Uniform ";
+                        }
+                        else if (data.isGlslConstant) {
+                            constructorType = "Constant ";
+                        }
+                        else if (data.isGlslFunction) {
+                            constructorType = "Function ";
+                        }
+                        else if (data.isGlslStruct) {
+                            constructorType = "Struct ";
+                        }
+                        else if (data.isInternallyConstructed) {
+                            constructorType = "Type ";
+                        }
+                        else if (data.isImmutable) {
+                            constructorType = "Class ";
+                        }
+                        else {
+                            constructorType = classType;
+                        }
+                    !}
+                        {+constructorType+}Detail
                     </h2>
                     
                     <div class="fixedFont">{!
                         if (data.isPrivate) output += "&lt;private&gt; ";
                         if (data.isInner) output += "&lt;inner&gt; ";
                     !}
-                        <b>{+ data.alias +}</b><if test="(classType != 'Namespace ') && !(data.isGlslConstant || data.isGlslUniform || data.isInternallyConstructed)">{+ makeSignature(data.params) +}</if>
+                        <b>{+ data.alias +}</b><if test="(classType != 'Namespace ') && !(data.isGlslConstant || data.isGlslUniform || data.isGlslStruct|| data.isInternallyConstructed)">{+ makeSignature(data.params) +}</if>
                     </div>
                     
                     <div class="description">
@@ -448,7 +475,7 @@
                         
                         <if test="member.example.length">
                             <for each="example" in="member.example">
-                                <pre class="code brush: js"">{+example+}</pre>
+                                <pre class="code brush: js">{+example+}</pre>
                             </for>
                         </if>
                             <if test="member.deprecated || member.since || member.hasPerformance || member.see.length || member.defaultValue">
@@ -536,7 +563,7 @@
                                 
                                 <if test="member.example.length">
                                     <for each="example" in="member.example">
-                                        <pre class="code brush: js"">{+example+}</pre>
+                                        <pre class="code brush: js">{+example+}</pre>
                                     </for>
                                 </if>
                                 
@@ -651,7 +678,7 @@
                         
                         <if test="member.example.length">
                             <for each="example" in="member.example">
-                                <pre class="code brush: js"">{+example+}</pre>
+                                <pre class="code brush: js">{+example+}</pre>
                             </for>
                         </if>
                         

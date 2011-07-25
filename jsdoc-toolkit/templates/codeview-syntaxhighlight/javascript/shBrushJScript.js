@@ -14,11 +14,11 @@
  * @license
  * Dual licensed under the MIT and GPL licenses.
  */
-;(function()
+(function()
 {
 	// CommonJS
 	typeof(require) != 'undefined' ? SyntaxHighlighter = require('shCore').SyntaxHighlighter : null;
-
+    
 	function Brush()
 	{
 		var keywords =	'break case catch continue ' +
@@ -102,18 +102,44 @@
                         'gl_MaxGeometryOutputVertices ' +
                         'gl_MaxGeometryTotalOutputComponents ' +
                         'gl_MaxGeometryUniformComponents ' +
-                        'gl_MaxGeometryVaryingComponents gl_DepthRange'; 
-
-		var r = SyntaxHighlighter.regexLib;
+                        'gl_MaxGeometryVaryingComponents gl_DepthRange';
+                        
+		var links = document.links;
+        var numLinks = links.length;
+        var symbols = [];
+        for (var i =0; i < numLinks; i++) {
+            var currentLink = links[i].href;
+            var start = currentLink.lastIndexOf("symbols/");
+            var end = currentLink.lastIndexOf(".html");
+            var symbolName = currentLink.slice(start + 8.0, end);
+            var periodIndex = symbolName.indexOf(".");
+            if(periodIndex !== -1) {
+                symbolName = symbolName.slice(periodIndex + 1.0);
+            }
+            if (start !== -1) {
+                symbols.push(symbolName);
+            }
+        }
 		
-		this.regexList = [
-			{ regex: r.multiLineDoubleQuotedString,					css: 'string' },			// double quoted strings
-			{ regex: r.multiLineSingleQuotedString,					css: 'string' },			// single quoted strings
-			{ regex: r.singleLineCComments,							css: 'comments' },			// one line comments
-			{ regex: r.multiLineCComments,							css: 'comments' },			// multiline comments
-			{ regex: /\s*#.*/gm,									css: 'preprocessor' },		// preprocessor tags like #region and #endregion
-			{ regex: new RegExp(this.getKeywords(keywords), 'gm'),	css: 'keyword' }			// keywords
-			];
+        var numSymbols = symbols.length;
+        var symbolKeywords = "";
+        for (i = 0; i < numSymbols; i++) {
+            if(symbols[i] !== "") {
+                symbolKeywords += symbols[i] + " ";
+            }
+        }
+                
+        var r = SyntaxHighlighter.regexLib;
+        var agi_model = "agi_model";
+        this.regexList = [
+            { regex: r.multiLineDoubleQuotedString,                 css: 'string' },            // double quoted strings
+            { regex: r.multiLineSingleQuotedString,                 css: 'string' },            // single quoted strings
+            { regex: r.singleLineCComments,                         css: 'comments' },          // one line comments
+            { regex: r.multiLineCComments,                          css: 'comments' },          // multiline comments
+            { regex: /\s*#.*/gm,                                    css: 'preprocessor' },      // preprocessor tags like #region and #endregion
+            { regex: new RegExp(this.getKeywords(keywords), 'gm'),  css: 'keyword' },           // keywords
+            { regex: new RegExp(this.getKeywords(symbolKeywords), 'gm'),  css: 'symbol'}      // symbol
+            ];
 	
 		this.forHtmlScript(r.scriptScriptTags);
 	};

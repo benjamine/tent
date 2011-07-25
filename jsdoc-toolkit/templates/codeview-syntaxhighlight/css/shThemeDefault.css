@@ -82,6 +82,9 @@
 .syntaxhighlighter .keyword {
   color: #006699 !important;
 }
+.syntaxhighlighter .symbol {
+  color: #E00000 !important;
+}
 .syntaxhighlighter .preprocessor {
   color: gray !important;
 }
