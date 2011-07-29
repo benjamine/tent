@@ -20,6 +20,7 @@ Tent is a JavaScript framework that aims to ease working with tool-agnostic enti
  \** *In future versions step 3 may occur simultaneously with steps 4 or 5, as in many offline editing applications with a background auto-saving process.*
 
 ---------------
+
 What's New In This Fork
 ---------------
 The majority of the changes in this fork build upon the codeview syntax highlighting template.
@@ -27,6 +28,7 @@ The majority of the changes in this fork build upon the codeview syntax highligh
 - There are two filter views to switch between Javascript and GLSL related symbols.
 - Syntax highlighting has also been included for GLSL keywords and user defined symbols.
 - Small visual styling changes have been made to the template.
+
 - The following new tags have been added to help with classification and provide additional styling functionality:
 	* @glslUniform - Decribes a global GLSL variable that has been declared with the keyword "uniform," meaning that its value is constant across an entire primitive as it is processed.
 	* @glslFunction - Describes a GLSL function. 
@@ -39,7 +41,7 @@ The majority of the changes in this fork build upon the codeview syntax highligh
 	* @performance - Use this tag to describe performance characteristics (e.g. average run time) or tips for improving the performance of a function.
 Using the @enumeration and @classConstant tags eliminates redundant summary boxes from appearing in the documentation for those types.
 
----------------
+
 Targeted platforms
 ----------------
 
