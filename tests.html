@@ -108,13 +108,11 @@
         </style>
     </head>
     <body>
-        <script type="text/javascript" src="lib/json2.js">
+        <script type="text/javascript" src="tools/jquery.min.js">
         </script>
-        <script type="text/javascript" src="lib/jquery.min.js">
+        <script type="text/javascript" src="tools/test/tests.js">
         </script>
-        <script type="text/javascript" src="lib/tests.js">
-        </script>
-        <script type="text/javascript" src="lib/Asserts.js">
+        <script type="text/javascript" src="tools/test/Asserts.js">
         </script>
         <h1>Tent Test Page</h1>
         <div id="controlPanel">
@@ -204,7 +202,7 @@
                         tent.log.bind(addToLog);
                         tent.log.info('Source loaded (' + files.length + ' files)');
                         
-                        tests.scripts.loadList('src-test/testfilelist.js', 'src-test', function(files){
+                        tests.scripts.loadList('src/testfilelist.js', 'src-test', function(files){
                             tent.log.info('Tests loaded (' + files.length + ' files, ' + tests.cases.length + ' test cases)');
                             scriptsLoaded = true;
                             document.getElementById('btnStart').disabled = '';
@@ -217,8 +215,8 @@
                     
                         if (document.getElementById('loadminified').checked) {
                             // load minified version
-                            tests.scripts.load('dist/tent.min.js' + '?' + Math.random(), function(data, textStatus){
-                                onSourceLoaded(['dist/tent.min.js']);
+                            tests.scripts.load('dist/tent.js' + '?' + Math.random(), function(data, textStatus){
+                                onSourceLoaded(['dist/tent.js']);
                             });
                         }
                         else {
