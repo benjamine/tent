@@ -25,4 +25,4 @@
 		<![endif]-->
 	</head>
 
-	<body>
+	<body onload="document.filterForm.classFilter.focus(); document.filterForm.classFilter.value=((window.location.search).split('='))[1] || document.getElementById('ClassFilter').value; ">

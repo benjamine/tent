@@ -44,6 +44,8 @@ function publish(symbolSet) {
 	function hasNoParent($) {return ($.memberOf == "")}
 	function isaFile($) {return ($.is("FILE"))}
 	function isaClass($) {return (($.is("CONSTRUCTOR") || $.isNamespace) && ($.alias != "_global_" || !JSDOC.opt.D.noGlobal))}
+	function isGLSL($) {return ($.isGlslUniform || $.isGlslConstant || $.isGlslFunction || $.isGlslStruct)}
+	function isJS($) {return isaClass($) && !(isGLSL($))}
 	
 	// get an array version of the symbolset, useful for filtering
 	var symbols = symbolSet.toArray();
@@ -73,31 +75,68 @@ function publish(symbolSet) {
 				(filemapCounts[lcAlias] > 1)?
 				lcAlias+"_"+filemapCounts[lcAlias] : lcAlias;
 		}
-	}
+	}	
 	
-	// create each of the class pages
-	for (var i = 0, l = publish.classes.length; i < l; i++) {
-		var symbol = publish.classes[i];
-		
-		symbol.events = symbol.getEvents();   // 1 order matters
-		symbol.methods = symbol.getMethods(); // 2
-		
-		var output = "";
-		output = classTemplate.process(symbol);
-		
-		IO.saveFile(publish.conf.outDir+publish.conf.symbolsDir, ((JSDOC.opt.u)? Link.filemap[symbol.alias] : symbol.alias) + publish.conf.ext, output);
-	}
+	// GLSL
+	publish.classes = symbols.filter(isGLSL).sort(makeSortby("alias"));
 	
-	// create the class index page
+	// create each of the glsl class pages
+    for (i = 0, l = publish.classes.length; i < l; i++) {
+        var symbol = publish.classes[i];
+        
+        symbol.events = symbol.getEvents();   // 1 order matters
+        symbol.methods = symbol.getMethods(); // 2
+        
+        var output = "";
+        output = classTemplate.process(symbol);
+        
+        IO.saveFile(publish.conf.outDir+publish.conf.symbolsDir, ((JSDOC.opt.u)? Link.filemap[symbol.alias] : symbol.alias) + publish.conf.ext, output);
+    }
+	// create the GLSL index page
 	try {
-		var classesindexTemplate = new JSDOC.JsPlate(publish.conf.templatesDir+"allclasses.tmpl");
-	}
-	catch(e) { print(e.message); quit(); }
+        var glslindexTemplate = new JSDOC.JsPlate(publish.conf.templatesDir+"glslfiles.tmpl");
+    }
+    catch(e) { print(e.message); quit(); }
+    
+    var glslIndex = glslindexTemplate.process(publish.classes);
+    IO.saveFile(publish.conf.outDir, ("glslIndex")+publish.conf.ext, glslIndex);
+    glslindexTemplate = glslIndex = classes = null;
 	
-	var classesIndex = classesindexTemplate.process(publish.classes);
-	IO.saveFile(publish.conf.outDir, (JSDOC.opt.D.index=="files"?"allclasses":"index")+publish.conf.ext, classesIndex);
-	classesindexTemplate = classesIndex = classes = null;
-	
+	// Javascript
+    publish.classes = symbols.filter(isJS).sort(makeSortby("alias"));
+    
+    // create each of the javascript class pages
+    for (var i = 0, l = publish.classes.length; i < l; i++) {
+        var symbol = publish.classes[i];
+        
+        symbol.events = symbol.getEvents();   // 1 order matters
+        symbol.methods = symbol.getMethods(); // 2
+        
+        var output = "";
+        output = classTemplate.process(symbol);
+        
+        IO.saveFile(publish.conf.outDir+publish.conf.symbolsDir, ((JSDOC.opt.u)? Link.filemap[symbol.alias] : symbol.alias) + publish.conf.ext, output);
+    }
+    // create the Javscript index page
+    try {
+        var jsindexTemplate = new JSDOC.JsPlate(publish.conf.templatesDir+"jsfiles.tmpl");
+    }
+    catch(e) { print(e.message); quit(); }
+    
+    var jsIndex = jsindexTemplate.process(publish.classes);
+    IO.saveFile(publish.conf.outDir, ("jsIndex")+publish.conf.ext, jsIndex);
+    jsindexTemplate = jsIndex = classes = null;
+    
+    // create the welcome index page
+    try {
+        var indexTemplate = new JSDOC.JsPlate(publish.conf.templatesDir+"index.tmpl");
+    }
+    catch(e) { print(e.message); quit(); }
+    
+    var index = indexTemplate.process(publish.classes);
+    IO.saveFile(publish.conf.outDir, ("index")+publish.conf.ext, index);
+    indexTemplate = index = classes = null; 
+    
 	// create the file index page
 	try {
 		var fileindexTemplate = new JSDOC.JsPlate(publish.conf.templatesDir+"allfiles.tmpl");
